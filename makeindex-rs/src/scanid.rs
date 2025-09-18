@@ -7,21 +7,15 @@
     unused_assignments,
     unused_mut
 )]
+use libc::*;
+use libc_stdhandle::*;
 extern "C" {
     // pub type _IO_wide_data;
     // pub type _IO_codecvt;
     // pub type _IO_marker;
     static mut stderr: *mut FILE;
-    fn fclose(__stream: *mut FILE) -> i32;
-    fn fprintf(_: *mut FILE, _: *const libc::c_char, _: ...) -> i32;
-    fn sscanf(_: *const libc::c_char, _: *const libc::c_char, _: ...) -> i32;
     fn getc(__stream: *mut FILE) -> i32;
     fn __ctype_b_loc() -> *mut *const libc::c_ushort;
-    fn strcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
-    fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> i32;
-    fn strncmp(_: *const libc::c_char, _: *const libc::c_char, _: libc::c_ulong) -> i32;
-    fn strchr(_: *const libc::c_char, _: i32) -> *mut libc::c_char;
-    fn strlen(_: *const libc::c_char) -> libc::c_ulong;
     static mut compress_blanks: i32;
     static mut verbose: i32;
     static mut german_sort: i32;
@@ -49,41 +43,8 @@ extern "C" {
 type size_t = libc::c_ulong;
 type __off_t = libc::c_long;
 type __off64_t = libc::c_long;
-#[derive(Copy, Clone)]
-#[repr(C)]
-struct _IO_FILE {
-    pub _flags: i32,
-    pub _IO_read_ptr: *mut libc::c_char,
-    pub _IO_read_end: *mut libc::c_char,
-    pub _IO_read_base: *mut libc::c_char,
-    pub _IO_write_base: *mut libc::c_char,
-    pub _IO_write_ptr: *mut libc::c_char,
-    pub _IO_write_end: *mut libc::c_char,
-    pub _IO_buf_base: *mut libc::c_char,
-    pub _IO_buf_end: *mut libc::c_char,
-    pub _IO_save_base: *mut libc::c_char,
-    pub _IO_backup_base: *mut libc::c_char,
-    pub _IO_save_end: *mut libc::c_char,
-    //  pub _markers: *mut _IO_marker,
-    pub _chain: *mut _IO_FILE,
-    pub _fileno: i32,
-    pub _flags2: i32,
-    pub _old_offset: __off_t,
-    pub _cur_column: libc::c_ushort,
-    pub _vtable_offset: libc::c_schar,
-    pub _shortbuf: [libc::c_char; 1],
-    pub _lock: *mut libc::c_void,
-    pub _offset: __off64_t,
-    //  pub _codecvt: *mut _IO_codecvt,
-    //  pub _wide_data: *mut _IO_wide_data,
-    pub _freeres_list: *mut _IO_FILE,
-    pub _freeres_buf: *mut libc::c_void,
-    pub __pad5: size_t,
-    pub _mode: i32,
-    pub _unused2: [libc::c_char; 20],
-}
+
 type _IO_lock_t = ();
-type FILE = _IO_FILE;
 type u32 = libc::c_uint;
 const _ISalnum: u32 = 8;
 const _ISpunct: u32 = 4;
@@ -435,7 +396,7 @@ unsafe extern "C" fn flush_to_eol() {
 unsafe extern "C" fn make_key() -> i32 {
     let mut ptr = std::ptr::null_mut::<KNODE>();
     let mut i = 0;
-    ptr = malloc(::core::mem::size_of::<NODE>() as libc::c_ulong) as NODE_PTR;
+    ptr = malloc(::core::mem::size_of::<NODE>().try_into().unwrap()) as NODE_PTR;
     if ptr.is_null() {
         fprintf(
             stderr,
@@ -490,7 +451,7 @@ unsafe extern "C" fn make_key() -> i32 {
 }
 unsafe extern "C" fn make_string(mut ppstr: *mut *mut libc::c_char, mut n: i32) {
     if *(*ppstr).offset(0) as i32 == '\0' as i32 {
-        *ppstr = malloc(n as libc::c_ulong) as *mut libc::c_char;
+        *ppstr = malloc(n.try_into().unwrap()) as *mut libc::c_char;
         if (*ppstr).is_null() {
             fprintf(
                 stderr,
@@ -519,7 +480,7 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
           
             make_string(
                 &mut (*data).encap,
-                (strlen(key.as_mut_ptr())).wrapping_add(1 as libc::c_ulong) as i32,
+                (strlen(key.as_mut_ptr())).wrapping_add(1) as i32,
             );
             if scan_field(
                 &mut n,
@@ -538,7 +499,7 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
             if i == last {
                 make_string(
                     &mut *((*data).af).as_mut_ptr().offset(i as isize),
-                    (strlen(key.as_mut_ptr())).wrapping_add(1 as libc::c_ulong) as i32,
+                    (strlen(key.as_mut_ptr())).wrapping_add(1) as i32,
                 );
                 if scan_field(
                     &mut n,
@@ -554,7 +515,7 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
             } else {
                 make_string(
                     &mut *((*data).af).as_mut_ptr().offset(i as isize),
-                    (strlen(key.as_mut_ptr())).wrapping_add(1 as libc::c_ulong) as i32,
+                    (strlen(key.as_mut_ptr())).wrapping_add(1) as i32,
                 );
                 if scan_field(
                     &mut n,
@@ -577,7 +538,7 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
             if i == last {
                 make_string(
                     &mut *((*data).sf).as_mut_ptr().offset(i as isize),
-                    (strlen(key.as_mut_ptr())).wrapping_add(1 as libc::c_ulong) as i32,
+                    (strlen(key.as_mut_ptr())).wrapping_add(1) as i32,
                 );
                 if scan_field(
                     &mut n,
@@ -593,7 +554,7 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
             } else {
                 make_string(
                     &mut *((*data).sf).as_mut_ptr().offset(i as isize),
-                    (strlen(key.as_mut_ptr())).wrapping_add(1 as libc::c_ulong) as i32,
+                    (strlen(key.as_mut_ptr())).wrapping_add(1) as i32,
                 );
                 if scan_field(
                     &mut n,
@@ -611,7 +572,7 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
             if german_sort != 0 && !(strchr((*data).sf[i as usize], '"' as i32)).is_null() {
                 make_string(
                     &mut *((*data).af).as_mut_ptr().offset(i as isize),
-                    (strlen((*data).sf[i as usize])).wrapping_add(1 as libc::c_ulong) as i32,
+                    (strlen((*data).sf[i as usize])).wrapping_add(1) as i32,
                 );
                 search_quote((*data).sf[i as usize], (*data).af[i as usize]);
             }
@@ -955,7 +916,7 @@ unsafe extern "C" fn scan_no(
         && (strncmp(
             &mut *no_0.offset(i as isize),
             page_comp.as_mut_ptr(),
-            comp_len as libc::c_ulong,
+            comp_len.try_into().unwrap(),
         ) != 0)
     {
         *type_0 = 0 as libc::c_short;
@@ -973,7 +934,7 @@ unsafe extern "C" fn scan_no(
             || (strncmp(
                 &mut *no_0.offset(i as isize),
                 page_comp.as_mut_ptr(),
-                comp_len as libc::c_ulong,
+                comp_len.try_into().unwrap(),
             ) != 0))
     {
         *type_0 = 1 as libc::c_short;
@@ -1025,7 +986,7 @@ unsafe extern "C" fn scan_arabic(
         && (strncmp(
             &mut *no_0.offset(i as isize),
             page_comp.as_mut_ptr(),
-            comp_len as libc::c_ulong,
+            comp_len.try_into().unwrap(),
         ) != 0)
     {
         if *(*__ctype_b_loc()).offset(*no_0.offset(i as isize) as i32 as isize) as i32
@@ -1110,7 +1071,7 @@ unsafe extern "C" fn scan_arabic(
     if strncmp(
         &mut *no_0.offset(i as isize),
         page_comp.as_mut_ptr(),
-        comp_len as libc::c_ulong,
+        comp_len.try_into().unwrap(),
     ) == 0
     {
         scan_no(
@@ -1137,7 +1098,7 @@ unsafe extern "C" fn scan_roman_lower(
         && (strncmp(
             &mut *no_0.offset(i as isize),
             page_comp.as_mut_ptr(),
-            comp_len as libc::c_ulong,
+            comp_len.try_into().unwrap(),
         ) != 0)
     {
         if (*no_0.offset(i as isize) as i32 == 'i' as i32
@@ -1255,7 +1216,7 @@ unsafe extern "C" fn scan_roman_lower(
     if strncmp(
         &mut *no_0.offset(i as isize),
         page_comp.as_mut_ptr(),
-        comp_len as libc::c_ulong,
+        comp_len.try_into().unwrap(),
     ) == 0
     {
         scan_no(
@@ -1282,7 +1243,7 @@ unsafe extern "C" fn scan_roman_upper(
         && (strncmp(
             &mut *no_0.offset(i as isize),
             page_comp.as_mut_ptr(),
-            comp_len as libc::c_ulong,
+            comp_len.try_into().unwrap(),
         ) != 0)
     {
         if (*no_0.offset(i as isize) as i32 == 'I' as i32
@@ -1400,7 +1361,7 @@ unsafe extern "C" fn scan_roman_upper(
     if strncmp(
         &mut *no_0.offset(i as isize),
         page_comp.as_mut_ptr(),
-        comp_len as libc::c_ulong,
+        comp_len.try_into().unwrap(),
     ) == 0
     {
         scan_no(
@@ -1455,7 +1416,7 @@ unsafe extern "C" fn scan_alpha_lower(
     if strncmp(
         &mut *no_0.offset(i as isize),
         page_comp.as_mut_ptr(),
-        comp_len as libc::c_ulong,
+        comp_len.try_into().unwrap(),
     ) == 0
     {
         scan_no(
@@ -1510,7 +1471,7 @@ unsafe extern "C" fn scan_alpha_upper(
     if strncmp(
         &mut *no_0.offset(i as isize),
         page_comp.as_mut_ptr(),
-        comp_len as libc::c_ulong,
+        comp_len.try_into().unwrap(),
     ) == 0
     {
         scan_no(

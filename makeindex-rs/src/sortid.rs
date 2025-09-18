@@ -1,12 +1,11 @@
+use libc::*;
+use libc_stdhandle::*;
 unsafe extern "C" {
     // pub type _IO_wide_data;
     // pub type _IO_codecvt;
     // pub type _IO_marker;
-    static mut stderr: *mut FILE;
-    fn fprintf(_: *mut FILE, _: *const libc::c_char, _: ...) -> i32;
     fn __ctype_b_loc() -> *mut *const libc::c_ushort;
     fn tolower(_: i32) -> i32;
-    fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> i32;
     static mut letter_ordering: i32;
     static mut verbose: i32;
     static mut german_sort: i32;
@@ -28,41 +27,7 @@ unsafe extern "C" {
 type size_t = libc::c_ulong;
 type __off_t = libc::c_long;
 type __off64_t = libc::c_long;
-#[derive(Copy, Clone)]
-#[repr(C)]
-struct _IO_FILE {
-    pub _flags: i32,
-    pub _IO_read_ptr: *mut libc::c_char,
-    pub _IO_read_end: *mut libc::c_char,
-    pub _IO_read_base: *mut libc::c_char,
-    pub _IO_write_base: *mut libc::c_char,
-    pub _IO_write_ptr: *mut libc::c_char,
-    pub _IO_write_end: *mut libc::c_char,
-    pub _IO_buf_base: *mut libc::c_char,
-    pub _IO_buf_end: *mut libc::c_char,
-    pub _IO_save_base: *mut libc::c_char,
-    pub _IO_backup_base: *mut libc::c_char,
-    pub _IO_save_end: *mut libc::c_char,
-    // pub _markers: *mut _IO_marker,
-    pub _chain: *mut _IO_FILE,
-    pub _fileno: i32,
-    pub _flags2: i32,
-    pub _old_offset: __off_t,
-    pub _cur_column: libc::c_ushort,
-    pub _vtable_offset: libc::c_schar,
-    pub _shortbuf: [libc::c_char; 1],
-    pub _lock: *mut libc::c_void,
-    pub _offset: __off64_t,
-    // pub _codecvt: *mut _IO_codecvt,
-    // pub _wide_data: *mut _IO_wide_data,
-    pub _freeres_list: *mut _IO_FILE,
-    pub _freeres_buf: *mut libc::c_void,
-    pub __pad5: size_t,
-    pub _mode: i32,
-    pub _unused2: [libc::c_char; 20],
-}
 type _IO_lock_t = ();
-type FILE = _IO_FILE;
 const _ISalnum: u32 = 8;
 const _ISpunct: u32 = 4;
 const _IScntrl: u32 = 2;
@@ -95,7 +60,7 @@ static mut idx_gc: libc::c_long = 0;
 pub unsafe extern "C" fn sort_idx() {
     if verbose != 0 {
         fprintf(
-            stderr,
+            stderr(),
             b"Sorting entries...\0" as *const u8 as *const libc::c_char,
             b"\0" as *const u8 as *const libc::c_char,
         );
@@ -120,7 +85,7 @@ pub unsafe extern "C" fn sort_idx() {
     );
     if verbose != 0 {
         fprintf(
-            stderr,
+            stderr(),
             b"done (%ld comparisons).\n\0" as *const u8 as *const libc::c_char,
             idx_gc,
         );
@@ -140,7 +105,7 @@ unsafe extern "C" fn compare(mut a: *mut FIELD_PTR, mut b: *mut FIELD_PTR) -> i3
     idx_dc += 1;
     if fresh0 == 0 {
         if verbose != 0 {
-            fprintf(stderr, b".\0" as *const u8 as *const libc::c_char);
+            fprintf(stderr(), b".\0" as *const u8 as *const libc::c_char);
         }
         fprintf(ilg_fp, b".\0" as *const u8 as *const libc::c_char);
     }
