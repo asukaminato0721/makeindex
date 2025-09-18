@@ -88,7 +88,6 @@ OBJS		= genind.o \
         mkind.o \
         scanid.o \
         scanst.o \
-        sortid.o
 
 # Note: qsort.o is replaced by Rust static library
 QSLIB		= libqsort.a
@@ -107,7 +106,6 @@ SRCS		= genind.c \
 		mkind.c \
 		scanid.c \
 		scanst.c \
-		sortid.c
 
 STRIP		= strip
 
@@ -209,8 +207,7 @@ genind.o: mkind.h genind.h
 mkind.o: mkind.h
 scanid.o: mkind.h scanid.h
 scanst.o: mkind.h scanst.h
-sortid.o: mkind.h
 
 # Rust library dependency
-$(RUST_LIB): ../makeindex-rs/src/qsort.rs ../makeindex-rs/Cargo.toml
+$(RUST_LIB): ../makeindex-rs/src/qsort.rs ../makeindex-rs/src/sortid.rs ../makeindex-rs/Cargo.toml
 	@$(MAKE) rust-lib
