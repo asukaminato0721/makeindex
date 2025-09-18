@@ -15,7 +15,7 @@ extern "C" {
     // pub type _IO_marker;
     fn __ctype_b_loc() -> *mut *const libc::c_ushort;
     static mut compress_blanks: i32;
-    static mut verbose: i32;
+    static mut verbose: bool;
     static mut german_sort: i32;
     static mut idx_keyword: [libc::c_char; 1024];
     static mut idx_aopen: libc::c_char;
@@ -35,8 +35,6 @@ extern "C" {
     static mut idx_tt: i32;
     static mut idx_et: i32;
     fn strtoint(str: *mut libc::c_char) -> i32;
-    fn malloc(_: libc::c_ulong) -> *mut libc::c_void;
-    fn exit(_: i32) -> !;
 }
 type size_t = libc::c_ulong;
 type __off_t = libc::c_long;
@@ -103,7 +101,7 @@ pub unsafe extern "C" fn scan_idx() {
     let mut i = 0;
     let mut not_eof = 1;
     let mut arg_count = -1;
-    if verbose != 0 {
+    if verbose {
         fprintf(
             stderr(),
             b"Scanning input file %s...\0" as *const u8 as *const libc::c_char,
@@ -132,7 +130,7 @@ pub unsafe extern "C" fn scan_idx() {
                         let fresh0 = idx_dc;
                         idx_dc += 1;
                         if fresh0 == 0 {
-                            if verbose != 0 {
+                            if verbose {
                                 fprintf(stderr(), b".\0" as *const u8 as *const libc::c_char);
                             }
                             fprintf(ilg_fp, b".\0" as *const u8 as *const libc::c_char);
@@ -155,7 +153,7 @@ pub unsafe extern "C" fn scan_idx() {
                         let fresh1 = idx_dc;
                         idx_dc += 1;
                         if fresh1 == 0 {
-                            if verbose != 0 {
+                            if verbose {
                                 fprintf(stderr(), b".\0" as *const u8 as *const libc::c_char);
                             }
                             fprintf(ilg_fp, b".\0" as *const u8 as *const libc::c_char);
@@ -196,14 +194,14 @@ pub unsafe extern "C" fn scan_idx() {
                     i += 1;
                     keyword[fresh2 as usize] = c as libc::c_char;
                     arg_count += 1;
-                    arg_count;
+               
                     idx_tc += 1;
-                    idx_tc;
+                  
                 }
                 0 => {
                     if c == idx_aopen as i32 {
                         arg_count += 1;
-                        arg_count;
+                
                         keyword[i as usize] = '\0' as i32 as libc::c_char;
                         if strcmp(keyword.as_ptr(), idx_keyword.as_ptr()) == 0 {
                             if scan_arg1() == 0 {
@@ -285,7 +283,7 @@ pub unsafe extern "C" fn scan_idx() {
                 1 => {
                     if c == idx_aopen as i32 {
                         arg_count += 1;
-                        arg_count;
+                   
                         if scan_arg2() == 0 {
                             arg_count = -1;
                         }
@@ -362,7 +360,7 @@ pub unsafe extern "C" fn scan_idx() {
     }
     idx_tt += idx_tc;
     idx_et += idx_ec;
-    if verbose != 0 {
+    if verbose {
         fprintf(
             stderr(),
             b"done (%d %s, %d %s).\n\0" as *const u8 as *const libc::c_char,

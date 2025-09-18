@@ -135,7 +135,7 @@ pub unsafe extern "C" fn main(
         }
         argv = argv.offset(1);
         if **argv as libc::c_int == '-' as i32 {
-            if *(*argv).offset(1_isize) as libc::c_int == '\0' as i32 {
+            if *(*argv).offset(1) as libc::c_int == '\0' as i32 {
                 break;
             }
             *argv = (*argv).offset(1);
@@ -282,7 +282,7 @@ pub unsafe extern "C" fn main(
                     }
                 }
                 ap = ap.offset(1);
-                ap;
+            
             }
         } else if fn_no < 1024 as libc::c_int {
             check_idx(*argv, 0);
@@ -602,7 +602,7 @@ unsafe extern "C" fn check_idx(mut fn_0: *mut libc::c_char, mut open_fn: libc::c
     let mut with_ext = 0;
     let mut i = 0;
     ext = strrchr(fn_0, '.' as i32);
-    if !ext.is_null() && ext != fn_0 && *ext.offset(1_isize) as libc::c_int != '/' as i32 {
+    if !ext.is_null() && ext != fn_0 && *ext.offset(1) as libc::c_int != '/' as i32 {
         with_ext = 1;
         while ptr != ext && i < 256 as libc::c_int {
             let fresh1 = ptr;
