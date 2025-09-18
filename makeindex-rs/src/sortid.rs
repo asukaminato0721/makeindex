@@ -185,22 +185,14 @@ unsafe extern "C" fn compare_one(mut x: *mut libc::c_char, mut y: *mut libc::c_c
         if german_sort != 0 {
             return 1_i32;
         } else {
-            return if n == -1_i32 {
-                1_i32
-            } else {
-                -1_i32
-            };
+            return if n == -1_i32 { 1_i32 } else { -1_i32 };
         }
     }
     if n >= 0_i32 {
         if german_sort != 0 {
             return -1_i32;
         } else {
-            return if m == -1_i32 {
-                -1_i32
-            } else {
-                1_i32
-            };
+            return if m == -1_i32 { -1_i32 } else { 1_i32 };
         }
     }
     if m == -1_i32 && n == -1_i32 {

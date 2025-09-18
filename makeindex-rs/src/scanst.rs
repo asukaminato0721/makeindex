@@ -915,8 +915,8 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
             sty_lc += 1;
         }
     }
-    *spec.offset(0_i32 as isize) = if *(*__ctype_b_loc())
-        .offset(c as libc::c_uchar as i32 as isize) as i32
+    *spec.offset(0_i32 as isize) = if *(*__ctype_b_loc()).offset(c as libc::c_uchar as i32 as isize)
+        as i32
         & _ISupper as i32 as libc::c_ushort as i32
         != 0
     {
@@ -938,15 +938,15 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
         {
             break;
         }
-        *spec.offset(i as isize) =
-            if *(*__ctype_b_loc()).offset(c as libc::c_uchar as i32 as isize) as i32
-                & _ISupper as i32 as libc::c_ushort as i32
-                != 0
-            {
-                tolower(c as libc::c_uchar as i32) as libc::c_uchar as i8
-            } else {
-                (c as libc::c_uchar as i32).try_into().unwrap()
-            };
+        *spec.offset(i as isize) = if *(*__ctype_b_loc()).offset(c as libc::c_uchar as i32 as isize)
+            as i32
+            & _ISupper as i32 as libc::c_ushort as i32
+            != 0
+        {
+            tolower(c as libc::c_uchar as i32) as libc::c_uchar as i8
+        } else {
+            (c as libc::c_uchar as i32).try_into().unwrap()
+        };
     }
     if i < 256_i32 {
         *spec.offset(i as isize) = '\0' as i8;
