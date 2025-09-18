@@ -1316,7 +1316,7 @@ unsafe extern "C" fn count_lfd(mut str: *mut libc::c_char) -> i32 {
     while *str.offset(i as isize) as i32 != '\0' as i32 {
         if *str.offset(i as isize) as i32 == '\n' as i32 {
             n += 1;
-            n;
+          
         }
         i += 1;
     }

@@ -134,9 +134,9 @@ static mut comp_len: i32 = 0;
 static mut key: [libc::c_char; 1024] = [0; 1024];
 static mut no: [libc::c_char; 16] = [0; 16];
 #[no_mangle]
-pub static mut head: NODE_PTR = 0 as *const KNODE as *mut KNODE;
+static mut head: NODE_PTR = 0 as *const KNODE as *mut KNODE;
 #[no_mangle]
-pub static mut tail: NODE_PTR = 0 as *const KNODE as *mut KNODE;
+static mut tail: NODE_PTR = 0 as *const KNODE as *mut KNODE;
 #[no_mangle]
 pub unsafe extern "C" fn scan_idx() {
     let mut keyword = [0; 1024];
@@ -516,7 +516,7 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
     while key[n as usize] as i32 != '\0' as i32 {
         if key[n as usize] as i32 == idx_encap as i32 {
             n += 1;
-            n;
+          
             make_string(
                 &mut (*data).encap,
                 (strlen(key.as_mut_ptr())).wrapping_add(1 as libc::c_ulong) as i32,
@@ -1551,7 +1551,7 @@ unsafe extern "C" fn scan_arg1() -> i32 {
             i += 1;
             key[fresh10 as usize] = a as libc::c_char;
             n += 1;
-            n;
+          
         } else if a == idx_aclose as i32 {
             if n == 0 {
                 if compress_blanks != 0 && key[(i - 1) as usize] as i32 == ' ' as i32 {
@@ -1565,7 +1565,7 @@ unsafe extern "C" fn scan_arg1() -> i32 {
                 i += 1;
                 key[fresh11 as usize] = a as libc::c_char;
                 n -= 1;
-                n;
+              
             }
         } else {
             let mut current_block_34: u64;
