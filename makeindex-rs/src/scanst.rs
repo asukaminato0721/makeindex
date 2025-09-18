@@ -78,9 +78,9 @@ const _ISdigit: u32 = 2048;
 const _ISalpha: u32 = 1024;
 const _ISlower: u32 = 512;
 const _ISupper: u32 = 256;
-static mut sty_lc: i32 = 0_i32;
-static mut sty_tc: i32 = 0_i32;
-static mut sty_ec: i32 = 0_i32;
+static mut sty_lc: i32 = 0;
+static mut sty_tc: i32 = 0;
+static mut sty_ec: i32 = 0;
 #[no_mangle]
 pub static mut idx_keyword: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -127,9 +127,9 @@ pub static mut postamble: [libc::c_char; 1024] = unsafe {
     )
 };
 #[no_mangle]
-pub static mut prelen: i32 = 1_i32;
+pub static mut prelen: i32 = 1;
 #[no_mangle]
-pub static mut postlen: i32 = 3_i32;
+pub static mut postlen: i32 = 3;
 #[no_mangle]
 pub static mut setpage_open: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -149,7 +149,7 @@ pub static mut setpage_close: [libc::c_char; 1024] = unsafe {
     )
 };
 #[no_mangle]
-pub static mut setpagelen: i32 = 2_i32;
+pub static mut setpagelen: i32 = 2;
 #[no_mangle]
 pub static mut group_skip: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -160,9 +160,9 @@ pub static mut group_skip: [libc::c_char; 1024] = unsafe {
     )
 };
 #[no_mangle]
-pub static mut skiplen: i32 = 3_i32;
+pub static mut skiplen: i32 = 3;
 #[no_mangle]
-pub static mut headings_flag: i32 = 0_i32;
+pub static mut headings_flag: i32 = 0;
 #[no_mangle]
 pub static mut heading_pre: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -182,9 +182,9 @@ pub static mut heading_suf: [libc::c_char; 1024] = unsafe {
     )
 };
 #[no_mangle]
-pub static mut headprelen: i32 = 0_i32;
+pub static mut headprelen: i32 = 0;
 #[no_mangle]
-pub static mut headsuflen: i32 = 0_i32;
+pub static mut headsuflen: i32 = 0;
 #[no_mangle]
 pub static mut symhead_pos: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -291,11 +291,11 @@ pub static mut item_x: [[libc::c_char; 1024]; 3] = unsafe {
     ]
 };
 #[no_mangle]
-pub static mut ilen_r: [i32; 3] = [1_i32, 1_i32, 1_i32];
+pub static mut ilen_r: [i32; 3] = [1, 1, 1];
 #[no_mangle]
-pub static mut ilen_u: [i32; 3] = [0_i32, 1_i32, 1_i32];
+pub static mut ilen_u: [i32; 3] = [0, 1, 1];
 #[no_mangle]
-pub static mut ilen_x: [i32; 3] = [0_i32, 1_i32, 1_i32];
+pub static mut ilen_x: [i32; 3] = [0, 1, 1];
 #[no_mangle]
 pub static mut delim_p: [[libc::c_char; 1024]; 3] = unsafe {
     [
@@ -401,9 +401,9 @@ pub static mut encap_s: [libc::c_char; 1024] = unsafe {
     )
 };
 #[no_mangle]
-pub static mut linemax: i32 = 72_i32;
+pub static mut linemax: i32 = 72;
 #[no_mangle]
-pub static mut indent_length: i32 = 16_i32;
+pub static mut indent_length: i32 = 16;
 #[no_mangle]
 pub static mut indent_space: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -424,11 +424,11 @@ pub static mut page_comp: [libc::c_char; 1024] = unsafe {
 };
 #[no_mangle]
 pub static mut page_offset: [i32; 5] = [
-    0_i32,
-    10000_i32,
-    10000_i32 + 10000_i32,
-    10000_i32 + 10000_i32 + 26_i32,
-    10000_i32 + 10000_i32 + 26_i32 + 10000_i32,
+    0,
+    10000,
+    10000 + 10000,
+    10000 + 10000 + 26,
+    10000 + 10000 + 26 + 10000,
 ];
 static mut page_prec: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -441,8 +441,8 @@ static mut page_prec: [libc::c_char; 1024] = unsafe {
 static mut put_dot: i32 = 0;
 #[no_mangle]
 pub unsafe extern "C" fn scan_sty() {
-    let mut spec: [libc::c_char; 256] = [0; 256];
-    let mut tmp: i32 = 0;
+    let mut spec = [0; 256];
+    let mut tmp = 0;
     if verbose != 0 {
         fprintf(
             stderr,
@@ -462,28 +462,28 @@ pub unsafe extern "C" fn scan_sty() {
         if strcmp(
             spec.as_mut_ptr(),
             b"preamble\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(preamble.as_mut_ptr());
             prelen = count_lfd(preamble.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"postamble\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(postamble.as_mut_ptr());
             postlen = count_lfd(postamble.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"group_skip\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(group_skip.as_mut_ptr());
             skiplen = count_lfd(group_skip.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"headings_flag\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             fscanf(
                 sty_fp,
@@ -493,187 +493,187 @@ pub unsafe extern "C" fn scan_sty() {
         } else if strcmp(
             spec.as_mut_ptr(),
             b"heading_prefix\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(heading_pre.as_mut_ptr());
             headprelen = count_lfd(heading_pre.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"heading_suffix\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(heading_suf.as_mut_ptr());
             headsuflen = count_lfd(heading_suf.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"symhead_positive\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(symhead_pos.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"symhead_negative\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(symhead_neg.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"numhead_positive\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(numhead_pos.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"numhead_negative\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(numhead_neg.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"setpage_prefix\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(setpage_open.as_mut_ptr());
             setpagelen = count_lfd(setpage_open.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"setpage_suffix\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(setpage_close.as_mut_ptr());
             setpagelen = count_lfd(setpage_close.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_0\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string((item_r[0]).as_mut_ptr());
-            ilen_r[0_i32 as usize] = count_lfd((item_r[0]).as_mut_ptr());
+            ilen_r[0] = count_lfd((item_r[0]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_1\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string((item_r[1]).as_mut_ptr());
-            ilen_r[1_i32 as usize] = count_lfd((item_r[1]).as_mut_ptr());
+            ilen_r[1] = count_lfd((item_r[1]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_2\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string((item_r[2]).as_mut_ptr());
-            ilen_r[2_i32 as usize] = count_lfd((item_r[2]).as_mut_ptr());
+            ilen_r[2] = count_lfd((item_r[2]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_01\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string((item_u[1]).as_mut_ptr());
-            ilen_u[1_i32 as usize] = count_lfd((item_u[1]).as_mut_ptr());
+            ilen_u[1] = count_lfd((item_u[1]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_12\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string((item_u[2]).as_mut_ptr());
-            ilen_u[2_i32 as usize] = count_lfd((item_u[2]).as_mut_ptr());
+            ilen_u[2] = count_lfd((item_u[2]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_x1\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string((item_x[1]).as_mut_ptr());
-            ilen_x[1_i32 as usize] = count_lfd((item_x[1]).as_mut_ptr());
+            ilen_x[1] = count_lfd((item_x[1]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_x2\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string((item_x[2]).as_mut_ptr());
-            ilen_x[2_i32 as usize] = count_lfd((item_x[2]).as_mut_ptr());
+            ilen_x[2] = count_lfd((item_x[2]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"encap_prefix\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(encap_p.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"encap_infix\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(encap_i.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"encap_suffix\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(encap_s.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_0\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string((delim_p[0]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_1\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string((delim_p[1]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_2\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string((delim_p[2]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_n\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(delim_n.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_r\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(delim_r.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_t\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(delim_t.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"suffix_2p\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(suffix_2p.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"suffix_3p\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(suffix_3p.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"suffix_mp\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(suffix_mp.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"line_max\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             fscanf(
                 sty_fp,
                 b"%d\0" as *const u8 as *const libc::c_char,
                 &mut tmp as *mut i32,
             );
-            if tmp > 0_i32 {
+            if tmp > 0 {
                 linemax = tmp;
             } else {
                 if idx_dot != 0 {
@@ -700,14 +700,14 @@ pub unsafe extern "C" fn scan_sty() {
         } else if strcmp(
             spec.as_mut_ptr(),
             b"indent_length\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             fscanf(
                 sty_fp,
                 b"%d\0" as *const u8 as *const libc::c_char,
                 &mut tmp as *mut i32,
             );
-            if tmp >= 0_i32 {
+            if tmp >= 0 {
                 indent_length = tmp;
             } else {
                 if idx_dot != 0 {
@@ -734,88 +734,88 @@ pub unsafe extern "C" fn scan_sty() {
         } else if strcmp(
             spec.as_mut_ptr(),
             b"indent_space\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(indent_space.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"page_compositor\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(page_comp.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"page_precedence\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(page_prec.as_mut_ptr());
             process_precedence();
         } else if strcmp(
             spec.as_mut_ptr(),
             b"keyword\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_string(idx_keyword.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"arg_open\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_char(&mut idx_aopen);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"arg_close\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_char(&mut idx_aclose);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"level\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_char(&mut idx_level);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"range_open\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_char(&mut idx_ropen);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"range_close\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_char(&mut idx_rclose);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"quote\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_char(&mut idx_quote);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"actual\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_char(&mut idx_actual);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"encap\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_char(&mut idx_encap);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"escape\0" as *const u8 as *const libc::c_char,
-        ) == 0_i32
+        ) == 0
         {
             scan_char(&mut idx_escape);
         } else {
             next_nonblank();
-            let mut a: i32 = 0;
+            let mut a = 0;
             loop {
                 a = getc(sty_fp);
-                if !(a != '\n' as i32 && a != -1_i32) {
+                if !(a != '\n' as i32 && a != -1) {
                     break;
                 }
             }
@@ -895,28 +895,27 @@ pub unsafe extern "C" fn scan_sty() {
     fclose(sty_fp);
 }
 unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
-    let mut i: i32 = 0_i32;
-    let mut c: i32 = 0;
+    let mut i = 0;
+    let mut c = 0;
     loop {
         c = next_nonblank();
-        if c == -1_i32 {
-            return 0_i32;
+        if c == -1 {
+            return 0;
         } else {
             if c != '%' as i32 {
                 break;
             }
-            let mut a: i32 = 0;
+            let mut a = 0;
             loop {
                 a = getc(sty_fp);
-                if !(a != '\n' as i32 && a != -1_i32) {
+                if !(a != '\n' as i32 && a != -1) {
                     break;
                 }
             }
             sty_lc += 1;
         }
     }
-    *spec.offset(0_i32 as isize) = if *(*__ctype_b_loc()).offset(c as libc::c_uchar as i32 as isize)
-        as i32
+    *spec.offset(0) = if *(*__ctype_b_loc()).offset(c as libc::c_uchar as i32 as isize) as i32
         & _ISupper as i32 as libc::c_ushort as i32
         != 0
     {
@@ -927,14 +926,14 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
     loop {
         let fresh0 = i;
         i += 1;
-        if !(fresh0 < 256_i32
+        if !(fresh0 < 256
             && {
                 c = getc(sty_fp);
                 c != ' ' as i32
             }
             && c != '\t' as i32
             && c != '\n' as i32
-            && c != -1_i32)
+            && c != -1)
         {
             break;
         }
@@ -948,9 +947,9 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
             (c as libc::c_uchar as i32).try_into().unwrap()
         };
     }
-    if i < 256_i32 {
+    if i < 256 {
         *spec.offset(i as isize) = '\0' as i8;
-        if c == -1_i32 {
+        if c == -1 {
             if idx_dot != 0 {
                 fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
                 idx_dot = 0;
@@ -971,12 +970,12 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
             sty_ec += 1;
 
             put_dot = 0;
-            return -1_i32;
+            return -1;
         }
         if c == '\n' as i32 {
             sty_lc += 1;
         }
-        1_i32
+        1
     } else {
         if idx_dot != 0 {
             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
@@ -993,20 +992,20 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
             ilg_fp,
             b"Specifier %s too long (max %d).\n\0" as *const u8 as *const libc::c_char,
             spec,
-            256_i32,
+            256,
         );
         sty_ec += 1;
 
         put_dot = 0;
-        0_i32
+        0
     }
 }
 unsafe extern "C" fn next_nonblank() -> i32 {
-    let mut c: i32 = 0;
+    let mut c = 0;
     loop {
         c = getc(sty_fp);
         match c {
-            -1 => return -1_i32,
+            -1 => return -1,
             10 => {
                 sty_lc += 1;
             }
@@ -1016,9 +1015,9 @@ unsafe extern "C" fn next_nonblank() -> i32 {
     }
 }
 unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
-    let mut clone: [libc::c_char; 1024] = [0; 1024];
-    let mut i: i32 = 0_i32;
-    let mut c: i32 = 0;
+    let mut clone = [0; 1024];
+    let mut i = 0;
+    let mut c = 0;
     c = next_nonblank();
     match c {
         34 => loop {
@@ -1044,12 +1043,12 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
                     sty_ec += 1;
 
                     put_dot = 0;
-                    return 0_i32;
+                    return 0;
                 }
                 34 => {
                     clone[i as usize] = '\0' as i8;
                     strcpy(str, clone.as_mut_ptr());
-                    return 1_i32;
+                    return 1;
                 }
                 92 => {
                     c = getc(sty_fp);
@@ -1075,15 +1074,15 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
                     if c == '\n' as i32 {
                         sty_lc += 1;
                     }
-                    if i < 1024_i32 {
+                    if i < 1024 {
                         let fresh4 = i;
                         i += 1;
                         clone[fresh4 as usize] = c as i8;
                     } else {
-                        let mut a: i32 = 0;
+                        let mut a = 0;
                         loop {
                             a = getc(sty_fp);
-                            if !(a != '\n' as i32 && a != -1_i32) {
+                            if !(a != '\n' as i32 && a != -1) {
                                 break;
                             }
                         }
@@ -1105,31 +1104,31 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
                             b"Attribute string %s too long (max %d).\n\0" as *const u8
                                 as *const libc::c_char,
                             clone.as_mut_ptr(),
-                            1024_i32,
+                            1024,
                         );
                         sty_ec += 1;
 
                         put_dot = 0;
-                        return 0_i32;
+                        return 0;
                     }
                 }
             }
         },
         37 => {
-            let mut a_0: i32 = 0;
+            let mut a_0 = 0;
             loop {
                 a_0 = getc(sty_fp);
-                if !(a_0 != '\n' as i32 && a_0 != -1_i32) {
+                if !(a_0 != '\n' as i32 && a_0 != -1) {
                     break;
                 }
             }
             sty_lc += 1;
         }
         _ => {
-            let mut a_1: i32 = 0;
+            let mut a_1 = 0;
             loop {
                 a_1 = getc(sty_fp);
-                if !(a_1 != '\n' as i32 && a_1 != -1_i32) {
+                if !(a_1 != '\n' as i32 && a_1 != -1) {
                     break;
                 }
             }
@@ -1154,13 +1153,13 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
             sty_ec += 1;
 
             put_dot = 0;
-            return 0_i32;
+            return 0;
         }
     }
-    1_i32
+    1
 }
 unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
-    let mut clone: i32 = 0;
+    let mut clone = 0;
     clone = next_nonblank();
     match clone {
         39 => {
@@ -1168,10 +1167,10 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
             clone = getc(sty_fp);
             match clone {
                 39 => {
-                    let mut a: i32 = 0;
+                    let mut a = 0;
                     loop {
                         a = getc(sty_fp);
-                        if !(a != '\n' as i32 && a != -1_i32) {
+                        if !(a != '\n' as i32 && a != -1) {
                             break;
                         }
                     }
@@ -1196,7 +1195,7 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
                     sty_ec += 1;
 
                     put_dot = 0;
-                    return 0_i32;
+                    return 0;
                 }
                 10 => {
                     sty_lc += 1;
@@ -1218,7 +1217,7 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
                 10796120567984398691 => {
                     if getc(sty_fp) == '\'' as i32 {
                         *c = clone as i8;
-                        return 1_i32;
+                        return 1;
                     } else {
                         if idx_dot != 0 {
                             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
@@ -1240,7 +1239,7 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
                         sty_ec += 1;
 
                         put_dot = 0;
-                        return 0_i32;
+                        return 0;
                     }
                 }
                 _ => {
@@ -1263,25 +1262,25 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
                     sty_ec += 1;
 
                     put_dot = 0;
-                    return 0_i32;
+                    return 0;
                 }
             }
         }
         37 => {
-            let mut a_0: i32 = 0;
+            let mut a_0 = 0;
             loop {
                 a_0 = getc(sty_fp);
-                if !(a_0 != '\n' as i32 && a_0 != -1_i32) {
+                if !(a_0 != '\n' as i32 && a_0 != -1) {
                     break;
                 }
             }
             sty_lc += 1;
         }
         _ => {
-            let mut a_1: i32 = 0;
+            let mut a_1 = 0;
             loop {
                 a_1 = getc(sty_fp);
-                if !(a_1 != '\n' as i32 && a_1 != -1_i32) {
+                if !(a_1 != '\n' as i32 && a_1 != -1) {
                     break;
                 }
             }
@@ -1306,14 +1305,14 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
             sty_ec += 1;
 
             put_dot = 0;
-            return 0_i32;
+            return 0;
         }
     }
-    1_i32
+    1
 }
 unsafe extern "C" fn count_lfd(mut str: *mut libc::c_char) -> i32 {
-    let mut i: i32 = 0_i32;
-    let mut n: i32 = 0_i32;
+    let mut i = 0;
+    let mut n = 0;
     while *str.offset(i as isize) as i32 != '\0' as i32 {
         if *str.offset(i as isize) as i32 == '\n' as i32 {
             n += 1;
@@ -1324,23 +1323,23 @@ unsafe extern "C" fn count_lfd(mut str: *mut libc::c_char) -> i32 {
     n
 }
 unsafe extern "C" fn process_precedence() -> i32 {
-    let mut order: [i32; 5] = [0; 5];
-    let mut type_0: [i32; 5] = [0; 5];
-    let mut i: i32 = 0_i32;
-    let mut last: i32 = 0;
-    let mut roml: i32 = 0_i32;
-    let mut romu: i32 = 0_i32;
-    let mut arab: i32 = 0_i32;
-    let mut alpl: i32 = 0_i32;
-    let mut alpu: i32 = 0_i32;
-    while i < 5_i32 && page_prec[i as usize] as i32 != '\0' as i32 {
+    let mut order = [0; 5];
+    let mut type_0 = [0; 5];
+    let mut i = 0;
+    let mut last = 0;
+    let mut roml = 0;
+    let mut romu = 0;
+    let mut arab = 0;
+    let mut alpl = 0;
+    let mut alpu = 0;
+    while i < 5 && page_prec[i as usize] as i32 != '\0' as i32 {
         match page_prec[i as usize] as i32 {
             114 => {
                 if roml != 0 {
-                    let mut a: i32 = 0;
+                    let mut a = 0;
                     loop {
                         a = getc(sty_fp);
-                        if !(a != '\n' as i32 && a != -1_i32) {
+                        if !(a != '\n' as i32 && a != -1) {
                             break;
                         }
                     }
@@ -1367,17 +1366,17 @@ unsafe extern "C" fn process_precedence() -> i32 {
                     sty_ec += 1;
 
                     put_dot = 0;
-                    return 0_i32;
+                    return 0;
                 } else {
                     roml = 1;
                 }
             }
             82 => {
                 if romu != 0 {
-                    let mut a_0: i32 = 0;
+                    let mut a_0 = 0;
                     loop {
                         a_0 = getc(sty_fp);
-                        if !(a_0 != '\n' as i32 && a_0 != -1_i32) {
+                        if !(a_0 != '\n' as i32 && a_0 != -1) {
                             break;
                         }
                     }
@@ -1404,17 +1403,17 @@ unsafe extern "C" fn process_precedence() -> i32 {
                     sty_ec += 1;
 
                     put_dot = 0;
-                    return 0_i32;
+                    return 0;
                 } else {
                     romu = 1;
                 }
             }
             110 => {
                 if arab != 0 {
-                    let mut a_1: i32 = 0;
+                    let mut a_1 = 0;
                     loop {
                         a_1 = getc(sty_fp);
-                        if !(a_1 != '\n' as i32 && a_1 != -1_i32) {
+                        if !(a_1 != '\n' as i32 && a_1 != -1) {
                             break;
                         }
                     }
@@ -1441,17 +1440,17 @@ unsafe extern "C" fn process_precedence() -> i32 {
                     sty_ec += 1;
 
                     put_dot = 0;
-                    return 0_i32;
+                    return 0;
                 } else {
                     arab = 1;
                 }
             }
             97 => {
                 if alpl != 0 {
-                    let mut a_2: i32 = 0;
+                    let mut a_2 = 0;
                     loop {
                         a_2 = getc(sty_fp);
-                        if !(a_2 != '\n' as i32 && a_2 != -1_i32) {
+                        if !(a_2 != '\n' as i32 && a_2 != -1) {
                             break;
                         }
                     }
@@ -1478,17 +1477,17 @@ unsafe extern "C" fn process_precedence() -> i32 {
                     sty_ec += 1;
 
                     put_dot = 0;
-                    return 0_i32;
+                    return 0;
                 } else {
                     alpl = 1;
                 }
             }
             65 => {
                 if alpu != 0 {
-                    let mut a_3: i32 = 0;
+                    let mut a_3 = 0;
                     loop {
                         a_3 = getc(sty_fp);
-                        if !(a_3 != '\n' as i32 && a_3 != -1_i32) {
+                        if !(a_3 != '\n' as i32 && a_3 != -1) {
                             break;
                         }
                     }
@@ -1515,16 +1514,16 @@ unsafe extern "C" fn process_precedence() -> i32 {
                     sty_ec += 1;
 
                     put_dot = 0;
-                    return 0_i32;
+                    return 0;
                 } else {
                     alpu = 1;
                 }
             }
             _ => {
-                let mut a_4: i32 = 0;
+                let mut a_4 = 0;
                 loop {
                     a_4 = getc(sty_fp);
-                    if !(a_4 != '\n' as i32 && a_4 != -1_i32) {
+                    if !(a_4 != '\n' as i32 && a_4 != -1) {
                         break;
                     }
                 }
@@ -1550,16 +1549,16 @@ unsafe extern "C" fn process_precedence() -> i32 {
                 sty_ec += 1;
 
                 put_dot = 0;
-                return 0_i32;
+                return 0;
             }
         }
         i += 1;
     }
     if page_prec[i as usize] as i32 != '\0' as i32 {
-        let mut a_5: i32 = 0;
+        let mut a_5 = 0;
         loop {
             a_5 = getc(sty_fp);
-            if !(a_5 != '\n' as i32 && a_5 != -1_i32) {
+            if !(a_5 != '\n' as i32 && a_5 != -1) {
                 break;
             }
         }
@@ -1585,7 +1584,7 @@ unsafe extern "C" fn process_precedence() -> i32 {
         sty_ec += 1;
 
         put_dot = 0;
-        return 0_i32;
+        return 0;
     }
     last = i;
     match page_prec[0] as i32 {
@@ -1615,23 +1614,23 @@ unsafe extern "C" fn process_precedence() -> i32 {
     while i < last {
         match page_prec[i as usize] as i32 {
             114 => {
-                order[i as usize] = order[(i - 1_i32) as usize] + 10000_i32;
+                order[i as usize] = order[(i - 1) as usize] + 10000;
                 type_0[i as usize] = 0;
             }
             82 => {
-                order[i as usize] = order[(i - 1_i32) as usize] + 10000_i32;
+                order[i as usize] = order[(i - 1) as usize] + 10000;
                 type_0[i as usize] = 1;
             }
             110 => {
-                order[i as usize] = order[(i - 1_i32) as usize] + 10000_i32;
+                order[i as usize] = order[(i - 1) as usize] + 10000;
                 type_0[i as usize] = 2;
             }
             97 => {
-                order[i as usize] = order[(i - 1_i32) as usize] + 26_i32;
+                order[i as usize] = order[(i - 1) as usize] + 26;
                 type_0[i as usize] = 3;
             }
             65 => {
-                order[i as usize] = order[(i - 1_i32) as usize] + 26_i32;
+                order[i as usize] = order[(i - 1) as usize] + 26;
                 type_0[i as usize] = 4;
             }
             _ => {}
@@ -1639,34 +1638,34 @@ unsafe extern "C" fn process_precedence() -> i32 {
         i += 1;
     }
     i = 0;
-    while i < 5_i32 {
-        page_offset[i as usize] = -1_i32;
+    while i < 5 {
+        page_offset[i as usize] = -1;
         i += 1;
     }
     page_offset[type_0[0] as usize] = 0;
     i = 1;
     while i < last {
-        page_offset[type_0[i as usize] as usize] = order[(i - 1_i32) as usize];
+        page_offset[type_0[i as usize] as usize] = order[(i - 1) as usize];
         i += 1;
     }
     i = 0;
-    while i < 5_i32 {
-        if page_offset[i as usize] == -1_i32 {
-            match type_0[(last - 1_i32) as usize] {
+    while i < 5 {
+        if page_offset[i as usize] == -1 {
+            match type_0[(last - 1) as usize] {
                 0 => {
-                    order[last as usize] = order[(last - 1_i32) as usize] + 10000_i32;
+                    order[last as usize] = order[(last - 1) as usize] + 10000;
                 }
                 1 => {
-                    order[last as usize] = order[(last - 1_i32) as usize] + 10000_i32;
+                    order[last as usize] = order[(last - 1) as usize] + 10000;
                 }
                 2 => {
-                    order[last as usize] = order[(last - 1_i32) as usize] + 10000_i32;
+                    order[last as usize] = order[(last - 1) as usize] + 10000;
                 }
                 3 => {
-                    order[last as usize] = order[(last - 1_i32) as usize] + 26_i32;
+                    order[last as usize] = order[(last - 1) as usize] + 26;
                 }
                 4 => {
-                    order[last as usize] = order[(last - 1_i32) as usize] + 26_i32;
+                    order[last as usize] = order[(last - 1) as usize] + 26;
                 }
                 _ => {}
             }
@@ -1676,5 +1675,5 @@ unsafe extern "C" fn process_precedence() -> i32 {
         }
         i += 1;
     }
-    1_i32
+    1
 }

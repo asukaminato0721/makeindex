@@ -139,11 +139,11 @@ pub static mut head: NODE_PTR = 0 as *const KNODE as *mut KNODE;
 pub static mut tail: NODE_PTR = 0 as *const KNODE as *mut KNODE;
 #[no_mangle]
 pub unsafe extern "C" fn scan_idx() {
-    let mut keyword: [libc::c_char; 1024] = [0; 1024];
-    let mut c: i32 = 0;
-    let mut i: i32 = 0;
-    let mut not_eof: i32 = 1;
-    let mut arg_count: i32 = -1;
+    let mut keyword = [0; 1024];
+    let mut c = 0;
+    let mut i = 0;
+    let mut not_eof = 1;
+    let mut arg_count = -1;
     if verbose != 0 {
         fprintf(
             stderr,
@@ -251,7 +251,7 @@ pub unsafe extern "C" fn scan_idx() {
                                 arg_count = -1;
                             }
                         } else {
-                            let mut tmp: i32 = 0;
+                            let mut tmp = 0;
                             loop {
                                 tmp = getc(idx_fp);
                                 if tmp == '\n' as i32 {
@@ -289,7 +289,7 @@ pub unsafe extern "C" fn scan_idx() {
                         i += 1;
                         keyword[fresh3 as usize] = c as libc::c_char;
                     } else {
-                        let mut tmp_0: i32 = 0;
+                        let mut tmp_0 = 0;
                         loop {
                             tmp_0 = getc(idx_fp);
                             if tmp_0 == '\n' as i32 {
@@ -331,7 +331,7 @@ pub unsafe extern "C" fn scan_idx() {
                             arg_count = -1;
                         }
                     } else {
-                        let mut tmp_1: i32 = 0;
+                        let mut tmp_1 = 0;
                         loop {
                             tmp_1 = getc(idx_fp);
                             if tmp_1 == '\n' as i32 {
@@ -365,7 +365,7 @@ pub unsafe extern "C" fn scan_idx() {
                     }
                 }
                 2 => {
-                    let mut tmp_2: i32 = 0;
+                    let mut tmp_2 = 0;
                     loop {
                         tmp_2 = getc(idx_fp);
                         if tmp_2 == '\n' as i32 {
@@ -424,7 +424,7 @@ pub unsafe extern "C" fn scan_idx() {
     fclose(idx_fp);
 }
 unsafe extern "C" fn flush_to_eol() {
-    let mut a: i32 = 0;
+    let mut a = 0;
     loop {
         a = getc(idx_fp);
         if !(a != '\n' as i32 && a != -1) {
@@ -433,8 +433,8 @@ unsafe extern "C" fn flush_to_eol() {
     }
 }
 unsafe extern "C" fn make_key() -> i32 {
-    let mut ptr: NODE_PTR = std::ptr::null_mut::<KNODE>();
-    let mut i: i32 = 0;
+    let mut ptr = std::ptr::null_mut::<KNODE>();
+    let mut i = 0;
     ptr = malloc(::core::mem::size_of::<NODE>() as libc::c_ulong) as NODE_PTR;
     if ptr.is_null() {
         fprintf(
@@ -458,13 +458,13 @@ unsafe extern "C" fn make_key() -> i32 {
         i;
     }
     (*ptr).data.encap = b"\0" as *const u8 as *const libc::c_char as *mut libc::c_char;
-    (*ptr).data.lpg[0 as usize] = '\0' as i32 as libc::c_char;
+    (*ptr).data.lpg[0] = '\0' as i32 as libc::c_char;
     (*ptr).data.count = 0 as libc::c_short;
     (*ptr).data.type_0 = -9999 as libc::c_short;
     if scan_key(&mut (*ptr).data) == 0 {
         return 0;
     }
-    (*ptr).data.group = group_type((*ptr).data.sf[0 as usize]);
+    (*ptr).data.group = group_type((*ptr).data.sf[0]);
     strcpy(((*ptr).data.lpg).as_mut_ptr(), no.as_mut_ptr());
     if scan_no(
         no.as_mut_ptr(),
@@ -489,7 +489,7 @@ unsafe extern "C" fn make_key() -> i32 {
     1
 }
 unsafe extern "C" fn make_string(mut ppstr: *mut *mut libc::c_char, mut n: i32) {
-    if *(*ppstr).offset(0 as isize) as i32 == '\0' as i32 {
+    if *(*ppstr).offset(0) as i32 == '\0' as i32 {
         *ppstr = malloc(n as libc::c_ulong) as *mut libc::c_char;
         if (*ppstr).is_null() {
             fprintf(
@@ -505,14 +505,14 @@ unsafe extern "C" fn make_string(mut ppstr: *mut *mut libc::c_char, mut n: i32) 
             );
             exit(1);
         }
-        *(*ppstr).offset(0 as isize) = '\0' as i32 as libc::c_char;
+        *(*ppstr).offset(0) = '\0' as i32 as libc::c_char;
     }
 }
 unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
-    let mut i: i32 = 0;
-    let mut n: i32 = 0;
-    let mut second_round: i32 = 0;
-    let mut last: i32 = 3 - 1;
+    let mut i = 0;
+    let mut n = 0;
+    let mut second_round = 0;
+    let mut last = 3 - 1;
     while key[n as usize] as i32 != '\0' as i32 {
         if key[n as usize] as i32 == idx_encap as i32 {
             n += 1;
@@ -535,7 +535,6 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
             return 0;
         } else if key[n as usize] as i32 == idx_actual as i32 {
             n += 1;
-            n;
             if i == last {
                 make_string(
                     &mut *((*data).af).as_mut_ptr().offset(i as isize),
@@ -572,9 +571,8 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
         } else {
             if second_round != 0 {
                 i += 1;
-                i;
+
                 n += 1;
-                n;
             }
             if i == last {
                 make_string(
@@ -619,7 +617,7 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
             }
         }
     }
-    if *(*data).sf[0 as usize] as i32 == '\0' as i32 {
+    if *(*data).sf[0] as i32 == '\0' as i32 {
         if idx_dot != 0 {
             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
             idx_dot = 0;
@@ -703,13 +701,12 @@ unsafe extern "C" fn scan_field(
     mut ck_actual: i32,
 ) -> i32 {
     let mut current_block: u64;
-    let mut i: i32 = 0;
-    let mut nbsh: i32 = 0;
+    let mut i = 0;
+    let mut nbsh = 0;
     if compress_blanks != 0
         && (key[*n as usize] as i32 == ' ' as i32 || key[*n as usize] as i32 == '\t' as i32)
     {
         *n += 1;
-        *n;
     }
     loop {
         nbsh = 0;
@@ -728,7 +725,6 @@ unsafe extern "C" fn scan_field(
                 break;
             }
             *n += 1;
-            *n;
         }
         if current_block == 10886091980245723256 {
             if key[*n as usize] as i32 == idx_quote as i32 {
@@ -843,7 +839,7 @@ unsafe extern "C" fn scan_field(
                 _ => {
                     if i <= len_field {
                         *n += 1;
-                        *n;
+
                         continue;
                     }
                 }
@@ -910,7 +906,7 @@ unsafe extern "C" fn scan_field(
 }
 #[no_mangle]
 pub unsafe extern "C" fn group_type(mut str: *mut libc::c_char) -> i32 {
-    let mut i: i32 = 0;
+    let mut i = 0;
     while *str.offset(i as isize) as i32 != '\0' as i32
         && ('0' as i32 <= *str.offset(i as isize) as i32
             && *str.offset(i as isize) as i32 <= '9' as i32)
@@ -925,12 +921,9 @@ pub unsafe extern "C" fn group_type(mut str: *mut libc::c_char) -> i32 {
             &mut i as *mut i32,
         );
         i
-    } else if '!' as i32 <= *str.offset(0 as isize) as i32
-        && *str.offset(0 as isize) as i32 <= '@' as i32
-        || '[' as i32 <= *str.offset(0 as isize) as i32
-            && *str.offset(0 as isize) as i32 <= '`' as i32
-        || '{' as i32 <= *str.offset(0 as isize) as i32
-            && *str.offset(0 as isize) as i32 <= '~' as i32
+    } else if '!' as i32 <= *str.offset(0) as i32 && *str.offset(0) as i32 <= '@' as i32
+        || '[' as i32 <= *str.offset(0) as i32 && *str.offset(0) as i32 <= '`' as i32
+        || '{' as i32 <= *str.offset(0) as i32 && *str.offset(0) as i32 <= '~' as i32
     {
         -1
     } else {
@@ -943,8 +936,8 @@ unsafe extern "C" fn scan_no(
     mut count: *mut libc::c_short,
     mut type_0: *mut libc::c_short,
 ) -> i32 {
-    let mut i: i32 = 1;
-    if *(*__ctype_b_loc()).offset(*no_0.offset(0 as isize) as i32 as isize) as i32
+    let mut i = 1;
+    if *(*__ctype_b_loc()).offset(*no_0.offset(0) as i32 as isize) as i32
         & _ISdigit as i32 as libc::c_ushort as i32
         != 0
     {
@@ -952,13 +945,13 @@ unsafe extern "C" fn scan_no(
         if scan_arabic(no_0, npg, count) == 0 {
             return 0;
         }
-    } else if (*no_0.offset(0 as isize) as i32 == 'i' as i32
-        || *no_0.offset(0 as isize) as i32 == 'v' as i32
-        || *no_0.offset(0 as isize) as i32 == 'x' as i32
-        || *no_0.offset(0 as isize) as i32 == 'l' as i32
-        || *no_0.offset(0 as isize) as i32 == 'c' as i32
-        || *no_0.offset(0 as isize) as i32 == 'd' as i32
-        || *no_0.offset(0 as isize) as i32 == 'm' as i32)
+    } else if (*no_0.offset(0) as i32 == 'i' as i32
+        || *no_0.offset(0) as i32 == 'v' as i32
+        || *no_0.offset(0) as i32 == 'x' as i32
+        || *no_0.offset(0) as i32 == 'l' as i32
+        || *no_0.offset(0) as i32 == 'c' as i32
+        || *no_0.offset(0) as i32 == 'd' as i32
+        || *no_0.offset(0) as i32 == 'm' as i32)
         && (strncmp(
             &mut *no_0.offset(i as isize),
             page_comp.as_mut_ptr(),
@@ -969,14 +962,14 @@ unsafe extern "C" fn scan_no(
         if scan_roman_lower(no_0, npg, count) == 0 {
             return 0;
         }
-    } else if (*no_0.offset(0 as isize) as i32 == 'I' as i32
-        || *no_0.offset(0 as isize) as i32 == 'V' as i32
-        || *no_0.offset(0 as isize) as i32 == 'X' as i32
-        || *no_0.offset(0 as isize) as i32 == 'L' as i32
-        || *no_0.offset(0 as isize) as i32 == 'C' as i32
-        || *no_0.offset(0 as isize) as i32 == 'D' as i32
-        || *no_0.offset(0 as isize) as i32 == 'M' as i32)
-        && (*no_0.offset(0 as isize) as i32 == 'I' as i32
+    } else if (*no_0.offset(0) as i32 == 'I' as i32
+        || *no_0.offset(0) as i32 == 'V' as i32
+        || *no_0.offset(0) as i32 == 'X' as i32
+        || *no_0.offset(0) as i32 == 'L' as i32
+        || *no_0.offset(0) as i32 == 'C' as i32
+        || *no_0.offset(0) as i32 == 'D' as i32
+        || *no_0.offset(0) as i32 == 'M' as i32)
+        && (*no_0.offset(0) as i32 == 'I' as i32
             || (strncmp(
                 &mut *no_0.offset(i as isize),
                 page_comp.as_mut_ptr(),
@@ -987,16 +980,12 @@ unsafe extern "C" fn scan_no(
         if scan_roman_upper(no_0, npg, count) == 0 {
             return 0;
         }
-    } else if 'a' as i32 <= *no_0.offset(0 as isize) as i32
-        && *no_0.offset(0 as isize) as i32 <= 'z' as i32
-    {
+    } else if 'a' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'z' as i32 {
         *type_0 = 3 as libc::c_short;
         if scan_alpha_lower(no_0, npg, count) == 0 {
             return 0;
         }
-    } else if 'A' as i32 <= *no_0.offset(0 as isize) as i32
-        && *no_0.offset(0 as isize) as i32 <= 'Z' as i32
-    {
+    } else if 'A' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'Z' as i32 {
         *type_0 = 4 as libc::c_short;
         if scan_alpha_upper(no_0, npg, count) == 0 {
             return 0;
@@ -1029,8 +1018,8 @@ unsafe extern "C" fn scan_arabic(
     mut npg: *mut libc::c_short,
     mut count: *mut libc::c_short,
 ) -> i32 {
-    let mut i: libc::c_short = 0 as libc::c_short;
-    let mut str: [libc::c_char; 6] = [0; 6];
+    let mut i = 0;
+    let mut str = [0; 6];
     while *no_0.offset(i as isize) as i32 != '\0' as i32
         && i as i32 <= 5
         && (strncmp(
@@ -1115,8 +1104,7 @@ unsafe extern "C" fn scan_arabic(
 
         return 0;
     }
-    *npg.offset(*count as isize) =
-        (strtoint(str.as_mut_ptr()) + page_offset[2 as usize]) as libc::c_short;
+    *npg.offset(*count as isize) = (strtoint(str.as_mut_ptr()) + page_offset[2]) as libc::c_short;
     *count += 1;
     *count;
     if strncmp(
@@ -1140,10 +1128,10 @@ unsafe extern "C" fn scan_roman_lower(
     mut npg: *mut libc::c_short,
     mut count: *mut libc::c_short,
 ) -> i32 {
-    let mut i: libc::c_short = 0 as libc::c_short;
-    let mut inp: i32 = 0;
-    let mut prev: i32 = 0;
-    let mut the_new: i32 = 0;
+    let mut i = 0;
+    let mut inp = 0;
+    let mut prev = 0;
+    let mut the_new = 0;
     while *no_0.offset(i as isize) as i32 != '\0' as i32
         && (i as i32) < 16
         && (strncmp(
@@ -1162,26 +1150,20 @@ unsafe extern "C" fn scan_roman_lower(
             && {
                 the_new = if *no_0.offset(i as isize) as i32 == 'i' as i32 {
                     1
+                } else if *no_0.offset(i as isize) as i32 == 'v' as i32 {
+                    5
+                } else if *no_0.offset(i as isize) as i32 == 'x' as i32 {
+                    10
+                } else if *no_0.offset(i as isize) as i32 == 'l' as i32 {
+                    50
+                } else if *no_0.offset(i as isize) as i32 == 'c' as i32 {
+                    100
+                } else if *no_0.offset(i as isize) as i32 == 'd' as i32 {
+                    500
+                } else if *no_0.offset(i as isize) as i32 == 'm' as i32 {
+                    1000
                 } else {
-                    if *no_0.offset(i as isize) as i32 == 'v' as i32 {
-                        5
-                    } else {
-                        if *no_0.offset(i as isize) as i32 == 'x' as i32 {
-                            10
-                        } else {
-                            if *no_0.offset(i as isize) as i32 == 'l' as i32 {
-                                50
-                            } else if *no_0.offset(i as isize) as i32 == 'c' as i32 {
-                                100
-                            } else if *no_0.offset(i as isize) as i32 == 'd' as i32 {
-                                500
-                            } else if *no_0.offset(i as isize) as i32 == 'm' as i32 {
-                                1000
-                            } else {
-                                0
-                            }
-                        }
-                    }
+                    0
                 };
                 the_new != 0
             }
@@ -1267,7 +1249,7 @@ unsafe extern "C" fn scan_roman_lower(
 
         return 0;
     }
-    *npg.offset(*count as isize) = (inp + page_offset[0 as usize]) as libc::c_short;
+    *npg.offset(*count as isize) = (inp + page_offset[0]) as libc::c_short;
     *count += 1;
     *count;
     if strncmp(
@@ -1291,10 +1273,10 @@ unsafe extern "C" fn scan_roman_upper(
     mut npg: *mut libc::c_short,
     mut count: *mut libc::c_short,
 ) -> i32 {
-    let mut i: libc::c_short = 0 as libc::c_short;
-    let mut inp: i32 = 0;
-    let mut prev: i32 = 0;
-    let mut the_new: i32 = 0;
+    let mut i = 0;
+    let mut inp = 0;
+    let mut prev = 0;
+    let mut the_new = 0;
     while *no_0.offset(i as isize) as i32 != '\0' as i32
         && (i as i32) < 16
         && (strncmp(
@@ -1313,26 +1295,20 @@ unsafe extern "C" fn scan_roman_upper(
             && {
                 the_new = if *no_0.offset(i as isize) as i32 == 'I' as i32 {
                     1
+                } else if *no_0.offset(i as isize) as i32 == 'V' as i32 {
+                    5
+                } else if *no_0.offset(i as isize) as i32 == 'X' as i32 {
+                    10
+                } else if *no_0.offset(i as isize) as i32 == 'L' as i32 {
+                    50
+                } else if *no_0.offset(i as isize) as i32 == 'C' as i32 {
+                    100
+                } else if *no_0.offset(i as isize) as i32 == 'D' as i32 {
+                    500
+                } else if *no_0.offset(i as isize) as i32 == 'M' as i32 {
+                    1000
                 } else {
-                    if *no_0.offset(i as isize) as i32 == 'V' as i32 {
-                        5
-                    } else {
-                        if *no_0.offset(i as isize) as i32 == 'X' as i32 {
-                            10
-                        } else {
-                            if *no_0.offset(i as isize) as i32 == 'L' as i32 {
-                                50
-                            } else if *no_0.offset(i as isize) as i32 == 'C' as i32 {
-                                100
-                            } else if *no_0.offset(i as isize) as i32 == 'D' as i32 {
-                                500
-                            } else if *no_0.offset(i as isize) as i32 == 'M' as i32 {
-                                1000
-                            } else {
-                                0
-                            }
-                        }
-                    }
+                    0
                 };
                 the_new != 0
             }
@@ -1418,7 +1394,7 @@ unsafe extern "C" fn scan_roman_upper(
 
         return 0;
     }
-    *npg.offset(*count as isize) = (inp + page_offset[1 as usize]) as libc::c_short;
+    *npg.offset(*count as isize) = (inp + page_offset[1]) as libc::c_short;
     *count += 1;
     *count;
     if strncmp(
@@ -1442,7 +1418,7 @@ unsafe extern "C" fn scan_alpha_lower(
     mut npg: *mut libc::c_short,
     mut count: *mut libc::c_short,
 ) -> i32 {
-    let mut i: libc::c_short = 0;
+    let mut i = 0;
     if *count as i32 >= 10 {
         if idx_dot != 0 {
             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
@@ -1465,17 +1441,14 @@ unsafe extern "C" fn scan_alpha_lower(
 
         return 0;
     }
-    *npg.offset(*count as isize) = ((if 'A' as i32 <= *no_0.offset(0 as isize) as i32
-        && *no_0.offset(0 as isize) as i32 <= 'Z' as i32
-    {
-        *no_0.offset(0 as isize) as i32 - 'A' as i32
-    } else if 'a' as i32 <= *no_0.offset(0 as isize) as i32
-        && *no_0.offset(0 as isize) as i32 <= 'z' as i32
-    {
-        *no_0.offset(0 as isize) as i32 - 'a' as i32
-    } else {
-        0
-    }) + page_offset[3 as usize]) as libc::c_short;
+    *npg.offset(*count as isize) =
+        ((if 'A' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'Z' as i32 {
+            *no_0.offset(0) as i32 - 'A' as i32
+        } else if 'a' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'z' as i32 {
+            *no_0.offset(0) as i32 - 'a' as i32
+        } else {
+            0
+        }) + page_offset[3]) as libc::c_short;
     *count += 1;
     *count;
     i = 1 as libc::c_short;
@@ -1500,7 +1473,7 @@ unsafe extern "C" fn scan_alpha_upper(
     mut npg: *mut libc::c_short,
     mut count: *mut libc::c_short,
 ) -> i32 {
-    let mut i: libc::c_short = 0;
+    let mut i = 0;
     if *count as i32 >= 10 {
         if idx_dot != 0 {
             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
@@ -1523,17 +1496,14 @@ unsafe extern "C" fn scan_alpha_upper(
 
         return 0;
     }
-    *npg.offset(*count as isize) = ((if 'A' as i32 <= *no_0.offset(0 as isize) as i32
-        && *no_0.offset(0 as isize) as i32 <= 'Z' as i32
-    {
-        *no_0.offset(0 as isize) as i32 - 'A' as i32
-    } else if 'a' as i32 <= *no_0.offset(0 as isize) as i32
-        && *no_0.offset(0 as isize) as i32 <= 'z' as i32
-    {
-        *no_0.offset(0 as isize) as i32 - 'a' as i32
-    } else {
-        0
-    }) + page_offset[4 as usize]) as libc::c_short;
+    *npg.offset(*count as isize) =
+        ((if 'A' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'Z' as i32 {
+            *no_0.offset(0) as i32 - 'A' as i32
+        } else if 'a' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'z' as i32 {
+            *no_0.offset(0) as i32 - 'a' as i32
+        } else {
+            0
+        }) + page_offset[4]) as libc::c_short;
     *count += 1;
     *count;
     i = 1 as libc::c_short;
@@ -1554,9 +1524,9 @@ unsafe extern "C" fn scan_alpha_upper(
     }
 }
 unsafe extern "C" fn scan_arg1() -> i32 {
-    let mut i: i32 = 0;
-    let mut n: i32 = 0;
-    let mut a: i32 = 0;
+    let mut i = 0;
+    let mut n = 0;
+    let mut a = 0;
     if compress_blanks != 0 {
         loop {
             a = getc(idx_fp);
@@ -1675,9 +1645,9 @@ unsafe extern "C" fn scan_arg1() -> i32 {
     0
 }
 unsafe extern "C" fn scan_arg2() -> i32 {
-    let mut i: i32 = 0;
-    let mut a: i32 = 0;
-    let mut hit_blank: i32 = 0;
+    let mut i = 0;
+    let mut a = 0;
+    let mut hit_blank = 0;
     loop {
         a = getc(idx_fp);
         if !(a == ' ' as i32 || a == '\t' as i32) {
@@ -1778,17 +1748,16 @@ unsafe extern "C" fn search_quote(
     mut sort_key: *mut libc::c_char,
     mut actual_key: *mut libc::c_char,
 ) {
-    let mut ptr: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
-    let mut sort: *mut libc::c_char = std::ptr::null_mut::<libc::c_char>();
-    let mut char_found: i32 = 0;
+    let mut ptr = std::ptr::null_mut::<libc::c_char>();
+    let mut sort = std::ptr::null_mut::<libc::c_char>();
+    let mut char_found = 0;
     strcpy(actual_key, sort_key as *const libc::c_char);
     ptr = strchr(sort_key as *const libc::c_char, '"' as i32);
     while !ptr.is_null() {
         sort = b"\0" as *const u8 as *const libc::c_char as *mut libc::c_char;
-        match *ptr.offset(1 as isize) as i32 {
+        match *ptr.offset(1) as i32 {
             97 | 65 => {
-                sort = (if *(*__ctype_b_loc()).offset(*ptr.offset(1 as isize) as i32 as isize)
-                    as i32
+                sort = (if *(*__ctype_b_loc()).offset(*ptr.offset(1) as i32 as isize) as i32
                     & _ISupper as i32 as libc::c_ushort as i32
                     != 0
                 {
@@ -1798,8 +1767,7 @@ unsafe extern "C" fn search_quote(
                 }) as *mut libc::c_char;
             }
             111 | 79 => {
-                sort = (if *(*__ctype_b_loc()).offset(*ptr.offset(1 as isize) as i32 as isize)
-                    as i32
+                sort = (if *(*__ctype_b_loc()).offset(*ptr.offset(1) as i32 as isize) as i32
                     & _ISupper as i32 as libc::c_ushort as i32
                     != 0
                 {
@@ -1809,8 +1777,7 @@ unsafe extern "C" fn search_quote(
                 }) as *mut libc::c_char;
             }
             117 | 85 => {
-                sort = (if *(*__ctype_b_loc()).offset(*ptr.offset(1 as isize) as i32 as isize)
-                    as i32
+                sort = (if *(*__ctype_b_loc()).offset(*ptr.offset(1) as i32 as isize) as i32
                     & _ISupper as i32 as libc::c_ushort as i32
                     != 0
                 {
@@ -1824,14 +1791,14 @@ unsafe extern "C" fn search_quote(
             }
             _ => {}
         }
-        if *sort.offset(0 as isize) as i32 != '\0' as i32 {
+        if *sort.offset(0) as i32 != '\0' as i32 {
             char_found = 1;
-            *ptr = *sort.offset(0 as isize);
-            *ptr.offset(1 as isize) = *sort.offset(1 as isize);
+            *ptr = *sort.offset(0);
+            *ptr.offset(1) = *sort.offset(1);
         }
-        ptr = strchr(ptr.offset(1 as isize), '"' as i32);
+        ptr = strchr(ptr.offset(1), '"' as i32);
     }
     if char_found == 0 {
-        *actual_key.offset(0 as isize) = '\0' as i32 as libc::c_char;
+        *actual_key.offset(0) = '\0' as i32 as libc::c_char;
     }
 }
