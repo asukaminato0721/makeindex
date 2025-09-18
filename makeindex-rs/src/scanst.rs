@@ -937,7 +937,7 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
         {
             break;
         }
-        *spec.offset(i as isize) = if *(*__ctype_b_loc()).offset(c as libc::c_uchar as i32 as isize)
+        *spec.offset(i) = if *(*__ctype_b_loc()).offset(c as libc::c_uchar as i32 as isize)
             as i32
             & _ISupper as i32 as libc::c_ushort as i32
             != 0
@@ -948,7 +948,7 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
         };
     }
     if i < 256 {
-        *spec.offset(i as isize) = '\0' as i8;
+        *spec.offset(i) = '\0' as i8;
         if c == -1 {
             if idx_dot != 0 {
                 fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
@@ -1313,8 +1313,8 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
 unsafe extern "C" fn count_lfd(mut str: *mut libc::c_char) -> i32 {
     let mut i = 0;
     let mut n = 0;
-    while *str.offset(i as isize) as i32 != '\0' as i32 {
-        if *str.offset(i as isize) as i32 == '\n' as i32 {
+    while *str.offset(i) as i32 != '\0' as i32 {
+        if *str.offset(i) as i32 == '\n' as i32 {
             n += 1;
           
         }
