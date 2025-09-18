@@ -13,8 +13,6 @@ extern "C" {
     // pub type _IO_wide_data;
     // pub type _IO_codecvt;
     // pub type _IO_marker;
-    static mut stderr: *mut FILE;
-    fn getc(__stream: *mut FILE) -> i32;
     fn __ctype_b_loc() -> *mut *const libc::c_ushort;
     static mut compress_blanks: i32;
     static mut verbose: i32;
@@ -107,7 +105,7 @@ pub unsafe extern "C" fn scan_idx() {
     let mut arg_count = -1;
     if verbose != 0 {
         fprintf(
-            stderr,
+            stderr(),
             b"Scanning input file %s...\0" as *const u8 as *const libc::c_char,
             idx_fn,
         );
@@ -121,9 +119,9 @@ pub unsafe extern "C" fn scan_idx() {
     idx_ec = idx_dc;
     idx_tc = idx_ec;
     idx_lc = idx_tc;
-    comp_len = strlen(page_comp.as_mut_ptr()) as i32;
+    comp_len = strlen(page_comp.as_ptr()) as i32;
     while not_eof != 0 {
-        c = getc(idx_fp);
+        c = fgetc(idx_fp);
         match c {
             -1 => {
                 if arg_count == 2 {
@@ -135,7 +133,7 @@ pub unsafe extern "C" fn scan_idx() {
                         idx_dc += 1;
                         if fresh0 == 0 {
                             if verbose != 0 {
-                                fprintf(stderr, b".\0" as *const u8 as *const libc::c_char);
+                                fprintf(stderr(), b".\0" as *const u8 as *const libc::c_char);
                             }
                             fprintf(ilg_fp, b".\0" as *const u8 as *const libc::c_char);
                         }
@@ -158,7 +156,7 @@ pub unsafe extern "C" fn scan_idx() {
                         idx_dc += 1;
                         if fresh1 == 0 {
                             if verbose != 0 {
-                                fprintf(stderr, b".\0" as *const u8 as *const libc::c_char);
+                                fprintf(stderr(), b".\0" as *const u8 as *const libc::c_char);
                             }
                             fprintf(ilg_fp, b".\0" as *const u8 as *const libc::c_char);
                         }
@@ -207,14 +205,14 @@ pub unsafe extern "C" fn scan_idx() {
                         arg_count += 1;
                         arg_count;
                         keyword[i as usize] = '\0' as i32 as libc::c_char;
-                        if strcmp(keyword.as_mut_ptr(), idx_keyword.as_mut_ptr()) == 0 {
+                        if strcmp(keyword.as_ptr(), idx_keyword.as_ptr()) == 0 {
                             if scan_arg1() == 0 {
                                 arg_count = -1;
                             }
                         } else {
                             let mut tmp = 0;
                             loop {
-                                tmp = getc(idx_fp);
+                                tmp = fgetc(idx_fp);
                                 if tmp == '\n' as i32 {
                                     break;
                                 }
@@ -252,7 +250,7 @@ pub unsafe extern "C" fn scan_idx() {
                     } else {
                         let mut tmp_0 = 0;
                         loop {
-                            tmp_0 = getc(idx_fp);
+                            tmp_0 = fgetc(idx_fp);
                             if tmp_0 == '\n' as i32 {
                                 break;
                             }
@@ -294,7 +292,7 @@ pub unsafe extern "C" fn scan_idx() {
                     } else {
                         let mut tmp_1 = 0;
                         loop {
-                            tmp_1 = getc(idx_fp);
+                            tmp_1 = fgetc(idx_fp);
                             if tmp_1 == '\n' as i32 {
                                 break;
                             }
@@ -328,7 +326,7 @@ pub unsafe extern "C" fn scan_idx() {
                 2 => {
                     let mut tmp_2 = 0;
                     loop {
-                        tmp_2 = getc(idx_fp);
+                        tmp_2 = fgetc(idx_fp);
                         if tmp_2 == '\n' as i32 {
                             break;
                         }
@@ -366,7 +364,7 @@ pub unsafe extern "C" fn scan_idx() {
     idx_et += idx_ec;
     if verbose != 0 {
         fprintf(
-            stderr,
+            stderr(),
             b"done (%d %s, %d %s).\n\0" as *const u8 as *const libc::c_char,
             idx_tc - idx_ec,
             b"entries accepted\0" as *const u8 as *const libc::c_char,
@@ -387,7 +385,7 @@ pub unsafe extern "C" fn scan_idx() {
 unsafe extern "C" fn flush_to_eol() {
     let mut a = 0;
     loop {
-        a = getc(idx_fp);
+        a = fgetc(idx_fp);
         if !(a != '\n' as i32 && a != -1) {
             break;
         }
@@ -399,12 +397,12 @@ unsafe extern "C" fn make_key() -> i32 {
     ptr = malloc(::core::mem::size_of::<NODE>().try_into().unwrap()) as NODE_PTR;
     if ptr.is_null() {
         fprintf(
-            stderr,
+            stderr(),
             b"Not enough core...abort.\n\0" as *const u8 as *const libc::c_char,
             b"\0" as *const u8 as *const libc::c_char,
         );
         fprintf(
-            stderr,
+            stderr(),
             b"Usage: %s [-ilqrcg] [-s sty] [-o ind] [-t log] [-p num] [idx0 idx1 ...]\n\0"
                 as *const u8 as *const libc::c_char,
             pgm_fn,
@@ -454,12 +452,12 @@ unsafe extern "C" fn make_string(mut ppstr: *mut *mut libc::c_char, mut n: i32) 
         *ppstr = malloc(n.try_into().unwrap()) as *mut libc::c_char;
         if (*ppstr).is_null() {
             fprintf(
-                stderr,
+                stderr(),
                 b"Not enough core...abort.\n\0" as *const u8 as *const libc::c_char,
                 b"\0" as *const u8 as *const libc::c_char,
             );
             fprintf(
-                stderr,
+                stderr(),
                 b"Usage: %s [-ilqrcg] [-s sty] [-o ind] [-t log] [-p num] [idx0 idx1 ...]\n\0"
                     as *const u8 as *const libc::c_char,
                 pgm_fn,
@@ -477,7 +475,7 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
     while key[n as usize] as i32 != '\0' as i32 {
         if key[n as usize] as i32 == idx_encap as i32 {
             n += 1;
-          
+
             make_string(
                 &mut (*data).encap,
                 (strlen(key.as_mut_ptr())).wrapping_add(1) as i32,
@@ -1490,20 +1488,20 @@ unsafe extern "C" fn scan_arg1() -> i32 {
     let mut a = 0;
     if compress_blanks != 0 {
         loop {
-            a = getc(idx_fp);
+            a = fgetc(idx_fp);
             if !(a == ' ' as i32 || a == '\t' as i32) {
                 break;
             }
         }
     } else {
-        a = getc(idx_fp);
+        a = fgetc(idx_fp);
     }
     while i < 1024 && a != -1 {
         if a == idx_quote as i32 || a == idx_escape as i32 {
             let fresh8 = i;
             i += 1;
             key[fresh8 as usize] = a as libc::c_char;
-            a = getc(idx_fp);
+            a = fgetc(idx_fp);
             let fresh9 = i;
             i += 1;
             key[fresh9 as usize] = a as libc::c_char;
@@ -1512,7 +1510,6 @@ unsafe extern "C" fn scan_arg1() -> i32 {
             i += 1;
             key[fresh10 as usize] = a as libc::c_char;
             n += 1;
-          
         } else if a == idx_aclose as i32 {
             if n == 0 {
                 if compress_blanks != 0 && key[(i - 1) as usize] as i32 == ' ' as i32 {
@@ -1526,7 +1523,6 @@ unsafe extern "C" fn scan_arg1() -> i32 {
                 i += 1;
                 key[fresh11 as usize] = a as libc::c_char;
                 n -= 1;
-              
             }
         } else {
             let mut current_block_34: u64;
@@ -1580,7 +1576,7 @@ unsafe extern "C" fn scan_arg1() -> i32 {
                 key[fresh13 as usize] = a as libc::c_char;
             }
         }
-        a = getc(idx_fp);
+        a = fgetc(idx_fp);
     }
     flush_to_eol();
     idx_lc += 1;
@@ -1610,7 +1606,7 @@ unsafe extern "C" fn scan_arg2() -> i32 {
     let mut a = 0;
     let mut hit_blank = 0;
     loop {
-        a = getc(idx_fp);
+        a = fgetc(idx_fp);
         if !(a == ' ' as i32 || a == '\t' as i32) {
             break;
         }
@@ -1680,7 +1676,7 @@ unsafe extern "C" fn scan_arg2() -> i32 {
                 }
             }
         }
-        a = getc(idx_fp);
+        a = fgetc(idx_fp);
     }
     flush_to_eol();
     idx_lc += 1;

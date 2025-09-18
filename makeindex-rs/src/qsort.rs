@@ -4,10 +4,10 @@ static mut mthresh: isize = 0;
 static mut qcmp: Option<unsafe extern "C" fn(*mut libc::c_char, *mut libc::c_char) -> i32> = None;
 #[no_mangle]
 pub unsafe extern "C" fn qqsort(
-    mut base: *mut libc::c_char,
-    mut n: isize,
-    mut size: isize,
-    mut compar: Option<unsafe extern "C" fn(*mut libc::c_char, *mut libc::c_char) -> i32>,
+    base: *mut libc::c_char,
+    n: isize,
+    size: isize,
+    compar: Option<unsafe extern "C" fn(*mut libc::c_char, *mut libc::c_char) -> i32>,
 ) {
     let mut i = std::ptr::null_mut::<libc::c_char>();
     let mut j = std::ptr::null_mut::<libc::c_char>();

@@ -59,8 +59,7 @@ DOC		= makeindex.tex
 #EXTHDRS	= /usr/include/ctype.h \
 #		/usr/include/stdio.h
 
-HDRS		= genind.h \
-		mkind.h \
+HDRS		= 
 
 LDFLAGS		= $(CFLAGS)
 
@@ -82,8 +81,7 @@ MANEXT		= 1
 
 MANUAL		= makeindex.l
 
-OBJS		= genind.o \
-        mkind.o \
+OBJS		=
 
 # Note: qsort.o is replaced by Rust static library
 QSLIB		= libqsort.a
@@ -98,8 +96,7 @@ SHAR		= $(PROGRAM).shar
 
 SHELL		= /bin/sh
 
-SRCS		= genind.c \
-		mkind.c \
+SRCS		=
 
 STRIP		= strip
 
@@ -197,8 +194,6 @@ update:		$(BINDIR)/$(PROGRAM)
 # Dependencies
 #=======================================================================
 
-genind.o: mkind.h genind.h
-mkind.o: mkind.h
 
 # Rust library dependency
 $(RUST_LIB): ../makeindex-rs/src/qsort.rs ../makeindex-rs/src/sortid.rs ../makeindex-rs/src/scanid.rs ../makeindex-rs/Cargo.toml
