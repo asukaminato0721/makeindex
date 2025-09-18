@@ -137,108 +137,108 @@ unsafe extern "C" fn compare(mut a: *mut FIELD_PTR, mut b: *mut FIELD_PTR) -> i3
     idx_gc += 1;
     idx_dot = 1;
     let fresh0 = idx_dc;
-    idx_dc = idx_dc + 1;
-    if fresh0 == 0 as i32 {
+    idx_dc += 1;
+    if fresh0 == 0_i32 {
         if verbose != 0 {
             fprintf(stderr, b".\0" as *const u8 as *const libc::c_char);
         }
         fprintf(ilg_fp, b".\0" as *const u8 as *const libc::c_char);
     }
-    if idx_dc == 1500 as i32 {
+    if idx_dc == 1500_i32 {
         idx_dc = 0;
     }
     i = 0;
-    while i < 3 as i32 {
+    while i < 3_i32 {
         dif = compare_one((**a).sf[i as usize], (**b).sf[i as usize]);
-        if dif != 0 as i32 {
+        if dif != 0_i32 {
             break;
         }
         dif = compare_one((**a).af[i as usize], (**b).af[i as usize]);
-        if dif != 0 as i32 {
+        if dif != 0_i32 {
             break;
         }
         i += 1;
     }
-    if i == 3 as i32 {
+    if i == 3_i32 {
         dif = compare_page(a, b);
     }
-    return dif;
+    dif
 }
 unsafe extern "C" fn compare_one(mut x: *mut libc::c_char, mut y: *mut libc::c_char) -> i32 {
     let mut m = 0;
     let mut n = 0;
     if *x.offset(0) as i32 == '\0' as i32 && *y.offset(0) as i32 == '\0' as i32 {
-        return 0 as i32;
+        return 0_i32;
     }
     if *x.offset(0) as i32 == '\0' as i32 {
-        return -(1 as i32);
+        return -1_i32;
     }
     if *y.offset(0) as i32 == '\0' as i32 {
-        return 1 as i32;
+        return 1_i32;
     }
     m = group_type(x);
     n = group_type(y);
-    if m >= 0 as i32 && n >= 0 as i32 {
+    if m >= 0_i32 && n >= 0_i32 {
         return m - n;
     }
-    if m >= 0 as i32 {
+    if m >= 0_i32 {
         if german_sort != 0 {
-            return 1 as i32;
+            return 1_i32;
         } else {
-            return if n == -(1 as i32) {
-                1 as i32
+            return if n == -1_i32 {
+                1_i32
             } else {
-                -(1 as i32)
+                -1_i32
             };
         }
     }
-    if n >= 0 as i32 {
+    if n >= 0_i32 {
         if german_sort != 0 {
-            return -(1 as i32);
+            return -1_i32;
         } else {
-            return if m == -(1 as i32) {
-                -(1 as i32)
+            return if m == -1_i32 {
+                -1_i32
             } else {
-                1 as i32
+                1_i32
             };
         }
     }
-    if m == -(1 as i32) && n == -(1 as i32) {
+    if m == -1_i32 && n == -1_i32 {
         return check_mixsym(x, y);
     }
-    if m == -(1 as i32) {
-        return -(1 as i32);
+    if m == -1_i32 {
+        return -1_i32;
     }
-    if n == -(1 as i32) {
-        return 1 as i32;
+    if n == -1_i32 {
+        return 1_i32;
     }
-    return compare_string(x as *mut libc::c_uchar, y as *mut libc::c_uchar);
+    compare_string(x as *mut libc::c_uchar, y as *mut libc::c_uchar)
 }
 unsafe extern "C" fn check_mixsym(mut x: *mut libc::c_char, mut y: *mut libc::c_char) -> i32 {
     let mut m = false;
     let mut n = false;
-    m = ('0' as i32 <= *x.offset(0) as i32 && *x.offset(0) as i32 <= '9' as i32);
-    n = ('0' as i32 <= *y.offset(0) as i32 && *y.offset(0) as i32 <= '9' as i32);
-    if m != false && n == false {
-        return 1 as i32;
+    m = '0' as i32 <= *x.offset(0) as i32 && *x.offset(0) as i32 <= '9' as i32;
+    n = '0' as i32 <= *y.offset(0) as i32 && *y.offset(0) as i32 <= '9' as i32;
+    if m && !n {
+        return 1_i32;
     }
-    if m == false && n != false {
-        return -(1 as i32);
+    if !m && n {
+        return -1_i32;
     }
-    return strcmp(x, y);
+    strcmp(x, y)
 }
 unsafe extern "C" fn compare_string(mut a: *mut libc::c_uchar, mut b: *mut libc::c_uchar) -> i32 {
-    let mut i: i32 = 0 as i32;
-    let mut j: i32 = 0 as i32;
+    let mut i: i32 = 0_i32;
+    let mut j: i32 = 0_i32;
     let mut al: i32 = 0;
     let mut bl: i32 = 0;
     while *a.offset(i as isize) as i32 != '\0' as i32 || *b.offset(j as isize) as i32 != '\0' as i32
     {
         if *a.offset(i as isize) as i32 == '\0' as i32 {
-            return -(1 as i32);
+            return -1_i32;
         }
         if *b.offset(j as isize) as i32 == '\0' as i32 {
-            return 1 as i32;
+            return 1_i32;
         }
         if letter_ordering != 0 {
             if *a.offset(i as isize) as i32 == ' ' as i32 {
@@ -272,29 +272,29 @@ unsafe extern "C" fn compare_string(mut a: *mut libc::c_uchar, mut b: *mut libc:
         j += 1;
     }
     if german_sort != 0 {
-        return new_strcmp(a, b, 0 as i32);
+        new_strcmp(a, b, 0_i32)
     } else {
-        return strcmp(a as *mut libc::c_char, b as *mut libc::c_char);
-    };
+        strcmp(a as *mut libc::c_char, b as *mut libc::c_char)
+    }
 }
 unsafe extern "C" fn compare_page(mut a: *mut FIELD_PTR, mut b: *mut FIELD_PTR) -> i32 {
-    let mut m: i32 = 0 as i32;
-    let mut i: libc::c_short = 0 as i32 as libc::c_short;
+    let mut m: i32 = 0_i32;
+    let mut i: libc::c_short = 0_i32 as libc::c_short;
     while (i as i32) < (**a).count as i32 && (i as i32) < (**b).count as i32 && {
         m = (**a).npg[i as usize] as i32 - (**b).npg[i as usize] as i32;
-        m == 0 as i32
+        m == 0_i32
     } {
         i += 1;
     }
-    if m == 0 as i32 {
+    if m == 0_i32 {
         if i as i32 == (**a).count as i32 && i as i32 == (**b).count as i32 {
             if (*(**a).encap as i32 == idx_ropen as i32 || *(**a).encap as i32 == idx_rclose as i32)
                 && (*(**b).encap as i32 == idx_ropen as i32
                     || *(**b).encap as i32 == idx_rclose as i32)
             {
                 m = (**a).lc - (**b).lc;
-            } else if strcmp((**a).encap, (**b).encap) == 0 as i32 {
-                if (**a).type_0 as i32 != 9999 as i32 && (**b).type_0 as i32 != 9999 as i32 {
+            } else if strcmp((**a).encap, (**b).encap) == 0_i32 {
+                if (**a).type_0 as i32 != 9999_i32 && (**b).type_0 as i32 != 9999_i32 {
                     (**b).type_0 = 9999;
                 }
             } else if *(**a).encap as i32 == idx_ropen as i32
@@ -310,12 +310,12 @@ unsafe extern "C" fn compare_page(mut a: *mut FIELD_PTR, mut b: *mut FIELD_PTR) 
                 );
             }
         } else if i as i32 == (**a).count as i32 && (i as i32) < (**b).count as i32 {
-            m = -(1 as i32);
+            m = -1_i32;
         } else if (i as i32) < (**a).count as i32 && i as i32 == (**b).count as i32 {
             m = 1;
         }
     }
-    return m;
+    m
 }
 unsafe extern "C" fn new_strcmp(
     mut s1: *mut libc::c_uchar,
@@ -326,28 +326,26 @@ unsafe extern "C" fn new_strcmp(
     i = 0;
     while *s1.offset(i as isize) as i32 == *s2.offset(i as isize) as i32 {
         let fresh1 = i;
-        i = i + 1;
+        i += 1;
         if *s1.offset(fresh1 as isize) as i32 == '\0' as i32 {
-            return 0 as i32;
+            return 0_i32;
         }
     }
     if option != 0 {
-        return if *(*__ctype_b_loc()).offset(*s1.offset(i as isize) as i32 as isize) as i32
+        if *(*__ctype_b_loc()).offset(*s1.offset(i as isize) as i32 as isize) as i32
             & _ISupper as i32 as libc::c_ushort as i32
             != 0
         {
-            -(1 as i32)
+            -1_i32
         } else {
-            1 as i32
-        };
+            1_i32
+        }
+    } else if *(*__ctype_b_loc()).offset(*s1.offset(i as isize) as i32 as isize) as i32
+        & _ISupper as i32 as libc::c_ushort as i32
+        != 0
+    {
+        1_i32
     } else {
-        return if *(*__ctype_b_loc()).offset(*s1.offset(i as isize) as i32 as isize) as i32
-            & _ISupper as i32 as libc::c_ushort as i32
-            != 0
-        {
-            1 as i32
-        } else {
-            -(1 as i32)
-        };
-    };
+        -1_i32
+    }
 }
