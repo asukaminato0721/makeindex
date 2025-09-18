@@ -7,16 +7,13 @@
     unused_assignments,
     unused_mut
 )]
+use libc::*;
+use libc_stdhandle::*;
 // #![feature(extern_types)]
 extern "C" {
     // pub type _IO_wide_data;
     // pub type _IO_codecvt;
     // pub type _IO_marker;
-    static mut stderr: *mut FILE;
-    fn fclose(__stream: *mut FILE) -> i32;
-    fn fprintf(_: *mut FILE, _: *const libc::c_char, _: ...) -> i32;
-    fn fscanf(_: *mut FILE, _: *const libc::c_char, _: ...) -> i32;
-    fn getc(__stream: *mut FILE) -> i32;
     fn __ctype_b_loc() -> *mut *const libc::c_ushort;
     fn tolower(_: i32) -> i32;
     fn strcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
@@ -64,7 +61,6 @@ struct _IO_FILE {
     pub _unused2: [libc::c_char; 20],
 }
 type _IO_lock_t = ();
-type FILE = _IO_FILE;
 type u32 = libc::c_uint;
 const _ISalnum: u32 = 8;
 const _ISpunct: u32 = 4;
@@ -445,7 +441,7 @@ pub unsafe extern "C" fn scan_sty() {
     let mut tmp = 0;
     if verbose != 0 {
         fprintf(
-            stderr,
+            stderr(),
             b"Scanning style file %s\0" as *const u8 as *const libc::c_char,
             sty_fn.as_mut_ptr(),
         );
@@ -814,7 +810,7 @@ pub unsafe extern "C" fn scan_sty() {
             next_nonblank();
             let mut a = 0;
             loop {
-                a = getc(sty_fp);
+                a = fgetc(sty_fp);
                 if !(a != '\n' as i32 && a != -1) {
                     break;
                 }
@@ -845,7 +841,7 @@ pub unsafe extern "C" fn scan_sty() {
         if put_dot != 0 {
             idx_dot = 1;
             if verbose != 0 {
-                fprintf(stderr, b".\0" as *const u8 as *const libc::c_char);
+                fprintf(stderr(), b".\0" as *const u8 as *const libc::c_char);
             }
             fprintf(ilg_fp, b".\0" as *const u8 as *const libc::c_char);
         }
@@ -876,7 +872,7 @@ pub unsafe extern "C" fn scan_sty() {
     }
     if verbose != 0 {
         fprintf(
-            stderr,
+            stderr(),
             b"done (%d %s, %d %s).\n\0" as *const u8 as *const libc::c_char,
             sty_tc - sty_ec,
             b"attributes redefined\0" as *const u8 as *const libc::c_char,
@@ -907,7 +903,7 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
             }
             let mut a = 0;
             loop {
-                a = getc(sty_fp);
+                a = fgetc(sty_fp);
                 if !(a != '\n' as i32 && a != -1) {
                     break;
                 }
@@ -928,7 +924,7 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
         i += 1;
         if !(fresh0 < 256
             && {
-                c = getc(sty_fp);
+                c = fgetc(sty_fp);
                 c != ' ' as i32
             }
             && c != '\t' as i32
@@ -1003,7 +999,7 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
 unsafe extern "C" fn next_nonblank() -> i32 {
     let mut c = 0;
     loop {
-        c = getc(sty_fp);
+        c = fgetc(sty_fp);
         match c {
             -1 => return -1,
             10 => {
@@ -1021,7 +1017,7 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
     c = next_nonblank();
     match c {
         34 => loop {
-            c = getc(sty_fp);
+            c = fgetc(sty_fp);
             match c {
                 -1 => {
                     if idx_dot != 0 {
@@ -1051,7 +1047,7 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
                     return 1;
                 }
                 92 => {
-                    c = getc(sty_fp);
+                    c = fgetc(sty_fp);
                     match c {
                         116 => {
                             let fresh1 = i;
@@ -1081,7 +1077,7 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
                     } else {
                         let mut a = 0;
                         loop {
-                            a = getc(sty_fp);
+                            a = fgetc(sty_fp);
                             if !(a != '\n' as i32 && a != -1) {
                                 break;
                             }
@@ -1117,7 +1113,7 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
         37 => {
             let mut a_0 = 0;
             loop {
-                a_0 = getc(sty_fp);
+                a_0 = fgetc(sty_fp);
                 if !(a_0 != '\n' as i32 && a_0 != -1) {
                     break;
                 }
@@ -1127,7 +1123,7 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
         _ => {
             let mut a_1 = 0;
             loop {
-                a_1 = getc(sty_fp);
+                a_1 = fgetc(sty_fp);
                 if !(a_1 != '\n' as i32 && a_1 != -1) {
                     break;
                 }
@@ -1164,12 +1160,12 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
     match clone {
         39 => {
             let mut current_block_44: u64;
-            clone = getc(sty_fp);
+            clone = fgetc(sty_fp);
             match clone {
                 39 => {
                     let mut a = 0;
                     loop {
-                        a = getc(sty_fp);
+                        a = fgetc(sty_fp);
                         if !(a != '\n' as i32 && a != -1) {
                             break;
                         }
@@ -1206,7 +1202,7 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
                     current_block_44 = 16202342022523421668;
                 }
                 92 => {
-                    clone = getc(sty_fp);
+                    clone = fgetc(sty_fp);
                     current_block_44 = 10796120567984398691;
                 }
                 _ => {
@@ -1215,7 +1211,7 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
             }
             match current_block_44 {
                 10796120567984398691 => {
-                    if getc(sty_fp) == '\'' as i32 {
+                    if fgetc(sty_fp) == '\'' as i32 {
                         *c = clone as i8;
                         return 1;
                     } else {
@@ -1269,7 +1265,7 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
         37 => {
             let mut a_0 = 0;
             loop {
-                a_0 = getc(sty_fp);
+                a_0 = fgetc(sty_fp);
                 if !(a_0 != '\n' as i32 && a_0 != -1) {
                     break;
                 }
@@ -1279,7 +1275,7 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
         _ => {
             let mut a_1 = 0;
             loop {
-                a_1 = getc(sty_fp);
+                a_1 = fgetc(sty_fp);
                 if !(a_1 != '\n' as i32 && a_1 != -1) {
                     break;
                 }
@@ -1338,7 +1334,7 @@ unsafe extern "C" fn process_precedence() -> i32 {
                 if roml != 0 {
                     let mut a = 0;
                     loop {
-                        a = getc(sty_fp);
+                        a = fgetc(sty_fp);
                         if !(a != '\n' as i32 && a != -1) {
                             break;
                         }
@@ -1375,7 +1371,7 @@ unsafe extern "C" fn process_precedence() -> i32 {
                 if romu != 0 {
                     let mut a_0 = 0;
                     loop {
-                        a_0 = getc(sty_fp);
+                        a_0 = fgetc(sty_fp);
                         if !(a_0 != '\n' as i32 && a_0 != -1) {
                             break;
                         }
@@ -1412,7 +1408,7 @@ unsafe extern "C" fn process_precedence() -> i32 {
                 if arab != 0 {
                     let mut a_1 = 0;
                     loop {
-                        a_1 = getc(sty_fp);
+                        a_1 = fgetc(sty_fp);
                         if !(a_1 != '\n' as i32 && a_1 != -1) {
                             break;
                         }
@@ -1449,7 +1445,7 @@ unsafe extern "C" fn process_precedence() -> i32 {
                 if alpl != 0 {
                     let mut a_2 = 0;
                     loop {
-                        a_2 = getc(sty_fp);
+                        a_2 = fgetc(sty_fp);
                         if !(a_2 != '\n' as i32 && a_2 != -1) {
                             break;
                         }
@@ -1486,7 +1482,7 @@ unsafe extern "C" fn process_precedence() -> i32 {
                 if alpu != 0 {
                     let mut a_3 = 0;
                     loop {
-                        a_3 = getc(sty_fp);
+                        a_3 = fgetc(sty_fp);
                         if !(a_3 != '\n' as i32 && a_3 != -1) {
                             break;
                         }
@@ -1522,7 +1518,7 @@ unsafe extern "C" fn process_precedence() -> i32 {
             _ => {
                 let mut a_4 = 0;
                 loop {
-                    a_4 = getc(sty_fp);
+                    a_4 = fgetc(sty_fp);
                     if !(a_4 != '\n' as i32 && a_4 != -1) {
                         break;
                     }
@@ -1557,7 +1553,7 @@ unsafe extern "C" fn process_precedence() -> i32 {
     if page_prec[i as usize] as i32 != '\0' as i32 {
         let mut a_5 = 0;
         loop {
-            a_5 = getc(sty_fp);
+            a_5 = fgetc(sty_fp);
             if !(a_5 != '\n' as i32 && a_5 != -1) {
                 break;
             }
