@@ -5,19 +5,19 @@ extern "C" {
    // pub type _IO_codecvt;
    // pub type _IO_marker;
     static mut stderr: *mut FILE;
-    fn fclose(__stream: *mut FILE) -> libc::c_int;
-    fn fprintf(_: *mut FILE, _: *const libc::c_char, _: ...) -> libc::c_int;
-    fn fscanf(_: *mut FILE, _: *const libc::c_char, _: ...) -> libc::c_int;
-    fn getc(__stream: *mut FILE) -> libc::c_int;
+    fn fclose(__stream: *mut FILE) -> i32;
+    fn fprintf(_: *mut FILE, _: *const libc::c_char, _: ...) -> i32;
+    fn fscanf(_: *mut FILE, _: *const libc::c_char, _: ...) -> i32;
+    fn getc(__stream: *mut FILE) -> i32;
     fn __ctype_b_loc() -> *mut *const libc::c_ushort;
-    fn tolower(_: libc::c_int) -> libc::c_int;
+    fn tolower(_: i32) -> i32;
     fn strcpy(_: *mut libc::c_char, _: *const libc::c_char) -> *mut libc::c_char;
-    fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> libc::c_int;
-    static mut verbose: libc::c_int;
+    fn strcmp(_: *const libc::c_char, _: *const libc::c_char) -> i32;
+    static mut verbose: i32;
     static mut sty_fp: *mut FILE;
     static mut ilg_fp: *mut FILE;
     static mut sty_fn: [libc::c_char; 0];
-    static mut idx_dot: libc::c_int;
+    static mut idx_dot: i32;
 }
 pub type size_t = libc::c_ulong;
 pub type __off_t = libc::c_long;
@@ -25,7 +25,7 @@ pub type __off64_t = libc::c_long;
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct _IO_FILE {
-    pub _flags: libc::c_int,
+    pub _flags: i32,
     pub _IO_read_ptr: *mut libc::c_char,
     pub _IO_read_end: *mut libc::c_char,
     pub _IO_read_base: *mut libc::c_char,
@@ -39,8 +39,8 @@ pub struct _IO_FILE {
     pub _IO_save_end: *mut libc::c_char,
    // pub _markers: *mut _IO_marker,
     pub _chain: *mut _IO_FILE,
-    pub _fileno: libc::c_int,
-    pub _flags2: libc::c_int,
+    pub _fileno: i32,
+    pub _flags2: i32,
     pub _old_offset: __off_t,
     pub _cur_column: libc::c_ushort,
     pub _vtable_offset: libc::c_schar,
@@ -52,7 +52,7 @@ pub struct _IO_FILE {
     pub _freeres_list: *mut _IO_FILE,
     pub _freeres_buf: *mut libc::c_void,
     pub __pad5: size_t,
-    pub _mode: libc::c_int,
+    pub _mode: i32,
     pub _unused2: [libc::c_char; 20],
 }
 pub type _IO_lock_t = ();
@@ -70,9 +70,9 @@ pub const _ISdigit: C2RustUnnamed = 2048;
 pub const _ISalpha: C2RustUnnamed = 1024;
 pub const _ISlower: C2RustUnnamed = 512;
 pub const _ISupper: C2RustUnnamed = 256;
-static mut sty_lc: libc::c_int = 0 as libc::c_int;
-static mut sty_tc: libc::c_int = 0 as libc::c_int;
-static mut sty_ec: libc::c_int = 0 as libc::c_int;
+static mut sty_lc: i32 = 0 as i32;
+static mut sty_tc: i32 = 0 as i32;
+static mut sty_ec: i32 = 0 as i32;
 #[no_mangle]
 pub static mut idx_keyword: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -119,9 +119,9 @@ pub static mut postamble: [libc::c_char; 1024] = unsafe {
     )
 };
 #[no_mangle]
-pub static mut prelen: libc::c_int = 1 as libc::c_int;
+pub static mut prelen: i32 = 1 as i32;
 #[no_mangle]
-pub static mut postlen: libc::c_int = 3 as libc::c_int;
+pub static mut postlen: i32 = 3 as i32;
 #[no_mangle]
 pub static mut setpage_open: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -141,7 +141,7 @@ pub static mut setpage_close: [libc::c_char; 1024] = unsafe {
     )
 };
 #[no_mangle]
-pub static mut setpagelen: libc::c_int = 2 as libc::c_int;
+pub static mut setpagelen: i32 = 2 as i32;
 #[no_mangle]
 pub static mut group_skip: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -152,9 +152,9 @@ pub static mut group_skip: [libc::c_char; 1024] = unsafe {
     )
 };
 #[no_mangle]
-pub static mut skiplen: libc::c_int = 3 as libc::c_int;
+pub static mut skiplen: i32 = 3 as i32;
 #[no_mangle]
-pub static mut headings_flag: libc::c_int = 0 as libc::c_int;
+pub static mut headings_flag: i32 = 0 as i32;
 #[no_mangle]
 pub static mut heading_pre: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -174,9 +174,9 @@ pub static mut heading_suf: [libc::c_char; 1024] = unsafe {
     )
 };
 #[no_mangle]
-pub static mut headprelen: libc::c_int = 0 as libc::c_int;
+pub static mut headprelen: i32 = 0 as i32;
 #[no_mangle]
-pub static mut headsuflen: libc::c_int = 0 as libc::c_int;
+pub static mut headsuflen: i32 = 0 as i32;
 #[no_mangle]
 pub static mut symhead_pos: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -283,22 +283,22 @@ pub static mut item_x: [[libc::c_char; 1024]; 3] = unsafe {
     ]
 };
 #[no_mangle]
-pub static mut ilen_r: [libc::c_int; 3] = [
-    1 as libc::c_int,
-    1 as libc::c_int,
-    1 as libc::c_int,
+pub static mut ilen_r: [i32; 3] = [
+    1 as i32,
+    1 as i32,
+    1 as i32,
 ];
 #[no_mangle]
-pub static mut ilen_u: [libc::c_int; 3] = [
-    0 as libc::c_int,
-    1 as libc::c_int,
-    1 as libc::c_int,
+pub static mut ilen_u: [i32; 3] = [
+    0 as i32,
+    1 as i32,
+    1 as i32,
 ];
 #[no_mangle]
-pub static mut ilen_x: [libc::c_int; 3] = [
-    0 as libc::c_int,
-    1 as libc::c_int,
-    1 as libc::c_int,
+pub static mut ilen_x: [i32; 3] = [
+    0 as i32,
+    1 as i32,
+    1 as i32,
 ];
 #[no_mangle]
 pub static mut delim_p: [[libc::c_char; 1024]; 3] = unsafe {
@@ -405,9 +405,9 @@ pub static mut encap_s: [libc::c_char; 1024] = unsafe {
     )
 };
 #[no_mangle]
-pub static mut linemax: libc::c_int = 72 as libc::c_int;
+pub static mut linemax: i32 = 72 as i32;
 #[no_mangle]
-pub static mut indent_length: libc::c_int = 16 as libc::c_int;
+pub static mut indent_length: i32 = 16 as i32;
 #[no_mangle]
 pub static mut indent_space: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -427,13 +427,13 @@ pub static mut page_comp: [libc::c_char; 1024] = unsafe {
     )
 };
 #[no_mangle]
-pub static mut page_offset: [libc::c_int; 5] = [
-    0 as libc::c_int,
-    10000 as libc::c_int,
-    10000 as libc::c_int + 10000 as libc::c_int,
-    10000 as libc::c_int + 10000 as libc::c_int + 26 as libc::c_int,
-    10000 as libc::c_int + 10000 as libc::c_int + 26 as libc::c_int
-        + 10000 as libc::c_int,
+pub static mut page_offset: [i32; 5] = [
+    0 as i32,
+    10000 as i32,
+    10000 as i32 + 10000 as i32,
+    10000 as i32 + 10000 as i32 + 26 as i32,
+    10000 as i32 + 10000 as i32 + 26 as i32
+        + 10000 as i32,
 ];
 static mut page_prec: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -443,11 +443,11 @@ static mut page_prec: [libc::c_char; 1024] = unsafe {
         b"rnaRA\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0",
     )
 };
-static mut put_dot: libc::c_int = 0;
+static mut put_dot: i32 = 0;
 #[no_mangle]
 pub unsafe extern "C" fn scan_sty() {
     let mut spec: [libc::c_char; 256] = [0; 256];
-    let mut tmp: libc::c_int = 0;
+    let mut tmp: i32 = 0;
     if verbose != 0 {
         fprintf(
             stderr,
@@ -463,232 +463,232 @@ pub unsafe extern "C" fn scan_sty() {
     while scan_spec(spec.as_mut_ptr()) != 0 {
         sty_tc += 1;
         sty_tc;
-        put_dot = 1 as libc::c_int;
+        put_dot = 1 as i32;
         if strcmp(spec.as_mut_ptr(), b"preamble\0" as *const u8 as *const libc::c_char)
-            == 0 as libc::c_int
+            == 0 as i32
         {
             scan_string(preamble.as_mut_ptr());
             prelen = count_lfd(preamble.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"postamble\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(postamble.as_mut_ptr());
             postlen = count_lfd(postamble.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"group_skip\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(group_skip.as_mut_ptr());
             skiplen = count_lfd(group_skip.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"headings_flag\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             fscanf(
                 sty_fp,
                 b"%d\0" as *const u8 as *const libc::c_char,
-                &mut headings_flag as *mut libc::c_int,
+                &mut headings_flag as *mut i32,
             );
         } else if strcmp(
             spec.as_mut_ptr(),
             b"heading_prefix\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(heading_pre.as_mut_ptr());
             headprelen = count_lfd(heading_pre.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"heading_suffix\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(heading_suf.as_mut_ptr());
             headsuflen = count_lfd(heading_suf.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"symhead_positive\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(symhead_pos.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"symhead_negative\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(symhead_neg.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"numhead_positive\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(numhead_pos.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"numhead_negative\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(numhead_neg.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"setpage_prefix\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(setpage_open.as_mut_ptr());
             setpagelen = count_lfd(setpage_open.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"setpage_suffix\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(setpage_close.as_mut_ptr());
             setpagelen = count_lfd(setpage_close.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_0\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            scan_string((item_r[0 as libc::c_int as usize]).as_mut_ptr());
-            ilen_r[0 as libc::c_int
-                as usize] = count_lfd((item_r[0 as libc::c_int as usize]).as_mut_ptr());
+            scan_string((item_r[0 as i32 as usize]).as_mut_ptr());
+            ilen_r[0 as i32
+                as usize] = count_lfd((item_r[0 as i32 as usize]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_1\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            scan_string((item_r[1 as libc::c_int as usize]).as_mut_ptr());
-            ilen_r[1 as libc::c_int
-                as usize] = count_lfd((item_r[1 as libc::c_int as usize]).as_mut_ptr());
+            scan_string((item_r[1 as i32 as usize]).as_mut_ptr());
+            ilen_r[1 as i32
+                as usize] = count_lfd((item_r[1 as i32 as usize]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_2\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            scan_string((item_r[2 as libc::c_int as usize]).as_mut_ptr());
-            ilen_r[2 as libc::c_int
-                as usize] = count_lfd((item_r[2 as libc::c_int as usize]).as_mut_ptr());
+            scan_string((item_r[2 as i32 as usize]).as_mut_ptr());
+            ilen_r[2 as i32
+                as usize] = count_lfd((item_r[2 as i32 as usize]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_01\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            scan_string((item_u[1 as libc::c_int as usize]).as_mut_ptr());
-            ilen_u[1 as libc::c_int
-                as usize] = count_lfd((item_u[1 as libc::c_int as usize]).as_mut_ptr());
+            scan_string((item_u[1 as i32 as usize]).as_mut_ptr());
+            ilen_u[1 as i32
+                as usize] = count_lfd((item_u[1 as i32 as usize]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_12\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            scan_string((item_u[2 as libc::c_int as usize]).as_mut_ptr());
-            ilen_u[2 as libc::c_int
-                as usize] = count_lfd((item_u[2 as libc::c_int as usize]).as_mut_ptr());
+            scan_string((item_u[2 as i32 as usize]).as_mut_ptr());
+            ilen_u[2 as i32
+                as usize] = count_lfd((item_u[2 as i32 as usize]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_x1\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            scan_string((item_x[1 as libc::c_int as usize]).as_mut_ptr());
-            ilen_x[1 as libc::c_int
-                as usize] = count_lfd((item_x[1 as libc::c_int as usize]).as_mut_ptr());
+            scan_string((item_x[1 as i32 as usize]).as_mut_ptr());
+            ilen_x[1 as i32
+                as usize] = count_lfd((item_x[1 as i32 as usize]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_x2\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            scan_string((item_x[2 as libc::c_int as usize]).as_mut_ptr());
-            ilen_x[2 as libc::c_int
-                as usize] = count_lfd((item_x[2 as libc::c_int as usize]).as_mut_ptr());
+            scan_string((item_x[2 as i32 as usize]).as_mut_ptr());
+            ilen_x[2 as i32
+                as usize] = count_lfd((item_x[2 as i32 as usize]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"encap_prefix\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(encap_p.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"encap_infix\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(encap_i.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"encap_suffix\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(encap_s.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_0\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            scan_string((delim_p[0 as libc::c_int as usize]).as_mut_ptr());
+            scan_string((delim_p[0 as i32 as usize]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_1\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            scan_string((delim_p[1 as libc::c_int as usize]).as_mut_ptr());
+            scan_string((delim_p[1 as i32 as usize]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_2\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
-            scan_string((delim_p[2 as libc::c_int as usize]).as_mut_ptr());
+            scan_string((delim_p[2 as i32 as usize]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_n\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(delim_n.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_r\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(delim_r.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_t\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(delim_t.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"suffix_2p\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(suffix_2p.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"suffix_3p\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(suffix_3p.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"suffix_mp\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(suffix_mp.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"line_max\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             fscanf(
                 sty_fp,
                 b"%d\0" as *const u8 as *const libc::c_char,
-                &mut tmp as *mut libc::c_int,
+                &mut tmp as *mut i32,
             );
-            if tmp > 0 as libc::c_int {
+            if tmp > 0 as i32 {
                 linemax = tmp;
             } else {
                 if idx_dot != 0 {
                     fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                    idx_dot = 0 as libc::c_int;
+                    idx_dot = 0 as i32;
                 }
                 fprintf(
                     ilg_fp,
@@ -706,24 +706,24 @@ pub unsafe extern "C" fn scan_sty() {
                 );
                 sty_ec += 1;
                 sty_ec;
-                put_dot = 0 as libc::c_int;
+                put_dot = 0 as i32;
             }
         } else if strcmp(
             spec.as_mut_ptr(),
             b"indent_length\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             fscanf(
                 sty_fp,
                 b"%d\0" as *const u8 as *const libc::c_char,
-                &mut tmp as *mut libc::c_int,
+                &mut tmp as *mut i32,
             );
-            if tmp >= 0 as libc::c_int {
+            if tmp >= 0 as i32 {
                 indent_length = tmp;
             } else {
                 if idx_dot != 0 {
                     fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                    idx_dot = 0 as libc::c_int;
+                    idx_dot = 0 as i32;
                 }
                 fprintf(
                     ilg_fp,
@@ -741,93 +741,93 @@ pub unsafe extern "C" fn scan_sty() {
                 );
                 sty_ec += 1;
                 sty_ec;
-                put_dot = 0 as libc::c_int;
+                put_dot = 0 as i32;
             }
         } else if strcmp(
             spec.as_mut_ptr(),
             b"indent_space\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(indent_space.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"page_compositor\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(page_comp.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"page_precedence\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(page_prec.as_mut_ptr());
             process_precedence();
         } else if strcmp(
             spec.as_mut_ptr(),
             b"keyword\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_string(idx_keyword.as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"arg_open\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_char(&mut idx_aopen);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"arg_close\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_char(&mut idx_aclose);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"level\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_char(&mut idx_level);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"range_open\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_char(&mut idx_ropen);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"range_close\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_char(&mut idx_rclose);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"quote\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_char(&mut idx_quote);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"actual\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_char(&mut idx_actual);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"encap\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_char(&mut idx_encap);
         } else if strcmp(
             spec.as_mut_ptr(),
             b"escape\0" as *const u8 as *const libc::c_char,
-        ) == 0 as libc::c_int
+        ) == 0 as i32
         {
             scan_char(&mut idx_escape);
         } else {
             next_nonblank();
-            let mut a: libc::c_int = 0;
+            let mut a: i32 = 0;
             loop {
                 a = getc(sty_fp);
-                if !(a != '\n' as i32 && a != -(1 as libc::c_int)) {
+                if !(a != '\n' as i32 && a != -(1 as i32)) {
                     break;
                 }
             }
@@ -835,7 +835,7 @@ pub unsafe extern "C" fn scan_sty() {
             sty_lc;
             if idx_dot != 0 {
                 fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                idx_dot = 0 as libc::c_int;
+                idx_dot = 0 as i32;
             }
             fprintf(
                 ilg_fp,
@@ -851,21 +851,21 @@ pub unsafe extern "C" fn scan_sty() {
             );
             sty_ec += 1;
             sty_ec;
-            put_dot = 0 as libc::c_int;
-            put_dot = 0 as libc::c_int;
+            put_dot = 0 as i32;
+            put_dot = 0 as i32;
         }
         if put_dot != 0 {
-            idx_dot = 1 as libc::c_int;
+            idx_dot = 1 as i32;
             if verbose != 0 {
                 fprintf(stderr, b".\0" as *const u8 as *const libc::c_char);
             }
             fprintf(ilg_fp, b".\0" as *const u8 as *const libc::c_char);
         }
     }
-    if idx_quote as libc::c_int == idx_escape as libc::c_int {
+    if idx_quote as i32 == idx_escape as i32 {
         if idx_dot != 0 {
             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-            idx_dot = 0 as libc::c_int;
+            idx_dot = 0 as i32;
         }
         fprintf(
             ilg_fp,
@@ -878,11 +878,11 @@ pub unsafe extern "C" fn scan_sty() {
             ilg_fp,
             b"Quote and escape symbols must be distinct (both `%c' now).\n\0"
                 as *const u8 as *const libc::c_char,
-            idx_quote as libc::c_int,
+            idx_quote as i32,
         );
         sty_ec += 1;
         sty_ec;
-        put_dot = 0 as libc::c_int;
+        put_dot = 0 as i32;
         idx_quote = '"' as i32 as libc::c_char;
         idx_escape = '\\' as i32 as libc::c_char;
     }
@@ -906,21 +906,21 @@ pub unsafe extern "C" fn scan_sty() {
     );
     fclose(sty_fp);
 }
-unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> libc::c_int {
-    let mut i: libc::c_int = 0 as libc::c_int;
-    let mut c: libc::c_int = 0;
+unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
+    let mut i: i32 = 0 as i32;
+    let mut c: i32 = 0;
     loop {
         c = next_nonblank();
-        if c == -(1 as libc::c_int) {
-            return 0 as libc::c_int
+        if c == -(1 as i32) {
+            return 0 as i32
         } else {
             if !(c == '%' as i32) {
                 break;
             }
-            let mut a: libc::c_int = 0;
+            let mut a: i32 = 0;
             loop {
                 a = getc(sty_fp);
-                if !(a != '\n' as i32 && a != -(1 as libc::c_int)) {
+                if !(a != '\n' as i32 && a != -(1 as i32)) {
                     break;
                 }
             }
@@ -930,22 +930,22 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> libc::c_int {
     }
     *spec
         .offset(
-            0 as libc::c_int as isize,
-        ) = (if *(*__ctype_b_loc()).offset(c as libc::c_uchar as libc::c_int as isize)
-        as libc::c_int & _ISupper as libc::c_int as libc::c_ushort as libc::c_int != 0
+            0 as i32 as isize,
+        ) = (if *(*__ctype_b_loc()).offset(c as libc::c_uchar as i32 as isize)
+        as i32 & _ISupper as i32 as libc::c_ushort as i32 != 0
     {
-        tolower(c as libc::c_uchar as libc::c_int) as libc::c_uchar as libc::c_int
+        tolower(c as libc::c_uchar as i32) as libc::c_uchar as i32
     } else {
-        c as libc::c_uchar as libc::c_int
+        c as libc::c_uchar as i32
     }) as libc::c_char;
     loop {
         let fresh0 = i;
         i = i + 1;
-        if !(fresh0 < 256 as libc::c_int
+        if !(fresh0 < 256 as i32
             && {
                 c = getc(sty_fp);
                 c != ' ' as i32
-            } && c != '\t' as i32 && c != '\n' as i32 && c != -(1 as libc::c_int))
+            } && c != '\t' as i32 && c != '\n' as i32 && c != -(1 as i32))
         {
             break;
         }
@@ -953,20 +953,20 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> libc::c_int {
             .offset(
                 i as isize,
             ) = (if *(*__ctype_b_loc())
-            .offset(c as libc::c_uchar as libc::c_int as isize) as libc::c_int
-            & _ISupper as libc::c_int as libc::c_ushort as libc::c_int != 0
+            .offset(c as libc::c_uchar as i32 as isize) as i32
+            & _ISupper as i32 as libc::c_ushort as i32 != 0
         {
-            tolower(c as libc::c_uchar as libc::c_int) as libc::c_uchar as libc::c_int
+            tolower(c as libc::c_uchar as i32) as libc::c_uchar as i32
         } else {
-            c as libc::c_uchar as libc::c_int
+            c as libc::c_uchar as i32
         }) as libc::c_char;
     }
-    if i < 256 as libc::c_int {
+    if i < 256 as i32 {
         *spec.offset(i as isize) = '\0' as i32 as libc::c_char;
-        if c == -(1 as libc::c_int) {
+        if c == -(1 as i32) {
             if idx_dot != 0 {
                 fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                idx_dot = 0 as libc::c_int;
+                idx_dot = 0 as i32;
             }
             fprintf(
                 ilg_fp,
@@ -983,18 +983,18 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> libc::c_int {
             );
             sty_ec += 1;
             sty_ec;
-            put_dot = 0 as libc::c_int;
-            return -(1 as libc::c_int);
+            put_dot = 0 as i32;
+            return -(1 as i32);
         }
         if c == '\n' as i32 {
             sty_lc += 1;
             sty_lc;
         }
-        return 1 as libc::c_int;
+        return 1 as i32;
     } else {
         if idx_dot != 0 {
             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-            idx_dot = 0 as libc::c_int;
+            idx_dot = 0 as i32;
         }
         fprintf(
             ilg_fp,
@@ -1007,20 +1007,20 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> libc::c_int {
             ilg_fp,
             b"Specifier %s too long (max %d).\n\0" as *const u8 as *const libc::c_char,
             spec,
-            256 as libc::c_int,
+            256 as i32,
         );
         sty_ec += 1;
         sty_ec;
-        put_dot = 0 as libc::c_int;
-        return 0 as libc::c_int;
+        put_dot = 0 as i32;
+        return 0 as i32;
     };
 }
-unsafe extern "C" fn next_nonblank() -> libc::c_int {
-    let mut c: libc::c_int = 0;
+unsafe extern "C" fn next_nonblank() -> i32 {
+    let mut c: i32 = 0;
     loop {
         c = getc(sty_fp);
         match c {
-            -1 => return -(1 as libc::c_int),
+            -1 => return -(1 as i32),
             10 => {
                 sty_lc += 1;
                 sty_lc;
@@ -1030,10 +1030,10 @@ unsafe extern "C" fn next_nonblank() -> libc::c_int {
         }
     };
 }
-unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> libc::c_int {
+unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
     let mut clone: [libc::c_char; 1024] = [0; 1024];
-    let mut i: libc::c_int = 0 as libc::c_int;
-    let mut c: libc::c_int = 0;
+    let mut i: i32 = 0 as i32;
+    let mut c: i32 = 0;
     c = next_nonblank();
     match c {
         34 => {
@@ -1043,7 +1043,7 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> libc::c_int {
                     -1 => {
                         if idx_dot != 0 {
                             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                            idx_dot = 0 as libc::c_int;
+                            idx_dot = 0 as i32;
                         }
                         fprintf(
                             ilg_fp,
@@ -1060,13 +1060,13 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> libc::c_int {
                         );
                         sty_ec += 1;
                         sty_ec;
-                        put_dot = 0 as libc::c_int;
-                        return 0 as libc::c_int;
+                        put_dot = 0 as i32;
+                        return 0 as i32;
                     }
                     34 => {
                         clone[i as usize] = '\0' as i32 as libc::c_char;
                         strcpy(str, clone.as_mut_ptr());
-                        return 1 as libc::c_int;
+                        return 1 as i32;
                     }
                     92 => {
                         c = getc(sty_fp);
@@ -1093,15 +1093,15 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> libc::c_int {
                             sty_lc += 1;
                             sty_lc;
                         }
-                        if i < 1024 as libc::c_int {
+                        if i < 1024 as i32 {
                             let fresh4 = i;
                             i = i + 1;
                             clone[fresh4 as usize] = c as libc::c_char;
                         } else {
-                            let mut a: libc::c_int = 0;
+                            let mut a: i32 = 0;
                             loop {
                                 a = getc(sty_fp);
-                                if !(a != '\n' as i32 && a != -(1 as libc::c_int)) {
+                                if !(a != '\n' as i32 && a != -(1 as i32)) {
                                     break;
                                 }
                             }
@@ -1112,7 +1112,7 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> libc::c_int {
                                     ilg_fp,
                                     b"\n\0" as *const u8 as *const libc::c_char,
                                 );
-                                idx_dot = 0 as libc::c_int;
+                                idx_dot = 0 as i32;
                             }
                             fprintf(
                                 ilg_fp,
@@ -1126,22 +1126,22 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> libc::c_int {
                                 b"Attribute string %s too long (max %d).\n\0" as *const u8
                                     as *const libc::c_char,
                                 clone.as_mut_ptr(),
-                                1024 as libc::c_int,
+                                1024 as i32,
                             );
                             sty_ec += 1;
                             sty_ec;
-                            put_dot = 0 as libc::c_int;
-                            return 0 as libc::c_int;
+                            put_dot = 0 as i32;
+                            return 0 as i32;
                         }
                     }
                 }
             }
         }
         37 => {
-            let mut a_0: libc::c_int = 0;
+            let mut a_0: i32 = 0;
             loop {
                 a_0 = getc(sty_fp);
-                if !(a_0 != '\n' as i32 && a_0 != -(1 as libc::c_int)) {
+                if !(a_0 != '\n' as i32 && a_0 != -(1 as i32)) {
                     break;
                 }
             }
@@ -1149,10 +1149,10 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> libc::c_int {
             sty_lc;
         }
         _ => {
-            let mut a_1: libc::c_int = 0;
+            let mut a_1: i32 = 0;
             loop {
                 a_1 = getc(sty_fp);
-                if !(a_1 != '\n' as i32 && a_1 != -(1 as libc::c_int)) {
+                if !(a_1 != '\n' as i32 && a_1 != -(1 as i32)) {
                     break;
                 }
             }
@@ -1160,7 +1160,7 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> libc::c_int {
             sty_lc;
             if idx_dot != 0 {
                 fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                idx_dot = 0 as libc::c_int;
+                idx_dot = 0 as i32;
             }
             fprintf(
                 ilg_fp,
@@ -1176,14 +1176,14 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> libc::c_int {
             );
             sty_ec += 1;
             sty_ec;
-            put_dot = 0 as libc::c_int;
-            return 0 as libc::c_int;
+            put_dot = 0 as i32;
+            return 0 as i32;
         }
     }
-    return 1 as libc::c_int;
+    return 1 as i32;
 }
-unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> libc::c_int {
-    let mut clone: libc::c_int = 0;
+unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
+    let mut clone: i32 = 0;
     clone = next_nonblank();
     match clone {
         39 => {
@@ -1191,10 +1191,10 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> libc::c_int {
             clone = getc(sty_fp);
             match clone {
                 39 => {
-                    let mut a: libc::c_int = 0;
+                    let mut a: i32 = 0;
                     loop {
                         a = getc(sty_fp);
-                        if !(a != '\n' as i32 && a != -(1 as libc::c_int)) {
+                        if !(a != '\n' as i32 && a != -(1 as i32)) {
                             break;
                         }
                     }
@@ -1202,7 +1202,7 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> libc::c_int {
                     sty_lc;
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as libc::c_int;
+                        idx_dot = 0 as i32;
                     }
                     fprintf(
                         ilg_fp,
@@ -1219,8 +1219,8 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> libc::c_int {
                     );
                     sty_ec += 1;
                     sty_ec;
-                    put_dot = 0 as libc::c_int;
-                    return 0 as libc::c_int;
+                    put_dot = 0 as i32;
+                    return 0 as i32;
                 }
                 10 => {
                     sty_lc += 1;
@@ -1242,11 +1242,11 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> libc::c_int {
                 10796120567984398691 => {
                     if getc(sty_fp) == '\'' as i32 {
                         *c = clone as libc::c_char;
-                        return 1 as libc::c_int;
+                        return 1 as i32;
                     } else {
                         if idx_dot != 0 {
                             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                            idx_dot = 0 as libc::c_int;
+                            idx_dot = 0 as i32;
                         }
                         fprintf(
                             ilg_fp,
@@ -1263,14 +1263,14 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> libc::c_int {
                         );
                         sty_ec += 1;
                         sty_ec;
-                        put_dot = 0 as libc::c_int;
-                        return 0 as libc::c_int;
+                        put_dot = 0 as i32;
+                        return 0 as i32;
                     }
                 }
                 _ => {
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as libc::c_int;
+                        idx_dot = 0 as i32;
                     }
                     fprintf(
                         ilg_fp,
@@ -1287,16 +1287,16 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> libc::c_int {
                     );
                     sty_ec += 1;
                     sty_ec;
-                    put_dot = 0 as libc::c_int;
-                    return 0 as libc::c_int;
+                    put_dot = 0 as i32;
+                    return 0 as i32;
                 }
             }
         }
         37 => {
-            let mut a_0: libc::c_int = 0;
+            let mut a_0: i32 = 0;
             loop {
                 a_0 = getc(sty_fp);
-                if !(a_0 != '\n' as i32 && a_0 != -(1 as libc::c_int)) {
+                if !(a_0 != '\n' as i32 && a_0 != -(1 as i32)) {
                     break;
                 }
             }
@@ -1304,10 +1304,10 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> libc::c_int {
             sty_lc;
         }
         _ => {
-            let mut a_1: libc::c_int = 0;
+            let mut a_1: i32 = 0;
             loop {
                 a_1 = getc(sty_fp);
-                if !(a_1 != '\n' as i32 && a_1 != -(1 as libc::c_int)) {
+                if !(a_1 != '\n' as i32 && a_1 != -(1 as i32)) {
                     break;
                 }
             }
@@ -1315,7 +1315,7 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> libc::c_int {
             sty_lc;
             if idx_dot != 0 {
                 fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                idx_dot = 0 as libc::c_int;
+                idx_dot = 0 as i32;
             }
             fprintf(
                 ilg_fp,
@@ -1331,17 +1331,17 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> libc::c_int {
             );
             sty_ec += 1;
             sty_ec;
-            put_dot = 0 as libc::c_int;
-            return 0 as libc::c_int;
+            put_dot = 0 as i32;
+            return 0 as i32;
         }
     }
-    return 1 as libc::c_int;
+    return 1 as i32;
 }
-unsafe extern "C" fn count_lfd(mut str: *mut libc::c_char) -> libc::c_int {
-    let mut i: libc::c_int = 0 as libc::c_int;
-    let mut n: libc::c_int = 0 as libc::c_int;
-    while *str.offset(i as isize) as libc::c_int != '\0' as i32 {
-        if *str.offset(i as isize) as libc::c_int == '\n' as i32 {
+unsafe extern "C" fn count_lfd(mut str: *mut libc::c_char) -> i32 {
+    let mut i: i32 = 0 as i32;
+    let mut n: i32 = 0 as i32;
+    while *str.offset(i as isize) as i32 != '\0' as i32 {
+        if *str.offset(i as isize) as i32 == '\n' as i32 {
             n += 1;
             n;
         }
@@ -1350,24 +1350,24 @@ unsafe extern "C" fn count_lfd(mut str: *mut libc::c_char) -> libc::c_int {
     }
     return n;
 }
-unsafe extern "C" fn process_precedence() -> libc::c_int {
-    let mut order: [libc::c_int; 5] = [0; 5];
-    let mut type_0: [libc::c_int; 5] = [0; 5];
-    let mut i: libc::c_int = 0 as libc::c_int;
-    let mut last: libc::c_int = 0;
-    let mut roml: libc::c_int = 0 as libc::c_int;
-    let mut romu: libc::c_int = 0 as libc::c_int;
-    let mut arab: libc::c_int = 0 as libc::c_int;
-    let mut alpl: libc::c_int = 0 as libc::c_int;
-    let mut alpu: libc::c_int = 0 as libc::c_int;
-    while i < 5 as libc::c_int && page_prec[i as usize] as libc::c_int != '\0' as i32 {
-        match page_prec[i as usize] as libc::c_int {
+unsafe extern "C" fn process_precedence() -> i32 {
+    let mut order: [i32; 5] = [0; 5];
+    let mut type_0: [i32; 5] = [0; 5];
+    let mut i: i32 = 0 as i32;
+    let mut last: i32 = 0;
+    let mut roml: i32 = 0 as i32;
+    let mut romu: i32 = 0 as i32;
+    let mut arab: i32 = 0 as i32;
+    let mut alpl: i32 = 0 as i32;
+    let mut alpu: i32 = 0 as i32;
+    while i < 5 as i32 && page_prec[i as usize] as i32 != '\0' as i32 {
+        match page_prec[i as usize] as i32 {
             114 => {
                 if roml != 0 {
-                    let mut a: libc::c_int = 0;
+                    let mut a: i32 = 0;
                     loop {
                         a = getc(sty_fp);
-                        if !(a != '\n' as i32 && a != -(1 as libc::c_int)) {
+                        if !(a != '\n' as i32 && a != -(1 as i32)) {
                             break;
                         }
                     }
@@ -1375,7 +1375,7 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                     sty_lc;
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as libc::c_int;
+                        idx_dot = 0 as i32;
                     }
                     fprintf(
                         ilg_fp,
@@ -1393,18 +1393,18 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                     );
                     sty_ec += 1;
                     sty_ec;
-                    put_dot = 0 as libc::c_int;
-                    return 0 as libc::c_int;
+                    put_dot = 0 as i32;
+                    return 0 as i32;
                 } else {
-                    roml = 1 as libc::c_int;
+                    roml = 1 as i32;
                 }
             }
             82 => {
                 if romu != 0 {
-                    let mut a_0: libc::c_int = 0;
+                    let mut a_0: i32 = 0;
                     loop {
                         a_0 = getc(sty_fp);
-                        if !(a_0 != '\n' as i32 && a_0 != -(1 as libc::c_int)) {
+                        if !(a_0 != '\n' as i32 && a_0 != -(1 as i32)) {
                             break;
                         }
                     }
@@ -1412,7 +1412,7 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                     sty_lc;
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as libc::c_int;
+                        idx_dot = 0 as i32;
                     }
                     fprintf(
                         ilg_fp,
@@ -1430,18 +1430,18 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                     );
                     sty_ec += 1;
                     sty_ec;
-                    put_dot = 0 as libc::c_int;
-                    return 0 as libc::c_int;
+                    put_dot = 0 as i32;
+                    return 0 as i32;
                 } else {
-                    romu = 1 as libc::c_int;
+                    romu = 1 as i32;
                 }
             }
             110 => {
                 if arab != 0 {
-                    let mut a_1: libc::c_int = 0;
+                    let mut a_1: i32 = 0;
                     loop {
                         a_1 = getc(sty_fp);
-                        if !(a_1 != '\n' as i32 && a_1 != -(1 as libc::c_int)) {
+                        if !(a_1 != '\n' as i32 && a_1 != -(1 as i32)) {
                             break;
                         }
                     }
@@ -1449,7 +1449,7 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                     sty_lc;
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as libc::c_int;
+                        idx_dot = 0 as i32;
                     }
                     fprintf(
                         ilg_fp,
@@ -1467,18 +1467,18 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                     );
                     sty_ec += 1;
                     sty_ec;
-                    put_dot = 0 as libc::c_int;
-                    return 0 as libc::c_int;
+                    put_dot = 0 as i32;
+                    return 0 as i32;
                 } else {
-                    arab = 1 as libc::c_int;
+                    arab = 1 as i32;
                 }
             }
             97 => {
                 if alpl != 0 {
-                    let mut a_2: libc::c_int = 0;
+                    let mut a_2: i32 = 0;
                     loop {
                         a_2 = getc(sty_fp);
-                        if !(a_2 != '\n' as i32 && a_2 != -(1 as libc::c_int)) {
+                        if !(a_2 != '\n' as i32 && a_2 != -(1 as i32)) {
                             break;
                         }
                     }
@@ -1486,7 +1486,7 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                     sty_lc;
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as libc::c_int;
+                        idx_dot = 0 as i32;
                     }
                     fprintf(
                         ilg_fp,
@@ -1504,18 +1504,18 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                     );
                     sty_ec += 1;
                     sty_ec;
-                    put_dot = 0 as libc::c_int;
-                    return 0 as libc::c_int;
+                    put_dot = 0 as i32;
+                    return 0 as i32;
                 } else {
-                    alpl = 1 as libc::c_int;
+                    alpl = 1 as i32;
                 }
             }
             65 => {
                 if alpu != 0 {
-                    let mut a_3: libc::c_int = 0;
+                    let mut a_3: i32 = 0;
                     loop {
                         a_3 = getc(sty_fp);
-                        if !(a_3 != '\n' as i32 && a_3 != -(1 as libc::c_int)) {
+                        if !(a_3 != '\n' as i32 && a_3 != -(1 as i32)) {
                             break;
                         }
                     }
@@ -1523,7 +1523,7 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                     sty_lc;
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as libc::c_int;
+                        idx_dot = 0 as i32;
                     }
                     fprintf(
                         ilg_fp,
@@ -1541,17 +1541,17 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                     );
                     sty_ec += 1;
                     sty_ec;
-                    put_dot = 0 as libc::c_int;
-                    return 0 as libc::c_int;
+                    put_dot = 0 as i32;
+                    return 0 as i32;
                 } else {
-                    alpu = 1 as libc::c_int;
+                    alpu = 1 as i32;
                 }
             }
             _ => {
-                let mut a_4: libc::c_int = 0;
+                let mut a_4: i32 = 0;
                 loop {
                     a_4 = getc(sty_fp);
-                    if !(a_4 != '\n' as i32 && a_4 != -(1 as libc::c_int)) {
+                    if !(a_4 != '\n' as i32 && a_4 != -(1 as i32)) {
                         break;
                     }
                 }
@@ -1559,7 +1559,7 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                 sty_lc;
                 if idx_dot != 0 {
                     fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                    idx_dot = 0 as libc::c_int;
+                    idx_dot = 0 as i32;
                 }
                 fprintf(
                     ilg_fp,
@@ -1572,22 +1572,22 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
                     ilg_fp,
                     b"Unknow type `%c' in page precedence specification.\n\0"
                         as *const u8 as *const libc::c_char,
-                    page_prec[i as usize] as libc::c_int,
+                    page_prec[i as usize] as i32,
                 );
                 sty_ec += 1;
                 sty_ec;
-                put_dot = 0 as libc::c_int;
-                return 0 as libc::c_int;
+                put_dot = 0 as i32;
+                return 0 as i32;
             }
         }
         i += 1;
         i;
     }
-    if page_prec[i as usize] as libc::c_int != '\0' as i32 {
-        let mut a_5: libc::c_int = 0;
+    if page_prec[i as usize] as i32 != '\0' as i32 {
+        let mut a_5: i32 = 0;
         loop {
             a_5 = getc(sty_fp);
-            if !(a_5 != '\n' as i32 && a_5 != -(1 as libc::c_int)) {
+            if !(a_5 != '\n' as i32 && a_5 != -(1 as i32)) {
                 break;
             }
         }
@@ -1595,7 +1595,7 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
         sty_lc;
         if idx_dot != 0 {
             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-            idx_dot = 0 as libc::c_int;
+            idx_dot = 0 as i32;
         }
         fprintf(
             ilg_fp,
@@ -1612,113 +1612,113 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
         );
         sty_ec += 1;
         sty_ec;
-        put_dot = 0 as libc::c_int;
-        return 0 as libc::c_int;
+        put_dot = 0 as i32;
+        return 0 as i32;
     }
     last = i;
-    match page_prec[0 as libc::c_int as usize] as libc::c_int {
+    match page_prec[0 as i32 as usize] as i32 {
         114 => {
-            order[0 as libc::c_int as usize] = 10000 as libc::c_int;
-            type_0[0 as libc::c_int as usize] = 0 as libc::c_int;
+            order[0 as i32 as usize] = 10000 as i32;
+            type_0[0 as i32 as usize] = 0 as i32;
         }
         82 => {
-            order[0 as libc::c_int as usize] = 10000 as libc::c_int;
-            type_0[0 as libc::c_int as usize] = 1 as libc::c_int;
+            order[0 as i32 as usize] = 10000 as i32;
+            type_0[0 as i32 as usize] = 1 as i32;
         }
         110 => {
-            order[0 as libc::c_int as usize] = 10000 as libc::c_int;
-            type_0[0 as libc::c_int as usize] = 2 as libc::c_int;
+            order[0 as i32 as usize] = 10000 as i32;
+            type_0[0 as i32 as usize] = 2 as i32;
         }
         97 => {
-            order[0 as libc::c_int as usize] = 26 as libc::c_int;
-            type_0[0 as libc::c_int as usize] = 3 as libc::c_int;
+            order[0 as i32 as usize] = 26 as i32;
+            type_0[0 as i32 as usize] = 3 as i32;
         }
         65 => {
-            order[0 as libc::c_int as usize] = 26 as libc::c_int;
-            type_0[0 as libc::c_int as usize] = 4 as libc::c_int;
+            order[0 as i32 as usize] = 26 as i32;
+            type_0[0 as i32 as usize] = 4 as i32;
         }
         _ => {}
     }
-    i = 1 as libc::c_int;
+    i = 1 as i32;
     while i < last {
-        match page_prec[i as usize] as libc::c_int {
+        match page_prec[i as usize] as i32 {
             114 => {
                 order[i
-                    as usize] = order[(i - 1 as libc::c_int) as usize]
-                    + 10000 as libc::c_int;
-                type_0[i as usize] = 0 as libc::c_int;
+                    as usize] = order[(i - 1 as i32) as usize]
+                    + 10000 as i32;
+                type_0[i as usize] = 0 as i32;
             }
             82 => {
                 order[i
-                    as usize] = order[(i - 1 as libc::c_int) as usize]
-                    + 10000 as libc::c_int;
-                type_0[i as usize] = 1 as libc::c_int;
+                    as usize] = order[(i - 1 as i32) as usize]
+                    + 10000 as i32;
+                type_0[i as usize] = 1 as i32;
             }
             110 => {
                 order[i
-                    as usize] = order[(i - 1 as libc::c_int) as usize]
-                    + 10000 as libc::c_int;
-                type_0[i as usize] = 2 as libc::c_int;
+                    as usize] = order[(i - 1 as i32) as usize]
+                    + 10000 as i32;
+                type_0[i as usize] = 2 as i32;
             }
             97 => {
                 order[i
-                    as usize] = order[(i - 1 as libc::c_int) as usize]
-                    + 26 as libc::c_int;
-                type_0[i as usize] = 3 as libc::c_int;
+                    as usize] = order[(i - 1 as i32) as usize]
+                    + 26 as i32;
+                type_0[i as usize] = 3 as i32;
             }
             65 => {
                 order[i
-                    as usize] = order[(i - 1 as libc::c_int) as usize]
-                    + 26 as libc::c_int;
-                type_0[i as usize] = 4 as libc::c_int;
+                    as usize] = order[(i - 1 as i32) as usize]
+                    + 26 as i32;
+                type_0[i as usize] = 4 as i32;
             }
             _ => {}
         }
         i += 1;
         i;
     }
-    i = 0 as libc::c_int;
-    while i < 5 as libc::c_int {
-        page_offset[i as usize] = -(1 as libc::c_int);
+    i = 0 as i32;
+    while i < 5 as i32 {
+        page_offset[i as usize] = -(1 as i32);
         i += 1;
         i;
     }
-    page_offset[type_0[0 as libc::c_int as usize] as usize] = 0 as libc::c_int;
-    i = 1 as libc::c_int;
+    page_offset[type_0[0 as i32 as usize] as usize] = 0 as i32;
+    i = 1 as i32;
     while i < last {
         page_offset[type_0[i as usize]
-            as usize] = order[(i - 1 as libc::c_int) as usize];
+            as usize] = order[(i - 1 as i32) as usize];
         i += 1;
         i;
     }
-    i = 0 as libc::c_int;
-    while i < 5 as libc::c_int {
-        if page_offset[i as usize] == -(1 as libc::c_int) {
-            match type_0[(last - 1 as libc::c_int) as usize] {
+    i = 0 as i32;
+    while i < 5 as i32 {
+        if page_offset[i as usize] == -(1 as i32) {
+            match type_0[(last - 1 as i32) as usize] {
                 0 => {
                     order[last
-                        as usize] = order[(last - 1 as libc::c_int) as usize]
-                        + 10000 as libc::c_int;
+                        as usize] = order[(last - 1 as i32) as usize]
+                        + 10000 as i32;
                 }
                 1 => {
                     order[last
-                        as usize] = order[(last - 1 as libc::c_int) as usize]
-                        + 10000 as libc::c_int;
+                        as usize] = order[(last - 1 as i32) as usize]
+                        + 10000 as i32;
                 }
                 2 => {
                     order[last
-                        as usize] = order[(last - 1 as libc::c_int) as usize]
-                        + 10000 as libc::c_int;
+                        as usize] = order[(last - 1 as i32) as usize]
+                        + 10000 as i32;
                 }
                 3 => {
                     order[last
-                        as usize] = order[(last - 1 as libc::c_int) as usize]
-                        + 26 as libc::c_int;
+                        as usize] = order[(last - 1 as i32) as usize]
+                        + 26 as i32;
                 }
                 4 => {
                     order[last
-                        as usize] = order[(last - 1 as libc::c_int) as usize]
-                        + 26 as libc::c_int;
+                        as usize] = order[(last - 1 as i32) as usize]
+                        + 26 as i32;
                 }
                 _ => {}
             }
@@ -1730,5 +1730,5 @@ unsafe extern "C" fn process_precedence() -> libc::c_int {
         i += 1;
         i;
     }
-    return 1 as libc::c_int;
+    return 1 as i32;
 }
