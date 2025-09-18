@@ -2,6 +2,8 @@
 
 pub mod qsort;
 pub mod sortid;
+pub mod scanid;
 // 重新导出主要函数
 pub use qsort::*;
 pub use sortid::*;
+pub use scanid::*;

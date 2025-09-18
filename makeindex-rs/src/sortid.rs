@@ -1,4 +1,4 @@
-extern "C" {
+unsafe extern "C" {
    // pub type _IO_wide_data;
    // pub type _IO_codecvt;
    // pub type _IO_marker;
