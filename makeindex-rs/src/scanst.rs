@@ -1,9 +1,17 @@
-#![allow(dead_code, mutable_transmutes, non_camel_case_types, non_snake_case, non_upper_case_globals, unused_assignments, unused_mut)]
+#![allow(
+    dead_code,
+    mutable_transmutes,
+    non_camel_case_types,
+    non_snake_case,
+    non_upper_case_globals,
+    unused_assignments,
+    unused_mut
+)]
 // #![feature(extern_types)]
 extern "C" {
-   // pub type _IO_wide_data;
-   // pub type _IO_codecvt;
-   // pub type _IO_marker;
+    // pub type _IO_wide_data;
+    // pub type _IO_codecvt;
+    // pub type _IO_marker;
     static mut stderr: *mut FILE;
     fn fclose(__stream: *mut FILE) -> i32;
     fn fprintf(_: *mut FILE, _: *const libc::c_char, _: ...) -> i32;
@@ -19,12 +27,12 @@ extern "C" {
     static mut sty_fn: [libc::c_char; 0];
     static mut idx_dot: i32;
 }
-pub type size_t = libc::c_ulong;
-pub type __off_t = libc::c_long;
-pub type __off64_t = libc::c_long;
+type size_t = libc::c_ulong;
+type __off_t = libc::c_long;
+type __off64_t = libc::c_long;
 #[derive(Copy, Clone)]
 #[repr(C)]
-pub struct _IO_FILE {
+struct _IO_FILE {
     pub _flags: i32,
     pub _IO_read_ptr: *mut libc::c_char,
     pub _IO_read_end: *mut libc::c_char,
@@ -37,7 +45,7 @@ pub struct _IO_FILE {
     pub _IO_save_base: *mut libc::c_char,
     pub _IO_backup_base: *mut libc::c_char,
     pub _IO_save_end: *mut libc::c_char,
-   // pub _markers: *mut _IO_marker,
+    // pub _markers: *mut _IO_marker,
     pub _chain: *mut _IO_FILE,
     pub _fileno: i32,
     pub _flags2: i32,
@@ -47,29 +55,29 @@ pub struct _IO_FILE {
     pub _shortbuf: [libc::c_char; 1],
     pub _lock: *mut libc::c_void,
     pub _offset: __off64_t,
-   // pub _codecvt: *mut _IO_codecvt,
-  //  pub _wide_data: *mut _IO_wide_data,
+    // pub _codecvt: *mut _IO_codecvt,
+    //  pub _wide_data: *mut _IO_wide_data,
     pub _freeres_list: *mut _IO_FILE,
     pub _freeres_buf: *mut libc::c_void,
     pub __pad5: size_t,
     pub _mode: i32,
     pub _unused2: [libc::c_char; 20],
 }
-pub type _IO_lock_t = ();
-pub type FILE = _IO_FILE;
-pub type C2RustUnnamed = libc::c_uint;
-pub const _ISalnum: C2RustUnnamed = 8;
-pub const _ISpunct: C2RustUnnamed = 4;
-pub const _IScntrl: C2RustUnnamed = 2;
-pub const _ISblank: C2RustUnnamed = 1;
-pub const _ISgraph: C2RustUnnamed = 32768;
-pub const _ISprint: C2RustUnnamed = 16384;
-pub const _ISspace: C2RustUnnamed = 8192;
-pub const _ISxdigit: C2RustUnnamed = 4096;
-pub const _ISdigit: C2RustUnnamed = 2048;
-pub const _ISalpha: C2RustUnnamed = 1024;
-pub const _ISlower: C2RustUnnamed = 512;
-pub const _ISupper: C2RustUnnamed = 256;
+type _IO_lock_t = ();
+type FILE = _IO_FILE;
+type u32 = libc::c_uint;
+const _ISalnum: u32 = 8;
+const _ISpunct: u32 = 4;
+const _IScntrl: u32 = 2;
+const _ISblank: u32 = 1;
+const _ISgraph: u32 = 32768;
+const _ISprint: u32 = 16384;
+const _ISspace: u32 = 8192;
+const _ISxdigit: u32 = 4096;
+const _ISdigit: u32 = 2048;
+const _ISalpha: u32 = 1024;
+const _ISlower: u32 = 512;
+const _ISupper: u32 = 256;
 static mut sty_lc: i32 = 0 as i32;
 static mut sty_tc: i32 = 0 as i32;
 static mut sty_ec: i32 = 0 as i32;
@@ -283,23 +291,11 @@ pub static mut item_x: [[libc::c_char; 1024]; 3] = unsafe {
     ]
 };
 #[no_mangle]
-pub static mut ilen_r: [i32; 3] = [
-    1 as i32,
-    1 as i32,
-    1 as i32,
-];
+pub static mut ilen_r: [i32; 3] = [1 as i32, 1 as i32, 1 as i32];
 #[no_mangle]
-pub static mut ilen_u: [i32; 3] = [
-    0 as i32,
-    1 as i32,
-    1 as i32,
-];
+pub static mut ilen_u: [i32; 3] = [0 as i32, 1 as i32, 1 as i32];
 #[no_mangle]
-pub static mut ilen_x: [i32; 3] = [
-    0 as i32,
-    1 as i32,
-    1 as i32,
-];
+pub static mut ilen_x: [i32; 3] = [0 as i32, 1 as i32, 1 as i32];
 #[no_mangle]
 pub static mut delim_p: [[libc::c_char; 1024]; 3] = unsafe {
     [
@@ -432,8 +428,7 @@ pub static mut page_offset: [i32; 5] = [
     10000 as i32,
     10000 as i32 + 10000 as i32,
     10000 as i32 + 10000 as i32 + 26 as i32,
-    10000 as i32 + 10000 as i32 + 26 as i32
-        + 10000 as i32,
+    10000 as i32 + 10000 as i32 + 26 as i32 + 10000 as i32,
 ];
 static mut page_prec: [libc::c_char; 1024] = unsafe {
     *::core::mem::transmute::<
@@ -463,9 +458,11 @@ pub unsafe extern "C" fn scan_sty() {
     while scan_spec(spec.as_mut_ptr()) != 0 {
         sty_tc += 1;
         sty_tc;
-        put_dot = 1 as i32;
-        if strcmp(spec.as_mut_ptr(), b"preamble\0" as *const u8 as *const libc::c_char)
-            == 0 as i32
+        put_dot = 1;
+        if strcmp(
+            spec.as_mut_ptr(),
+            b"preamble\0" as *const u8 as *const libc::c_char,
+        ) == 0 as i32
         {
             scan_string(preamble.as_mut_ptr());
             prelen = count_lfd(preamble.as_mut_ptr());
@@ -550,57 +547,50 @@ pub unsafe extern "C" fn scan_sty() {
             b"item_0\0" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
-            scan_string((item_r[0 as i32 as usize]).as_mut_ptr());
-            ilen_r[0 as i32
-                as usize] = count_lfd((item_r[0 as i32 as usize]).as_mut_ptr());
+            scan_string((item_r[0]).as_mut_ptr());
+            ilen_r[0 as i32 as usize] = count_lfd((item_r[0]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_1\0" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
-            scan_string((item_r[1 as i32 as usize]).as_mut_ptr());
-            ilen_r[1 as i32
-                as usize] = count_lfd((item_r[1 as i32 as usize]).as_mut_ptr());
+            scan_string((item_r[1]).as_mut_ptr());
+            ilen_r[1 as i32 as usize] = count_lfd((item_r[1]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_2\0" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
-            scan_string((item_r[2 as i32 as usize]).as_mut_ptr());
-            ilen_r[2 as i32
-                as usize] = count_lfd((item_r[2 as i32 as usize]).as_mut_ptr());
+            scan_string((item_r[2]).as_mut_ptr());
+            ilen_r[2 as i32 as usize] = count_lfd((item_r[2]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_01\0" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
-            scan_string((item_u[1 as i32 as usize]).as_mut_ptr());
-            ilen_u[1 as i32
-                as usize] = count_lfd((item_u[1 as i32 as usize]).as_mut_ptr());
+            scan_string((item_u[1]).as_mut_ptr());
+            ilen_u[1 as i32 as usize] = count_lfd((item_u[1]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_12\0" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
-            scan_string((item_u[2 as i32 as usize]).as_mut_ptr());
-            ilen_u[2 as i32
-                as usize] = count_lfd((item_u[2 as i32 as usize]).as_mut_ptr());
+            scan_string((item_u[2]).as_mut_ptr());
+            ilen_u[2 as i32 as usize] = count_lfd((item_u[2]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_x1\0" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
-            scan_string((item_x[1 as i32 as usize]).as_mut_ptr());
-            ilen_x[1 as i32
-                as usize] = count_lfd((item_x[1 as i32 as usize]).as_mut_ptr());
+            scan_string((item_x[1]).as_mut_ptr());
+            ilen_x[1 as i32 as usize] = count_lfd((item_x[1]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"item_x2\0" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
-            scan_string((item_x[2 as i32 as usize]).as_mut_ptr());
-            ilen_x[2 as i32
-                as usize] = count_lfd((item_x[2 as i32 as usize]).as_mut_ptr());
+            scan_string((item_x[2]).as_mut_ptr());
+            ilen_x[2 as i32 as usize] = count_lfd((item_x[2]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"encap_prefix\0" as *const u8 as *const libc::c_char,
@@ -624,19 +614,19 @@ pub unsafe extern "C" fn scan_sty() {
             b"delim_0\0" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
-            scan_string((delim_p[0 as i32 as usize]).as_mut_ptr());
+            scan_string((delim_p[0]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_1\0" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
-            scan_string((delim_p[1 as i32 as usize]).as_mut_ptr());
+            scan_string((delim_p[1]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_2\0" as *const u8 as *const libc::c_char,
         ) == 0 as i32
         {
-            scan_string((delim_p[2 as i32 as usize]).as_mut_ptr());
+            scan_string((delim_p[2]).as_mut_ptr());
         } else if strcmp(
             spec.as_mut_ptr(),
             b"delim_n\0" as *const u8 as *const libc::c_char,
@@ -688,25 +678,24 @@ pub unsafe extern "C" fn scan_sty() {
             } else {
                 if idx_dot != 0 {
                     fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                    idx_dot = 0 as i32;
+                    idx_dot = 0;
                 }
                 fprintf(
                     ilg_fp,
-                    b"** Input style error (file = %s, line = %d):\n   -- \0"
-                        as *const u8 as *const libc::c_char,
+                    b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                        as *const libc::c_char,
                     sty_fn.as_mut_ptr(),
                     sty_lc,
                 );
                 fprintf(
                     ilg_fp,
-                    b"%s must be positive (got %d)\0" as *const u8
-                        as *const libc::c_char,
+                    b"%s must be positive (got %d)\0" as *const u8 as *const libc::c_char,
                     b"line_max\0" as *const u8 as *const libc::c_char,
                     tmp,
                 );
                 sty_ec += 1;
-                sty_ec;
-                put_dot = 0 as i32;
+
+                put_dot = 0;
             }
         } else if strcmp(
             spec.as_mut_ptr(),
@@ -723,25 +712,24 @@ pub unsafe extern "C" fn scan_sty() {
             } else {
                 if idx_dot != 0 {
                     fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                    idx_dot = 0 as i32;
+                    idx_dot = 0;
                 }
                 fprintf(
                     ilg_fp,
-                    b"** Input style error (file = %s, line = %d):\n   -- \0"
-                        as *const u8 as *const libc::c_char,
+                    b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                        as *const libc::c_char,
                     sty_fn.as_mut_ptr(),
                     sty_lc,
                 );
                 fprintf(
                     ilg_fp,
-                    b"%s must be nonnegative (got %d)\0" as *const u8
-                        as *const libc::c_char,
+                    b"%s must be nonnegative (got %d)\0" as *const u8 as *const libc::c_char,
                     b"indent_length\0" as *const u8 as *const libc::c_char,
                     tmp,
                 );
                 sty_ec += 1;
-                sty_ec;
-                put_dot = 0 as i32;
+
+                put_dot = 0;
             }
         } else if strcmp(
             spec.as_mut_ptr(),
@@ -832,10 +820,10 @@ pub unsafe extern "C" fn scan_sty() {
                 }
             }
             sty_lc += 1;
-            sty_lc;
+
             if idx_dot != 0 {
                 fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                idx_dot = 0 as i32;
+                idx_dot = 0;
             }
             fprintf(
                 ilg_fp,
@@ -850,12 +838,12 @@ pub unsafe extern "C" fn scan_sty() {
                 spec.as_mut_ptr(),
             );
             sty_ec += 1;
-            sty_ec;
-            put_dot = 0 as i32;
-            put_dot = 0 as i32;
+
+            put_dot = 0;
+            put_dot = 0;
         }
         if put_dot != 0 {
-            idx_dot = 1 as i32;
+            idx_dot = 1;
             if verbose != 0 {
                 fprintf(stderr, b".\0" as *const u8 as *const libc::c_char);
             }
@@ -865,7 +853,7 @@ pub unsafe extern "C" fn scan_sty() {
     if idx_quote as i32 == idx_escape as i32 {
         if idx_dot != 0 {
             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-            idx_dot = 0 as i32;
+            idx_dot = 0;
         }
         fprintf(
             ilg_fp,
@@ -876,15 +864,15 @@ pub unsafe extern "C" fn scan_sty() {
         );
         fprintf(
             ilg_fp,
-            b"Quote and escape symbols must be distinct (both `%c' now).\n\0"
-                as *const u8 as *const libc::c_char,
+            b"Quote and escape symbols must be distinct (both `%c' now).\n\0" as *const u8
+                as *const libc::c_char,
             idx_quote as i32,
         );
         sty_ec += 1;
-        sty_ec;
-        put_dot = 0 as i32;
-        idx_quote = '"' as i32 as libc::c_char;
-        idx_escape = '\\' as i32 as libc::c_char;
+
+        put_dot = 0;
+        idx_quote = '"' as i8;
+        idx_escape = '\\' as i8;
     }
     if verbose != 0 {
         fprintf(
@@ -912,7 +900,7 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
     loop {
         c = next_nonblank();
         if c == -(1 as i32) {
-            return 0 as i32
+            return 0 as i32;
         } else {
             if !(c == '%' as i32) {
                 break;
@@ -925,19 +913,17 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
                 }
             }
             sty_lc += 1;
-            sty_lc;
         }
     }
-    *spec
-        .offset(
-            0 as i32 as isize,
-        ) = (if *(*__ctype_b_loc()).offset(c as libc::c_uchar as i32 as isize)
-        as i32 & _ISupper as i32 as libc::c_ushort as i32 != 0
+    *spec.offset(0 as i32 as isize) = (if *(*__ctype_b_loc())
+        .offset(c as libc::c_uchar as i32 as isize) as i32
+        & _ISupper as i32 as libc::c_ushort as i32
+        != 0
     {
-        tolower(c as libc::c_uchar as i32) as libc::c_uchar as i32
+        tolower(c as libc::c_uchar as i32) as libc::c_uchar as i8
     } else {
-        c as libc::c_uchar as i32
-    }) as libc::c_char;
+        c as libc::c_uchar as i8
+    });
     loop {
         let fresh0 = i;
         i = i + 1;
@@ -945,28 +931,29 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
             && {
                 c = getc(sty_fp);
                 c != ' ' as i32
-            } && c != '\t' as i32 && c != '\n' as i32 && c != -(1 as i32))
+            }
+            && c != '\t' as i32
+            && c != '\n' as i32
+            && c != -(1 as i32))
         {
             break;
         }
-        *spec
-            .offset(
-                i as isize,
-            ) = (if *(*__ctype_b_loc())
-            .offset(c as libc::c_uchar as i32 as isize) as i32
-            & _ISupper as i32 as libc::c_ushort as i32 != 0
-        {
-            tolower(c as libc::c_uchar as i32) as libc::c_uchar as i32
-        } else {
-            c as libc::c_uchar as i32
-        }) as libc::c_char;
+        *spec.offset(i as isize) =
+            (if *(*__ctype_b_loc()).offset(c as libc::c_uchar as i32 as isize) as i32
+                & _ISupper as i32 as libc::c_ushort as i32
+                != 0
+            {
+                tolower(c as libc::c_uchar as i32) as libc::c_uchar as i8
+            } else {
+                (c as libc::c_uchar as i32).try_into().unwrap()
+            });
     }
     if i < 256 as i32 {
-        *spec.offset(i as isize) = '\0' as i32 as libc::c_char;
+        *spec.offset(i as isize) = '\0' as i8;
         if c == -(1 as i32) {
             if idx_dot != 0 {
                 fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                idx_dot = 0 as i32;
+                idx_dot = 0;
             }
             fprintf(
                 ilg_fp,
@@ -982,19 +969,18 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
                 spec,
             );
             sty_ec += 1;
-            sty_ec;
-            put_dot = 0 as i32;
+
+            put_dot = 0;
             return -(1 as i32);
         }
         if c == '\n' as i32 {
             sty_lc += 1;
-            sty_lc;
         }
         return 1 as i32;
     } else {
         if idx_dot != 0 {
             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-            idx_dot = 0 as i32;
+            idx_dot = 0;
         }
         fprintf(
             ilg_fp,
@@ -1010,8 +996,8 @@ unsafe extern "C" fn scan_spec(mut spec: *mut libc::c_char) -> i32 {
             256 as i32,
         );
         sty_ec += 1;
-        sty_ec;
-        put_dot = 0 as i32;
+
+        put_dot = 0;
         return 0 as i32;
     };
 }
@@ -1023,12 +1009,11 @@ unsafe extern "C" fn next_nonblank() -> i32 {
             -1 => return -(1 as i32),
             10 => {
                 sty_lc += 1;
-                sty_lc;
             }
             32 | 9 => {}
             _ => return c,
         }
-    };
+    }
 }
 unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
     let mut clone: [libc::c_char; 1024] = [0; 1024];
@@ -1036,107 +1021,100 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
     let mut c: i32 = 0;
     c = next_nonblank();
     match c {
-        34 => {
-            loop {
-                c = getc(sty_fp);
-                match c {
-                    -1 => {
+        34 => loop {
+            c = getc(sty_fp);
+            match c {
+                -1 => {
+                    if idx_dot != 0 {
+                        fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
+                        idx_dot = 0;
+                    }
+                    fprintf(
+                        ilg_fp,
+                        b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                            as *const libc::c_char,
+                        sty_fn.as_mut_ptr(),
+                        sty_lc,
+                    );
+                    fprintf(
+                        ilg_fp,
+                        b"No closing delimiter in %s.\n\0" as *const u8 as *const libc::c_char,
+                        clone.as_mut_ptr(),
+                    );
+                    sty_ec += 1;
+
+                    put_dot = 0;
+                    return 0 as i32;
+                }
+                34 => {
+                    clone[i as usize] = '\0' as i8;
+                    strcpy(str, clone.as_mut_ptr());
+                    return 1 as i32;
+                }
+                92 => {
+                    c = getc(sty_fp);
+                    match c {
+                        116 => {
+                            let fresh1 = i;
+                            i = i + 1;
+                            clone[fresh1 as usize] = '\t' as i8;
+                        }
+                        110 => {
+                            let fresh2 = i;
+                            i = i + 1;
+                            clone[fresh2 as usize] = '\n' as i8;
+                        }
+                        _ => {
+                            let fresh3 = i;
+                            i = i + 1;
+                            clone[fresh3 as usize] = c as i8;
+                        }
+                    }
+                }
+                _ => {
+                    if c == '\n' as i32 {
+                        sty_lc += 1;
+                    }
+                    if i < 1024 as i32 {
+                        let fresh4 = i;
+                        i = i + 1;
+                        clone[fresh4 as usize] = c as i8;
+                    } else {
+                        let mut a: i32 = 0;
+                        loop {
+                            a = getc(sty_fp);
+                            if !(a != '\n' as i32 && a != -(1 as i32)) {
+                                break;
+                            }
+                        }
+                        sty_lc += 1;
+
                         if idx_dot != 0 {
                             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                            idx_dot = 0 as i32;
+                            idx_dot = 0;
                         }
                         fprintf(
                             ilg_fp,
-                            b"** Input style error (file = %s, line = %d):\n   -- \0"
-                                as *const u8 as *const libc::c_char,
+                            b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                                as *const libc::c_char,
                             sty_fn.as_mut_ptr(),
                             sty_lc,
                         );
                         fprintf(
                             ilg_fp,
-                            b"No closing delimiter in %s.\n\0" as *const u8
+                            b"Attribute string %s too long (max %d).\n\0" as *const u8
                                 as *const libc::c_char,
                             clone.as_mut_ptr(),
+                            1024 as i32,
                         );
                         sty_ec += 1;
-                        sty_ec;
-                        put_dot = 0 as i32;
+
+                        put_dot = 0;
                         return 0 as i32;
-                    }
-                    34 => {
-                        clone[i as usize] = '\0' as i32 as libc::c_char;
-                        strcpy(str, clone.as_mut_ptr());
-                        return 1 as i32;
-                    }
-                    92 => {
-                        c = getc(sty_fp);
-                        match c {
-                            116 => {
-                                let fresh1 = i;
-                                i = i + 1;
-                                clone[fresh1 as usize] = '\t' as i32 as libc::c_char;
-                            }
-                            110 => {
-                                let fresh2 = i;
-                                i = i + 1;
-                                clone[fresh2 as usize] = '\n' as i32 as libc::c_char;
-                            }
-                            _ => {
-                                let fresh3 = i;
-                                i = i + 1;
-                                clone[fresh3 as usize] = c as libc::c_char;
-                            }
-                        }
-                    }
-                    _ => {
-                        if c == '\n' as i32 {
-                            sty_lc += 1;
-                            sty_lc;
-                        }
-                        if i < 1024 as i32 {
-                            let fresh4 = i;
-                            i = i + 1;
-                            clone[fresh4 as usize] = c as libc::c_char;
-                        } else {
-                            let mut a: i32 = 0;
-                            loop {
-                                a = getc(sty_fp);
-                                if !(a != '\n' as i32 && a != -(1 as i32)) {
-                                    break;
-                                }
-                            }
-                            sty_lc += 1;
-                            sty_lc;
-                            if idx_dot != 0 {
-                                fprintf(
-                                    ilg_fp,
-                                    b"\n\0" as *const u8 as *const libc::c_char,
-                                );
-                                idx_dot = 0 as i32;
-                            }
-                            fprintf(
-                                ilg_fp,
-                                b"** Input style error (file = %s, line = %d):\n   -- \0"
-                                    as *const u8 as *const libc::c_char,
-                                sty_fn.as_mut_ptr(),
-                                sty_lc,
-                            );
-                            fprintf(
-                                ilg_fp,
-                                b"Attribute string %s too long (max %d).\n\0" as *const u8
-                                    as *const libc::c_char,
-                                clone.as_mut_ptr(),
-                                1024 as i32,
-                            );
-                            sty_ec += 1;
-                            sty_ec;
-                            put_dot = 0 as i32;
-                            return 0 as i32;
-                        }
                     }
                 }
             }
-        }
+        },
         37 => {
             let mut a_0: i32 = 0;
             loop {
@@ -1146,7 +1124,6 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
                 }
             }
             sty_lc += 1;
-            sty_lc;
         }
         _ => {
             let mut a_1: i32 = 0;
@@ -1157,10 +1134,10 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
                 }
             }
             sty_lc += 1;
-            sty_lc;
+
             if idx_dot != 0 {
                 fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                idx_dot = 0 as i32;
+                idx_dot = 0;
             }
             fprintf(
                 ilg_fp,
@@ -1175,8 +1152,8 @@ unsafe extern "C" fn scan_string(mut str: *mut libc::c_char) -> i32 {
                 b"\0" as *const u8 as *const libc::c_char,
             );
             sty_ec += 1;
-            sty_ec;
-            put_dot = 0 as i32;
+
+            put_dot = 0;
             return 0 as i32;
         }
     }
@@ -1199,32 +1176,31 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
                         }
                     }
                     sty_lc += 1;
-                    sty_lc;
+
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as i32;
+                        idx_dot = 0;
                     }
                     fprintf(
                         ilg_fp,
-                        b"** Input style error (file = %s, line = %d):\n   -- \0"
-                            as *const u8 as *const libc::c_char,
+                        b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                            as *const libc::c_char,
                         sty_fn.as_mut_ptr(),
                         sty_lc,
                     );
                     fprintf(
                         ilg_fp,
-                        b"Premature closing delimiter.\n\0" as *const u8
-                            as *const libc::c_char,
+                        b"Premature closing delimiter.\n\0" as *const u8 as *const libc::c_char,
                         b"\0" as *const u8 as *const libc::c_char,
                     );
                     sty_ec += 1;
-                    sty_ec;
-                    put_dot = 0 as i32;
+
+                    put_dot = 0;
                     return 0 as i32;
                 }
                 10 => {
                     sty_lc += 1;
-                    sty_lc;
+
                     current_block_44 = 16202342022523421668;
                 }
                 -1 => {
@@ -1241,17 +1217,17 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
             match current_block_44 {
                 10796120567984398691 => {
                     if getc(sty_fp) == '\'' as i32 {
-                        *c = clone as libc::c_char;
+                        *c = clone as i8;
                         return 1 as i32;
                     } else {
                         if idx_dot != 0 {
                             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                            idx_dot = 0 as i32;
+                            idx_dot = 0;
                         }
                         fprintf(
                             ilg_fp,
-                            b"** Input style error (file = %s, line = %d):\n   -- \0"
-                                as *const u8 as *const libc::c_char,
+                            b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                                as *const libc::c_char,
                             sty_fn.as_mut_ptr(),
                             sty_lc,
                         );
@@ -1262,32 +1238,31 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
                             b"\0" as *const u8 as *const libc::c_char,
                         );
                         sty_ec += 1;
-                        sty_ec;
-                        put_dot = 0 as i32;
+
+                        put_dot = 0;
                         return 0 as i32;
                     }
                 }
                 _ => {
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as i32;
+                        idx_dot = 0;
                     }
                     fprintf(
                         ilg_fp,
-                        b"** Input style error (file = %s, line = %d):\n   -- \0"
-                            as *const u8 as *const libc::c_char,
+                        b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                            as *const libc::c_char,
                         sty_fn.as_mut_ptr(),
                         sty_lc,
                     );
                     fprintf(
                         ilg_fp,
-                        b"No character (premature EOF).\n\0" as *const u8
-                            as *const libc::c_char,
+                        b"No character (premature EOF).\n\0" as *const u8 as *const libc::c_char,
                         b"\0" as *const u8 as *const libc::c_char,
                     );
                     sty_ec += 1;
-                    sty_ec;
-                    put_dot = 0 as i32;
+
+                    put_dot = 0;
                     return 0 as i32;
                 }
             }
@@ -1301,7 +1276,6 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
                 }
             }
             sty_lc += 1;
-            sty_lc;
         }
         _ => {
             let mut a_1: i32 = 0;
@@ -1312,10 +1286,10 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
                 }
             }
             sty_lc += 1;
-            sty_lc;
+
             if idx_dot != 0 {
                 fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                idx_dot = 0 as i32;
+                idx_dot = 0;
             }
             fprintf(
                 ilg_fp,
@@ -1330,8 +1304,8 @@ unsafe extern "C" fn scan_char(mut c: *mut libc::c_char) -> i32 {
                 b"\0" as *const u8 as *const libc::c_char,
             );
             sty_ec += 1;
-            sty_ec;
-            put_dot = 0 as i32;
+
+            put_dot = 0;
             return 0 as i32;
         }
     }
@@ -1346,7 +1320,6 @@ unsafe extern "C" fn count_lfd(mut str: *mut libc::c_char) -> i32 {
             n;
         }
         i += 1;
-        i;
     }
     return n;
 }
@@ -1372,15 +1345,15 @@ unsafe extern "C" fn process_precedence() -> i32 {
                         }
                     }
                     sty_lc += 1;
-                    sty_lc;
+
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as i32;
+                        idx_dot = 0;
                     }
                     fprintf(
                         ilg_fp,
-                        b"** Input style error (file = %s, line = %d):\n   -- \0"
-                            as *const u8 as *const libc::c_char,
+                        b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                            as *const libc::c_char,
                         sty_fn.as_mut_ptr(),
                         sty_lc,
                     );
@@ -1392,11 +1365,11 @@ unsafe extern "C" fn process_precedence() -> i32 {
                         page_prec.as_mut_ptr(),
                     );
                     sty_ec += 1;
-                    sty_ec;
-                    put_dot = 0 as i32;
+
+                    put_dot = 0;
                     return 0 as i32;
                 } else {
-                    roml = 1 as i32;
+                    roml = 1;
                 }
             }
             82 => {
@@ -1409,15 +1382,15 @@ unsafe extern "C" fn process_precedence() -> i32 {
                         }
                     }
                     sty_lc += 1;
-                    sty_lc;
+
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as i32;
+                        idx_dot = 0;
                     }
                     fprintf(
                         ilg_fp,
-                        b"** Input style error (file = %s, line = %d):\n   -- \0"
-                            as *const u8 as *const libc::c_char,
+                        b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                            as *const libc::c_char,
                         sty_fn.as_mut_ptr(),
                         sty_lc,
                     );
@@ -1429,11 +1402,11 @@ unsafe extern "C" fn process_precedence() -> i32 {
                         page_prec.as_mut_ptr(),
                     );
                     sty_ec += 1;
-                    sty_ec;
-                    put_dot = 0 as i32;
+
+                    put_dot = 0;
                     return 0 as i32;
                 } else {
-                    romu = 1 as i32;
+                    romu = 1;
                 }
             }
             110 => {
@@ -1446,15 +1419,15 @@ unsafe extern "C" fn process_precedence() -> i32 {
                         }
                     }
                     sty_lc += 1;
-                    sty_lc;
+
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as i32;
+                        idx_dot = 0;
                     }
                     fprintf(
                         ilg_fp,
-                        b"** Input style error (file = %s, line = %d):\n   -- \0"
-                            as *const u8 as *const libc::c_char,
+                        b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                            as *const libc::c_char,
                         sty_fn.as_mut_ptr(),
                         sty_lc,
                     );
@@ -1466,11 +1439,11 @@ unsafe extern "C" fn process_precedence() -> i32 {
                         page_prec.as_mut_ptr(),
                     );
                     sty_ec += 1;
-                    sty_ec;
-                    put_dot = 0 as i32;
+
+                    put_dot = 0;
                     return 0 as i32;
                 } else {
-                    arab = 1 as i32;
+                    arab = 1;
                 }
             }
             97 => {
@@ -1483,15 +1456,15 @@ unsafe extern "C" fn process_precedence() -> i32 {
                         }
                     }
                     sty_lc += 1;
-                    sty_lc;
+
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as i32;
+                        idx_dot = 0;
                     }
                     fprintf(
                         ilg_fp,
-                        b"** Input style error (file = %s, line = %d):\n   -- \0"
-                            as *const u8 as *const libc::c_char,
+                        b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                            as *const libc::c_char,
                         sty_fn.as_mut_ptr(),
                         sty_lc,
                     );
@@ -1503,11 +1476,11 @@ unsafe extern "C" fn process_precedence() -> i32 {
                         page_prec.as_mut_ptr(),
                     );
                     sty_ec += 1;
-                    sty_ec;
-                    put_dot = 0 as i32;
+
+                    put_dot = 0;
                     return 0 as i32;
                 } else {
-                    alpl = 1 as i32;
+                    alpl = 1;
                 }
             }
             65 => {
@@ -1520,16 +1493,16 @@ unsafe extern "C" fn process_precedence() -> i32 {
                         }
                     }
                     sty_lc += 1;
-                    sty_lc;
+
                     if idx_dot != 0 {
                         fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                        idx_dot = 0 as i32;
+                        idx_dot = 0;
                     }
                     fprintf(
                         ilg_fp,
-                        b"** Input style error (file = %s, line = %d):\n   -- \0"
-                            as *const u8 as *const libc::c_char,
-                        sty_fn.as_mut_ptr(),
+                        b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                            as *const libc::c_char,
+                        sty_fn,
                         sty_lc,
                     );
                     fprintf(
@@ -1537,14 +1510,14 @@ unsafe extern "C" fn process_precedence() -> i32 {
                         b"Multiple instances of type `%c' in page precedence specification `%s'.\n\0"
                             as *const u8 as *const libc::c_char,
                         'A' as i32,
-                        page_prec.as_mut_ptr(),
+                        page_prec,
                     );
                     sty_ec += 1;
-                    sty_ec;
-                    put_dot = 0 as i32;
+
+                    put_dot = 0;
                     return 0 as i32;
                 } else {
-                    alpu = 1 as i32;
+                    alpu = 1;
                 }
             }
             _ => {
@@ -1556,32 +1529,31 @@ unsafe extern "C" fn process_precedence() -> i32 {
                     }
                 }
                 sty_lc += 1;
-                sty_lc;
+
                 if idx_dot != 0 {
                     fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-                    idx_dot = 0 as i32;
+                    idx_dot = 0;
                 }
                 fprintf(
                     ilg_fp,
-                    b"** Input style error (file = %s, line = %d):\n   -- \0"
-                        as *const u8 as *const libc::c_char,
-                    sty_fn.as_mut_ptr(),
+                    b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
+                        as *const libc::c_char,
+                    sty_fn,
                     sty_lc,
                 );
                 fprintf(
                     ilg_fp,
-                    b"Unknow type `%c' in page precedence specification.\n\0"
-                        as *const u8 as *const libc::c_char,
+                    b"Unknow type `%c' in page precedence specification.\n\0" as *const u8
+                        as *const libc::c_char,
                     page_prec[i as usize] as i32,
                 );
                 sty_ec += 1;
-                sty_ec;
-                put_dot = 0 as i32;
+
+                put_dot = 0;
                 return 0 as i32;
             }
         }
         i += 1;
-        i;
     }
     if page_prec[i as usize] as i32 != '\0' as i32 {
         let mut a_5: i32 = 0;
@@ -1592,16 +1564,16 @@ unsafe extern "C" fn process_precedence() -> i32 {
             }
         }
         sty_lc += 1;
-        sty_lc;
+
         if idx_dot != 0 {
             fprintf(ilg_fp, b"\n\0" as *const u8 as *const libc::c_char);
-            idx_dot = 0 as i32;
+            idx_dot = 0;
         }
         fprintf(
             ilg_fp,
             b"** Input style error (file = %s, line = %d):\n   -- \0" as *const u8
                 as *const libc::c_char,
-            sty_fn.as_mut_ptr(),
+            sty_fn,
             sty_lc,
         );
         fprintf(
@@ -1611,124 +1583,98 @@ unsafe extern "C" fn process_precedence() -> i32 {
             b"\0" as *const u8 as *const libc::c_char,
         );
         sty_ec += 1;
-        sty_ec;
-        put_dot = 0 as i32;
+
+        put_dot = 0;
         return 0 as i32;
     }
     last = i;
-    match page_prec[0 as i32 as usize] as i32 {
+    match page_prec[0] as i32 {
         114 => {
-            order[0 as i32 as usize] = 10000 as i32;
-            type_0[0 as i32 as usize] = 0 as i32;
+            order[0] = 10000;
+            type_0[0] = 0;
         }
         82 => {
-            order[0 as i32 as usize] = 10000 as i32;
-            type_0[0 as i32 as usize] = 1 as i32;
+            order[0] = 10000;
+            type_0[0] = 1;
         }
         110 => {
-            order[0 as i32 as usize] = 10000 as i32;
-            type_0[0 as i32 as usize] = 2 as i32;
+            order[0] = 10000;
+            type_0[0] = 2;
         }
         97 => {
-            order[0 as i32 as usize] = 26 as i32;
-            type_0[0 as i32 as usize] = 3 as i32;
+            order[0] = 26;
+            type_0[0] = 3;
         }
         65 => {
-            order[0 as i32 as usize] = 26 as i32;
-            type_0[0 as i32 as usize] = 4 as i32;
+            order[0] = 26;
+            type_0[0] = 4;
         }
         _ => {}
     }
-    i = 1 as i32;
+    i = 1;
     while i < last {
         match page_prec[i as usize] as i32 {
             114 => {
-                order[i
-                    as usize] = order[(i - 1 as i32) as usize]
-                    + 10000 as i32;
-                type_0[i as usize] = 0 as i32;
+                order[i as usize] = order[(i - 1 as i32) as usize] + 10000 as i32;
+                type_0[i as usize] = 0;
             }
             82 => {
-                order[i
-                    as usize] = order[(i - 1 as i32) as usize]
-                    + 10000 as i32;
-                type_0[i as usize] = 1 as i32;
+                order[i as usize] = order[(i - 1 as i32) as usize] + 10000 as i32;
+                type_0[i as usize] = 1;
             }
             110 => {
-                order[i
-                    as usize] = order[(i - 1 as i32) as usize]
-                    + 10000 as i32;
-                type_0[i as usize] = 2 as i32;
+                order[i as usize] = order[(i - 1 as i32) as usize] + 10000 as i32;
+                type_0[i as usize] = 2;
             }
             97 => {
-                order[i
-                    as usize] = order[(i - 1 as i32) as usize]
-                    + 26 as i32;
-                type_0[i as usize] = 3 as i32;
+                order[i as usize] = order[(i - 1 as i32) as usize] + 26 as i32;
+                type_0[i as usize] = 3;
             }
             65 => {
-                order[i
-                    as usize] = order[(i - 1 as i32) as usize]
-                    + 26 as i32;
-                type_0[i as usize] = 4 as i32;
+                order[i as usize] = order[(i - 1 as i32) as usize] + 26 as i32;
+                type_0[i as usize] = 4;
             }
             _ => {}
         }
         i += 1;
-        i;
     }
-    i = 0 as i32;
+    i = 0;
     while i < 5 as i32 {
         page_offset[i as usize] = -(1 as i32);
         i += 1;
-        i;
     }
-    page_offset[type_0[0 as i32 as usize] as usize] = 0 as i32;
-    i = 1 as i32;
+    page_offset[type_0[0] as usize] = 0;
+    i = 1;
     while i < last {
-        page_offset[type_0[i as usize]
-            as usize] = order[(i - 1 as i32) as usize];
+        page_offset[type_0[i as usize] as usize] = order[(i - 1 as i32) as usize];
         i += 1;
-        i;
     }
-    i = 0 as i32;
+    i = 0;
     while i < 5 as i32 {
         if page_offset[i as usize] == -(1 as i32) {
             match type_0[(last - 1 as i32) as usize] {
                 0 => {
-                    order[last
-                        as usize] = order[(last - 1 as i32) as usize]
-                        + 10000 as i32;
+                    order[last as usize] = order[(last - 1 as i32) as usize] + 10000 as i32;
                 }
                 1 => {
-                    order[last
-                        as usize] = order[(last - 1 as i32) as usize]
-                        + 10000 as i32;
+                    order[last as usize] = order[(last - 1 as i32) as usize] + 10000 as i32;
                 }
                 2 => {
-                    order[last
-                        as usize] = order[(last - 1 as i32) as usize]
-                        + 10000 as i32;
+                    order[last as usize] = order[(last - 1 as i32) as usize] + 10000 as i32;
                 }
                 3 => {
-                    order[last
-                        as usize] = order[(last - 1 as i32) as usize]
-                        + 26 as i32;
+                    order[last as usize] = order[(last - 1 as i32) as usize] + 26 as i32;
                 }
                 4 => {
-                    order[last
-                        as usize] = order[(last - 1 as i32) as usize]
-                        + 26 as i32;
+                    order[last as usize] = order[(last - 1 as i32) as usize] + 26 as i32;
                 }
                 _ => {}
             }
             type_0[last as usize] = i;
             page_offset[i as usize] = order[last as usize];
             last += 1;
-            last;
         }
         i += 1;
-        i;
     }
     return 1 as i32;
 }

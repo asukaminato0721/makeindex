@@ -1,17 +1,13 @@
 static mut qsz: i32 = 0;
 static mut thresh: i32 = 0;
 static mut mthresh: i32 = 0;
-static mut qcmp: Option::<
-    unsafe extern "C" fn(*mut libc::c_char, *mut libc::c_char) -> i32,
-> = None;
+static mut qcmp: Option<unsafe extern "C" fn(*mut libc::c_char, *mut libc::c_char) -> i32> = None;
 #[no_mangle]
 pub unsafe extern "C" fn qqsort(
     mut base: *mut libc::c_char,
     mut n: i32,
     mut size: i32,
-    mut compar: Option::<
-        unsafe extern "C" fn(*mut libc::c_char, *mut libc::c_char) -> i32,
-    >,
+    mut compar: Option<unsafe extern "C" fn(*mut libc::c_char, *mut libc::c_char) -> i32>,
 ) {
     let mut i: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut j: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -41,8 +37,9 @@ pub unsafe extern "C" fn qqsort(
         if !(lo < hi) {
             break;
         }
-        if (Some(qcmp.expect("non-null function pointer")))
-            .expect("non-null function pointer")(j, lo) > 0 as i32
+        if (Some(qcmp.expect("non-null function pointer"))).expect("non-null function pointer")(
+            j, lo,
+        ) > 0 as i32
         {
             j = lo;
         }
@@ -70,7 +67,8 @@ pub unsafe extern "C" fn qqsort(
         loop {
             hi = hi.offset(-(qsz as isize));
             if !((Some(qcmp.expect("non-null function pointer")))
-                .expect("non-null function pointer")(hi, min) > 0 as i32)
+                .expect("non-null function pointer")(hi, min)
+                > 0 as i32)
             {
                 break;
             }
@@ -97,7 +95,7 @@ pub unsafe extern "C" fn qqsort(
                 *i = c;
             }
         }
-    };
+    }
 }
 unsafe extern "C" fn qst(mut base: *mut libc::c_char, mut max: *mut libc::c_char) {
     let mut i: *mut libc::c_char = 0 as *mut libc::c_char;
@@ -109,31 +107,31 @@ unsafe extern "C" fn qst(mut base: *mut libc::c_char, mut max: *mut libc::c_char
     let mut tmp: *mut libc::c_char = 0 as *mut libc::c_char;
     let mut lo: i32 = 0;
     let mut hi: i32 = 0;
-    lo = max.offset_from(base) as libc::c_long as i32;
+    lo = max.offset_from(base) as i32;
     loop {
-        i = base
-            .offset(
-                (qsz as libc::c_uint)
-                    .wrapping_mul((lo / qsz) as libc::c_uint >> 1 as i32)
-                    as isize,
-            );
+        i = base.offset(
+            (qsz as libc::c_uint).wrapping_mul((lo / qsz) as libc::c_uint >> 1 as i32) as isize,
+        );
         mid = i;
         if lo >= mthresh {
             jj = base;
             j = if (Some(qcmp.expect("non-null function pointer")))
-                .expect("non-null function pointer")(jj, i) > 0 as i32
+                .expect("non-null function pointer")(jj, i)
+                > 0 as i32
             {
                 jj
             } else {
                 i
             };
             tmp = max.offset(-(qsz as isize));
-            if (Some(qcmp.expect("non-null function pointer")))
-                .expect("non-null function pointer")(j, tmp) > 0 as i32
+            if (Some(qcmp.expect("non-null function pointer"))).expect("non-null function pointer")(
+                j, tmp,
+            ) > 0 as i32
             {
                 j = if j == jj { i } else { jj };
                 if (Some(qcmp.expect("non-null function pointer")))
-                    .expect("non-null function pointer")(j, tmp) < 0 as i32
+                    .expect("non-null function pointer")(j, tmp)
+                    < 0 as i32
                 {
                     j = tmp;
                 }
@@ -161,7 +159,8 @@ unsafe extern "C" fn qst(mut base: *mut libc::c_char, mut max: *mut libc::c_char
         loop {
             while i < mid
                 && (Some(qcmp.expect("non-null function pointer")))
-                    .expect("non-null function pointer")(i, mid) <= 0 as i32
+                    .expect("non-null function pointer")(i, mid)
+                    <= 0 as i32
             {
                 i = i.offset(qsz as isize);
             }
@@ -171,7 +170,8 @@ unsafe extern "C" fn qst(mut base: *mut libc::c_char, mut max: *mut libc::c_char
                     break;
                 }
                 if (Some(qcmp.expect("non-null function pointer")))
-                    .expect("non-null function pointer")(mid, j) <= 0 as i32
+                    .expect("non-null function pointer")(mid, j)
+                    <= 0 as i32
                 {
                     j = j.offset(-(qsz as isize));
                 } else {
@@ -217,8 +217,8 @@ unsafe extern "C" fn qst(mut base: *mut libc::c_char, mut max: *mut libc::c_char
         }
         j = mid;
         i = j.offset(qsz as isize);
-        lo = j.offset_from(base) as libc::c_long as i32;
-        hi = max.offset_from(i) as libc::c_long as i32;
+        lo = j.offset_from(base) as i32;
+        hi = max.offset_from(i) as i32;
         if lo <= hi {
             if lo >= thresh {
                 qst(base, j);
@@ -234,5 +234,5 @@ unsafe extern "C" fn qst(mut base: *mut libc::c_char, mut max: *mut libc::c_char
         if !(lo >= thresh) {
             break;
         }
-    };
+    }
 }
