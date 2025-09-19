@@ -9,13 +9,13 @@ pub unsafe extern "C" fn qqsort(
     size: isize,
     compar: Option<unsafe extern "C" fn(*mut libc::c_char, *mut libc::c_char) -> i32>,
 ) {
-    let mut i ;
-    let mut j ;
-    let mut lo ;
-    let mut hi ;
-    let mut min ;
-    let mut c ;
-    let  max ;
+    let mut i;
+    let mut j;
+    let mut lo;
+    let mut hi;
+    let mut min;
+    let mut c;
+    let max;
     if n <= 1 {
         return;
     }
@@ -92,15 +92,15 @@ pub unsafe extern "C" fn qqsort(
     }
 }
 unsafe extern "C" fn qst(mut base: *mut libc::c_char, mut max: *mut libc::c_char) {
-    let mut i ;
-    let mut j ;
+    let mut i;
+    let mut j;
     let mut jj = std::ptr::null_mut::<libc::c_char>();
-    let mut mid ;
-    let mut ii ;
-    let mut c ;
+    let mut mid;
+    let mut ii;
+    let mut c;
     let mut tmp = std::ptr::null_mut::<libc::c_char>();
-    let mut lo ;
-    let mut hi ;
+    let mut lo;
+    let mut hi;
     lo = max.offset_from(base);
     loop {
         i = base.offset((qsz).wrapping_mul((lo / qsz) >> 1));

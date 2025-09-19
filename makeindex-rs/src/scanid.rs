@@ -61,9 +61,9 @@ struct KFIELD {
     pub af: [*mut libc::c_char; 3],
     pub group: i32,
     pub lpg: [libc::c_char; 16],
-    pub npg: [libc::c_short; 10],
-    pub count: libc::c_short,
-    pub type_0: libc::c_short,
+    pub npg: [i16; 10],
+    pub count: i16,
+    pub type_0: i16,
     pub encap: *mut libc::c_char,
     pub fn_0: *mut libc::c_char,
     pub lc: i32,
@@ -194,14 +194,13 @@ pub unsafe extern "C" fn scan_idx() {
                     i += 1;
                     keyword[fresh2 as usize] = c as libc::c_char;
                     arg_count += 1;
-               
+
                     idx_tc += 1;
-                  
                 }
                 0 => {
                     if c == idx_aopen as i32 {
                         arg_count += 1;
-                
+
                         keyword[i as usize] = '\0' as i32 as libc::c_char;
                         if strcmp(keyword.as_ptr(), idx_keyword.as_ptr()) == 0 {
                             if scan_arg1() == 0 {
@@ -283,7 +282,7 @@ pub unsafe extern "C" fn scan_idx() {
                 1 => {
                     if c == idx_aopen as i32 {
                         arg_count += 1;
-                   
+
                         if scan_arg2() == 0 {
                             arg_count = -1;
                         }
@@ -416,8 +415,8 @@ unsafe extern "C" fn make_key() -> i32 {
     }
     (*ptr).data.encap = b"\0" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*ptr).data.lpg[0] = '\0' as i32 as libc::c_char;
-    (*ptr).data.count = 0 as libc::c_short;
-    (*ptr).data.type_0 = -9999 as libc::c_short;
+    (*ptr).data.count = 0 as i16;
+    (*ptr).data.type_0 = -9999 as i16;
     if scan_key(&mut (*ptr).data) == 0 {
         return 0;
     }
@@ -889,16 +888,16 @@ pub unsafe extern "C" fn group_type(mut str: *mut libc::c_char) -> i32 {
 }
 unsafe extern "C" fn scan_no(
     mut no_0: *mut libc::c_char,
-    mut npg: *mut libc::c_short,
-    mut count: *mut libc::c_short,
-    mut type_0: *mut libc::c_short,
+    mut npg: *mut i16,
+    mut count: *mut i16,
+    mut type_0: *mut i16,
 ) -> i32 {
     let mut i = 1;
     if *(*__ctype_b_loc()).offset(*no_0.offset(0) as i32 as isize) as i32
         & _ISdigit as i32 as libc::c_ushort as i32
         != 0
     {
-        *type_0 = 2 as libc::c_short;
+        *type_0 = 2 as i16;
         if scan_arabic(no_0, npg, count) == 0 {
             return 0;
         }
@@ -915,7 +914,7 @@ unsafe extern "C" fn scan_no(
             comp_len.try_into().unwrap(),
         ) != 0)
     {
-        *type_0 = 0 as libc::c_short;
+        *type_0 = 0 as i16;
         if scan_roman_lower(no_0, npg, count) == 0 {
             return 0;
         }
@@ -933,17 +932,17 @@ unsafe extern "C" fn scan_no(
                 comp_len.try_into().unwrap(),
             ) != 0))
     {
-        *type_0 = 1 as libc::c_short;
+        *type_0 = 1 as i16;
         if scan_roman_upper(no_0, npg, count) == 0 {
             return 0;
         }
     } else if 'a' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'z' as i32 {
-        *type_0 = 3 as libc::c_short;
+        *type_0 = 3 as i16;
         if scan_alpha_lower(no_0, npg, count) == 0 {
             return 0;
         }
     } else if 'A' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'Z' as i32 {
-        *type_0 = 4 as libc::c_short;
+        *type_0 = 4 as i16;
         if scan_alpha_upper(no_0, npg, count) == 0 {
             return 0;
         }
@@ -972,8 +971,8 @@ unsafe extern "C" fn scan_no(
 }
 unsafe extern "C" fn scan_arabic(
     mut no_0: *mut libc::c_char,
-    mut npg: *mut libc::c_short,
-    mut count: *mut libc::c_short,
+    mut npg: *mut i16,
+    mut count: *mut i16,
 ) -> i32 {
     let mut i = 0;
     let mut str = [0; 6];
@@ -1061,7 +1060,7 @@ unsafe extern "C" fn scan_arabic(
 
         return 0;
     }
-    *npg.offset(*count as isize) = (strtoint(str.as_mut_ptr()) + page_offset[2]) as libc::c_short;
+    *npg.offset(*count as isize) = (strtoint(str.as_mut_ptr()) + page_offset[2]) as i16;
     *count += 1;
     *count;
     if strncmp(
@@ -1082,8 +1081,8 @@ unsafe extern "C" fn scan_arabic(
 }
 unsafe extern "C" fn scan_roman_lower(
     mut no_0: *mut libc::c_char,
-    mut npg: *mut libc::c_short,
-    mut count: *mut libc::c_short,
+    mut npg: *mut i16,
+    mut count: *mut i16,
 ) -> i32 {
     let mut i = 0;
     let mut inp = 0;
@@ -1206,7 +1205,7 @@ unsafe extern "C" fn scan_roman_lower(
 
         return 0;
     }
-    *npg.offset(*count as isize) = (inp + page_offset[0]) as libc::c_short;
+    *npg.offset(*count as isize) = (inp + page_offset[0]) as i16;
     *count += 1;
     *count;
     if strncmp(
@@ -1227,8 +1226,8 @@ unsafe extern "C" fn scan_roman_lower(
 }
 unsafe extern "C" fn scan_roman_upper(
     mut no_0: *mut libc::c_char,
-    mut npg: *mut libc::c_short,
-    mut count: *mut libc::c_short,
+    mut npg: *mut i16,
+    mut count: *mut i16,
 ) -> i32 {
     let mut i = 0;
     let mut inp = 0;
@@ -1351,7 +1350,7 @@ unsafe extern "C" fn scan_roman_upper(
 
         return 0;
     }
-    *npg.offset(*count as isize) = (inp + page_offset[1]) as libc::c_short;
+    *npg.offset(*count as isize) = (inp + page_offset[1]) as i16;
     *count += 1;
     *count;
     if strncmp(
@@ -1372,8 +1371,8 @@ unsafe extern "C" fn scan_roman_upper(
 }
 unsafe extern "C" fn scan_alpha_lower(
     mut no_0: *mut libc::c_char,
-    mut npg: *mut libc::c_short,
-    mut count: *mut libc::c_short,
+    mut npg: *mut i16,
+    mut count: *mut i16,
 ) -> i32 {
     let mut i = 0;
     if *count as i32 >= 10 {
@@ -1405,10 +1404,10 @@ unsafe extern "C" fn scan_alpha_lower(
             *no_0.offset(0) as i32 - 'a' as i32
         } else {
             0
-        }) + page_offset[3]) as libc::c_short;
+        }) + page_offset[3]) as i16;
     *count += 1;
     *count;
-    i = 1 as libc::c_short;
+    i = 1 as i16;
     if strncmp(
         &mut *no_0.offset(i as isize),
         page_comp.as_mut_ptr(),
@@ -1427,8 +1426,8 @@ unsafe extern "C" fn scan_alpha_lower(
 }
 unsafe extern "C" fn scan_alpha_upper(
     mut no_0: *mut libc::c_char,
-    mut npg: *mut libc::c_short,
-    mut count: *mut libc::c_short,
+    mut npg: *mut i16,
+    mut count: *mut i16,
 ) -> i32 {
     let mut i = 0;
     if *count as i32 >= 10 {
@@ -1460,10 +1459,10 @@ unsafe extern "C" fn scan_alpha_upper(
             *no_0.offset(0) as i32 - 'a' as i32
         } else {
             0
-        }) + page_offset[4]) as libc::c_short;
+        }) + page_offset[4]) as i16;
     *count += 1;
     *count;
-    i = 1 as libc::c_short;
+    i = 1 as i16;
     if strncmp(
         &mut *no_0.offset(i as isize),
         page_comp.as_mut_ptr(),

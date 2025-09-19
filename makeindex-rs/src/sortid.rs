@@ -47,9 +47,9 @@ struct KFIELD {
     pub af: [*mut libc::c_char; 3],
     pub group: i32,
     pub lpg: [libc::c_char; 16],
-    pub npg: [libc::c_short; 10],
-    pub count: libc::c_short,
-    pub type_0: libc::c_short,
+    pub npg: [i16; 10],
+    pub count: i16,
+    pub type_0: i16,
     pub encap: *mut libc::c_char,
     pub fn_0: *mut libc::c_char,
     pub lc: i32,
@@ -235,7 +235,7 @@ unsafe extern "C" fn compare_string(a: *mut libc::c_uchar, b: *mut libc::c_uchar
 }
 unsafe extern "C" fn compare_page(a: *mut FIELD_PTR, b: *mut FIELD_PTR) -> i32 {
     let mut m = 0;
-    let mut i = 0 as libc::c_short;
+    let mut i = 0 as i16;
     while (i as i32) < (**a).count as i32 && (i as i32) < (**b).count as i32 && {
         m = (**a).npg[i as usize] as i32 - (**b).npg[i as usize] as i32;
         m == 0
