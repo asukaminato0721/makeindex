@@ -140,7 +140,6 @@ pub unsafe extern "C" fn gen_ind() {
             }
         }
         n += 1;
-        n;
     }
     tmp_lc = ind_lc;
     if in_range != 0 {
@@ -235,7 +234,6 @@ unsafe extern "C" fn make_entry(n: i32) -> i32 {
                 break;
             }
             level += 1;
-            level;
         }
         if level < 3 {
             new_entry();
@@ -788,7 +786,6 @@ unsafe extern "C" fn insert_page() {
         page = strtoint(&mut *pageno.as_mut_ptr().offset(i as isize)) + 1;
         if even_odd == 1 && page % 2 == 0 || even_odd == 2 && page % 2 == 1 {
             page += 1;
-            page;
         }
         *pageno.as_mut_ptr().offset((j + 1) as isize) = '\0' as i32 as libc::c_char;
         while page >= 10 {

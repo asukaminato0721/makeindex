@@ -896,7 +896,6 @@ unsafe extern "C" fn open_sty(mut fn_0: *mut libc::c_char) {
                     break;
                 }
                 path = path.offset(1);
-                path;
             }
         }
     }
@@ -921,7 +920,6 @@ pub unsafe extern "C" fn strtoint(mut str: *mut libc::c_char) -> i32 {
     while *str as i32 != '\0' as i32 {
         val = 10 * val + *str as i32 - 48;
         str = str.offset(1);
-        str;
     }
     val
 }
