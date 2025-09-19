@@ -15,7 +15,7 @@ pub unsafe extern "C" fn qqsort(
     let mut hi;
     let mut min;
     let mut c;
-    
+
     if n <= 1 {
         return;
     }
