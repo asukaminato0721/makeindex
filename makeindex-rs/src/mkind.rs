@@ -243,7 +243,7 @@ pub unsafe extern "C" fn main(mut argc: i32, mut argv: *mut *mut libc::c_char) -
                         ) == 0
                         {
                             log_given = true;
-                            even_odd = 2 as i32;
+                            even_odd = 2;
                         } else if strcmp(
                             pageno.as_mut_ptr(),
                             b"odd\0" as *const u8 as *const libc::c_char,
@@ -280,7 +280,7 @@ pub unsafe extern "C" fn main(mut argc: i32, mut argv: *mut *mut libc::c_char) -
                 }
                 ap = ap.offset(1);
             }
-        } else if fn_no < 1024 as i32 {
+        } else if fn_no < 1024 {
             check_idx(*argv, 0);
             fn_no += 1;
             fns[fn_no as usize] = *argv;
@@ -288,7 +288,7 @@ pub unsafe extern "C" fn main(mut argc: i32, mut argv: *mut *mut libc::c_char) -
             fprintf(
                 stderr(),
                 b"Too many input files (max %d).\n\0" as *const u8 as *const libc::c_char,
-                1024 as i32,
+                1024,
             );
             fprintf(
                 stderr(),
@@ -307,7 +307,7 @@ pub unsafe extern "C" fn main(mut argc: i32, mut argv: *mut *mut libc::c_char) -
             base.as_mut_ptr(),
             b".mst\0" as *const u8 as *const libc::c_char,
         );
-        if 0 == access(tmp.as_mut_ptr(), 4 as i32) {
+        if 0 == access(tmp.as_mut_ptr(), 4) {
             open_sty(tmp.as_mut_ptr());
             sty_given = true;
         }
@@ -600,7 +600,7 @@ unsafe extern "C" fn check_idx(mut fn_0: *mut libc::c_char, mut open_fn: i32) {
     ext = strrchr(fn_0, '.' as i32);
     if !ext.is_null() && ext != fn_0 && *ext.offset(1) as i32 != '/' as i32 {
         with_ext = 1;
-        while ptr != ext && i < 256 as i32 {
+        while ptr != ext && i < 256 {
             let fresh1 = ptr;
             ptr = ptr.offset(1);
             let fresh2 = i;
@@ -608,7 +608,7 @@ unsafe extern "C" fn check_idx(mut fn_0: *mut libc::c_char, mut open_fn: i32) {
             base[fresh2 as usize] = *fresh1;
         }
     } else {
-        while *ptr as i32 != '\0' as i32 && i < 256 as i32 {
+        while *ptr as i32 != '\0' as i32 && i < 256 {
             let fresh3 = ptr;
             ptr = ptr.offset(1);
             let fresh4 = i;
@@ -616,14 +616,14 @@ unsafe extern "C" fn check_idx(mut fn_0: *mut libc::c_char, mut open_fn: i32) {
             base[fresh4 as usize] = *fresh3;
         }
     }
-    if i < 256 as i32 {
+    if i < 256 {
         base[i as usize] = '\0' as i32 as libc::c_char;
     } else {
         fprintf(
             stderr(),
             b"Index file name %s too long (max %d).\n\0" as *const u8 as *const libc::c_char,
             base.as_mut_ptr(),
-            256 as i32,
+            256,
         );
         fprintf(
             stderr(),
@@ -637,7 +637,7 @@ unsafe extern "C" fn check_idx(mut fn_0: *mut libc::c_char, mut open_fn: i32) {
     if open_fn != 0 && {
         idx_fp = fopen(idx_fn, b"r\0" as *const u8 as *const libc::c_char);
         idx_fp.is_null()
-    } || open_fn == 0 && access(idx_fn, 4 as i32) != 0
+    } || open_fn == 0 && access(idx_fn, 4) != 0
     {
         if with_ext != 0 {
             fprintf(
@@ -677,7 +677,7 @@ unsafe extern "C" fn check_idx(mut fn_0: *mut libc::c_char, mut open_fn: i32) {
             if open_fn != 0 && {
                 idx_fp = fopen(idx_fn, b"r\0" as *const u8 as *const libc::c_char);
                 idx_fp.is_null()
-            } || open_fn == 0 && access(idx_fn, 4 as i32) != 0
+            } || open_fn == 0 && access(idx_fn, 4) != 0
             {
                 fprintf(
                     stderr(),
@@ -786,7 +786,7 @@ unsafe extern "C" fn find_pageno() {
     let mut i = 0;
     let mut p = 0;
     let mut c = 0;
-    fseek(log_fp, -(1), 2 as i32);
+    fseek(log_fp, -(1), 2);
     p = fgetc(log_fp);
     fseek(log_fp, -(2), 1);
     loop {
@@ -871,7 +871,7 @@ unsafe extern "C" fn open_sty(mut fn_0: *mut libc::c_char) {
                     stderr(),
                     b"Path %s too long (max %d).\n\0" as *const u8 as *const libc::c_char,
                     sty_fn.as_mut_ptr(),
-                    1024 as i32,
+                    1024,
                 );
                 fprintf(
                     stderr(),
@@ -919,7 +919,7 @@ unsafe extern "C" fn open_sty(mut fn_0: *mut libc::c_char) {
 pub unsafe extern "C" fn strtoint(mut str: *mut libc::c_char) -> i32 {
     let mut val = 0;
     while *str as i32 != '\0' as i32 {
-        val = 10 * val + *str as i32 - 48 as i32;
+        val = 10 * val + *str as i32 - 48;
         str = str.offset(1);
         str;
     }

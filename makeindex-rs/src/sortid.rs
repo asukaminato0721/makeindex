@@ -235,7 +235,7 @@ unsafe extern "C" fn compare_string(a: *mut libc::c_uchar, b: *mut libc::c_uchar
 }
 unsafe extern "C" fn compare_page(a: *mut FIELD_PTR, b: *mut FIELD_PTR) -> i32 {
     let mut m = 0;
-    let mut i = 0 as i16;
+    let mut i = 0_i16;
     while (i as i32) < (**a).count as i32 && (i as i32) < (**b).count as i32 && {
         m = (**a).npg[i as usize] as i32 - (**b).npg[i as usize] as i32;
         m == 0

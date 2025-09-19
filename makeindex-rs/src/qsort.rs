@@ -15,7 +15,7 @@ pub unsafe extern "C" fn qqsort(
     let mut hi;
     let mut min;
     let mut c;
-    let max;
+    
     if n <= 1 {
         return;
     }
@@ -23,7 +23,7 @@ pub unsafe extern "C" fn qqsort(
     qcmp = compar;
     thresh = qsz * 4;
     mthresh = qsz * 6;
-    max = base.offset(n * qsz);
+    let max = base.offset(n * qsz);
     if n >= 4 {
         qst(base, max);
         hi = base.offset(thresh);

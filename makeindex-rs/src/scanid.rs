@@ -415,8 +415,8 @@ unsafe extern "C" fn make_key() -> i32 {
     }
     (*ptr).data.encap = b"\0" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*ptr).data.lpg[0] = '\0' as i32 as libc::c_char;
-    (*ptr).data.count = 0 as i16;
-    (*ptr).data.type_0 = -9999 as i16;
+    (*ptr).data.count = 0_i16;
+    (*ptr).data.type_0 = -9999_i16;
     if scan_key(&mut (*ptr).data) == 0 {
         return 0;
     }
@@ -897,7 +897,7 @@ unsafe extern "C" fn scan_no(
         & _ISdigit as i32 as libc::c_ushort as i32
         != 0
     {
-        *type_0 = 2 as i16;
+        *type_0 = 2_i16;
         if scan_arabic(no_0, npg, count) == 0 {
             return 0;
         }
@@ -914,7 +914,7 @@ unsafe extern "C" fn scan_no(
             comp_len.try_into().unwrap(),
         ) != 0)
     {
-        *type_0 = 0 as i16;
+        *type_0 = 0_i16;
         if scan_roman_lower(no_0, npg, count) == 0 {
             return 0;
         }
@@ -932,17 +932,17 @@ unsafe extern "C" fn scan_no(
                 comp_len.try_into().unwrap(),
             ) != 0))
     {
-        *type_0 = 1 as i16;
+        *type_0 = 1_i16;
         if scan_roman_upper(no_0, npg, count) == 0 {
             return 0;
         }
     } else if 'a' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'z' as i32 {
-        *type_0 = 3 as i16;
+        *type_0 = 3_i16;
         if scan_alpha_lower(no_0, npg, count) == 0 {
             return 0;
         }
     } else if 'A' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'Z' as i32 {
-        *type_0 = 4 as i16;
+        *type_0 = 4_i16;
         if scan_alpha_upper(no_0, npg, count) == 0 {
             return 0;
         }
@@ -1407,7 +1407,7 @@ unsafe extern "C" fn scan_alpha_lower(
         }) + page_offset[3]) as i16;
     *count += 1;
     *count;
-    i = 1 as i16;
+    i = 1_i16;
     if strncmp(
         &mut *no_0.offset(i as isize),
         page_comp.as_mut_ptr(),
@@ -1462,7 +1462,7 @@ unsafe extern "C" fn scan_alpha_upper(
         }) + page_offset[4]) as i16;
     *count += 1;
     *count;
-    i = 1 as i16;
+    i = 1_i16;
     if strncmp(
         &mut *no_0.offset(i as isize),
         page_comp.as_mut_ptr(),
