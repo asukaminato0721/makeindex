@@ -561,7 +561,7 @@ unsafe extern "C" fn process_idx(
             );
             exit(1);
         }
-        if need_version  {
+        if need_version {
             if verbose {
                 fprintf(
                     stderr(),
