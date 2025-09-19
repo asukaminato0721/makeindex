@@ -1000,7 +1000,7 @@ unsafe extern "C" fn scan_string(str: *mut libc::c_char) -> i32 {
                     return 0;
                 }
                 34 => {
-                    clone[i as usize] = '\0' as i8;
+                    clone[i] = '\0' as i8;
                     strcpy(str, clone.as_mut_ptr());
                     return 1;
                 }
@@ -1010,17 +1010,17 @@ unsafe extern "C" fn scan_string(str: *mut libc::c_char) -> i32 {
                         116 => {
                             let fresh1 = i;
                             i += 1;
-                            clone[fresh1 as usize] = '\t' as i8;
+                            clone[fresh1] = '\t' as i8;
                         }
                         110 => {
                             let fresh2 = i;
                             i += 1;
-                            clone[fresh2 as usize] = '\n' as i8;
+                            clone[fresh2] = '\n' as i8;
                         }
                         _ => {
                             let fresh3 = i;
                             i += 1;
-                            clone[fresh3 as usize] = c as i8;
+                            clone[fresh3] = c as i8;
                         }
                     }
                 }
@@ -1031,7 +1031,7 @@ unsafe extern "C" fn scan_string(str: *mut libc::c_char) -> i32 {
                     if i < 1024 {
                         let fresh4 = i;
                         i += 1;
-                        clone[fresh4 as usize] = c as i8;
+                        clone[fresh4] = c as i8;
                     } else {
                         let mut a = 0;
                         loop {
@@ -1285,8 +1285,8 @@ unsafe extern "C" fn process_precedence() -> i32 {
     let mut arab = 0;
     let mut alpl = 0;
     let mut alpu = 0;
-    while i < 5 && page_prec[i as usize] as i32 != '\0' as i32 {
-        match page_prec[i as usize] as i32 {
+    while i < 5 && page_prec[i] as i32 != '\0' as i32 {
+        match page_prec[i] as i32 {
             114 => {
                 if roml != 0 {
                     let mut a = 0;
@@ -1497,7 +1497,7 @@ unsafe extern "C" fn process_precedence() -> i32 {
                     ilg_fp,
                     b"Unknow type `%c' in page precedence specification.\n\0" as *const u8
                         as *const libc::c_char,
-                    page_prec[i as usize] as i32,
+                    page_prec[i] as i32,
                 );
                 sty_ec += 1;
 
@@ -1507,7 +1507,7 @@ unsafe extern "C" fn process_precedence() -> i32 {
         }
         i += 1;
     }
-    if page_prec[i as usize] as i32 != '\0' as i32 {
+    if page_prec[i] as i32 != '\0' as i32 {
         let mut a_5 = 0;
         loop {
             a_5 = fgetc(sty_fp);
@@ -1565,26 +1565,26 @@ unsafe extern "C" fn process_precedence() -> i32 {
     }
     i = 1;
     while i < last {
-        match page_prec[i as usize] as i32 {
+        match page_prec[i] as i32 {
             114 => {
-                order[i as usize] = order[(i - 1) as usize] + 10000;
-                type_0[i as usize] = 0;
+                order[i] = order[(i - 1)] + 10000;
+                type_0[i] = 0;
             }
             82 => {
-                order[i as usize] = order[(i - 1) as usize] + 10000;
-                type_0[i as usize] = 1;
+                order[i] = order[(i - 1)] + 10000;
+                type_0[i] = 1;
             }
             110 => {
-                order[i as usize] = order[(i - 1) as usize] + 10000;
-                type_0[i as usize] = 2;
+                order[i] = order[(i - 1)] + 10000;
+                type_0[i] = 2;
             }
             97 => {
-                order[i as usize] = order[(i - 1) as usize] + 26;
-                type_0[i as usize] = 3;
+                order[i] = order[(i - 1)] + 26;
+                type_0[i] = 3;
             }
             65 => {
-                order[i as usize] = order[(i - 1) as usize] + 26;
-                type_0[i as usize] = 4;
+                order[i] = order[(i - 1)] + 26;
+                type_0[i] = 4;
             }
             _ => {}
         }
@@ -1592,38 +1592,38 @@ unsafe extern "C" fn process_precedence() -> i32 {
     }
     i = 0;
     while i < 5 {
-        page_offset[i as usize] = -1;
+        page_offset[i] = -1;
         i += 1;
     }
-    page_offset[type_0[0] as usize] = 0;
+    page_offset[type_0[0]] = 0;
     i = 1;
     while i < last {
-        page_offset[type_0[i as usize] as usize] = order[(i - 1) as usize];
+        page_offset[type_0[i]] = order[(i - 1)];
         i += 1;
     }
     i = 0;
     while i < 5 {
-        if page_offset[i as usize] == -1 {
-            match type_0[(last - 1) as usize] {
+        if page_offset[i] == -1 {
+            match type_0[(last - 1)] {
                 0 => {
-                    order[last as usize] = order[(last - 1) as usize] + 10000;
+                    order[last] = order[(last - 1)] + 10000;
                 }
                 1 => {
-                    order[last as usize] = order[(last - 1) as usize] + 10000;
+                    order[last] = order[(last - 1)] + 10000;
                 }
                 2 => {
-                    order[last as usize] = order[(last - 1) as usize] + 10000;
+                    order[last] = order[(last - 1)] + 10000;
                 }
                 3 => {
-                    order[last as usize] = order[(last - 1) as usize] + 26;
+                    order[last] = order[(last - 1)] + 26;
                 }
                 4 => {
-                    order[last as usize] = order[(last - 1) as usize] + 26;
+                    order[last] = order[(last - 1)] + 26;
                 }
                 _ => {}
             }
-            type_0[last as usize] = i;
-            page_offset[i as usize] = order[last as usize];
+            type_0[last] = i;
+            page_offset[i] = order[last];
             last += 1;
         }
         i += 1;

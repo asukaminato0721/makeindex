@@ -114,11 +114,11 @@ unsafe extern "C" fn compare(a: *mut FIELD_PTR, b: *mut FIELD_PTR) -> i32 {
     }
     i = 0;
     while i < 3 {
-        dif = compare_one((**a).sf[i as usize], (**b).sf[i as usize]);
+        dif = compare_one((**a).sf[i], (**b).sf[i]);
         if dif != 0 {
             break;
         }
-        dif = compare_one((**a).af[i as usize], (**b).af[i as usize]);
+        dif = compare_one((**a).af[i], (**b).af[i]);
         if dif != 0 {
             break;
         }
@@ -235,9 +235,9 @@ unsafe extern "C" fn compare_string(a: *mut libc::c_uchar, b: *mut libc::c_uchar
 }
 unsafe extern "C" fn compare_page(a: *mut FIELD_PTR, b: *mut FIELD_PTR) -> i32 {
     let mut m = 0;
-    let mut i = 0_i16;
+    let mut i = 0;
     while (i as i32) < (**a).count as i32 && (i as i32) < (**b).count as i32 && {
-        m = (**a).npg[i as usize] as i32 - (**b).npg[i as usize] as i32;
+        m = (**a).npg[i] as i32 - (**b).npg[i] as i32;
         m == 0
     } {
         i += 1;

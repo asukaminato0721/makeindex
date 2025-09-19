@@ -1,12 +1,3 @@
-#![allow(
-    dead_code,
-    mutable_transmutes,
-    non_camel_case_types,
-    non_snake_case,
-    non_upper_case_globals,
-    unused_assignments,
-    unused_mut
-)]
 use libc::*;
 use libc_stdhandle::*;
 extern "C" {
@@ -598,7 +589,7 @@ unsafe extern "C" fn page_diff(mut a: FIELD_PTR, mut b: FIELD_PTR) -> i32 {
     if (*a).count as i32 != (*b).count as i32 {
         return -1;
     }
-    i = 0_i16;
+    i = 0;
     while (i as i32) < (*a).count as i32 - 1 {
         if (*a).npg[i as usize] as i32 != (*b).npg[i as usize] as i32 {
             return -1;
