@@ -17,7 +17,7 @@ GERMAN-FILES	=	b211b
 
 STYLE-FILES	=	b210a b211c
 
-MAKEINDEX	=	../src/makeindex
+MAKEINDEX	=	../makeindex-rs/target/debug/makeindex
 
 RM		=	/bin/rm -f
 

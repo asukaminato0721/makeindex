@@ -1,3 +1,13 @@
+to test:
+
+```
+cd makeindex-rs
+cargo build
+cd ..
+cd test
+make
+```
+
 ------------------------------------------------------------------------------
 		MakeIndex General Release Information
 

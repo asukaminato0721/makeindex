@@ -109,9 +109,9 @@ pub static mut ilg_fn: *mut libc::c_char = 0 as *const libc::c_char as *mut libc
 pub static mut pageno: [libc::c_char; 16] = [0; 16];
 static mut log_fn: [libc::c_char; 256] = [0; 256];
 static mut base: [libc::c_char; 256] = [0; 256];
-static mut need_version: i32 = 1;
+static mut need_version: bool = true;
 #[no_mangle]
-pub unsafe extern "C" fn main(mut argc: i32, mut argv: *mut *mut libc::c_char) -> i32 {
+pub unsafe extern "C" fn makeindex_main(mut argc: i32, mut argv: *mut *mut libc::c_char) -> i32 {
     let mut fns = [std::ptr::null_mut::<libc::c_char>(); 1024];
     let mut ap = std::ptr::null_mut::<libc::c_char>();
     let mut use_stdin = false;
@@ -467,7 +467,7 @@ unsafe extern "C" fn process_idx(
             b"%s.\n\0" as *const u8 as *const libc::c_char,
             b"portable version 2.12 [26-May-1993]\0" as *const u8 as *const libc::c_char,
         );
-        need_version = 0;
+        need_version = false;
         if sty_given {
             scan_sty();
         }
@@ -561,7 +561,7 @@ unsafe extern "C" fn process_idx(
             );
             exit(1);
         }
-        if need_version != 0 {
+        if need_version  {
             if verbose {
                 fprintf(
                     stderr(),
@@ -586,7 +586,7 @@ unsafe extern "C" fn process_idx(
                 b"%s.\n\0" as *const u8 as *const libc::c_char,
                 b"portable version 2.12 [26-May-1993]\0" as *const u8 as *const libc::c_char,
             );
-            need_version = 0;
+            need_version = false;
         }
         scan_idx();
         fn_no += 1;
