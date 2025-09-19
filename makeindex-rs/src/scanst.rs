@@ -1567,23 +1567,23 @@ unsafe extern "C" fn process_precedence() -> i32 {
     while i < last {
         match page_prec[i] as i32 {
             114 => {
-                order[i] = order[(i - 1)] + 10000;
+                order[i] = order[i - 1] + 10000;
                 type_0[i] = 0;
             }
             82 => {
-                order[i] = order[(i - 1)] + 10000;
+                order[i] = order[i - 1] + 10000;
                 type_0[i] = 1;
             }
             110 => {
-                order[i] = order[(i - 1)] + 10000;
+                order[i] = order[i - 1] + 10000;
                 type_0[i] = 2;
             }
             97 => {
-                order[i] = order[(i - 1)] + 26;
+                order[i] = order[i - 1] + 26;
                 type_0[i] = 3;
             }
             65 => {
-                order[i] = order[(i - 1)] + 26;
+                order[i] = order[i - 1] + 26;
                 type_0[i] = 4;
             }
             _ => {}
@@ -1598,27 +1598,27 @@ unsafe extern "C" fn process_precedence() -> i32 {
     page_offset[type_0[0]] = 0;
     i = 1;
     while i < last {
-        page_offset[type_0[i]] = order[(i - 1)];
+        page_offset[type_0[i]] = order[i - 1];
         i += 1;
     }
     i = 0;
     while i < 5 {
         if page_offset[i] == -1 {
-            match type_0[(last - 1)] {
+            match type_0[last - 1] {
                 0 => {
-                    order[last] = order[(last - 1)] + 10000;
+                    order[last] = order[last - 1] + 10000;
                 }
                 1 => {
-                    order[last] = order[(last - 1)] + 10000;
+                    order[last] = order[last - 1] + 10000;
                 }
                 2 => {
-                    order[last] = order[(last - 1)] + 10000;
+                    order[last] = order[last - 1] + 10000;
                 }
                 3 => {
-                    order[last] = order[(last - 1)] + 26;
+                    order[last] = order[last - 1] + 26;
                 }
                 4 => {
-                    order[last] = order[(last - 1)] + 26;
+                    order[last] = order[last - 1] + 26;
                 }
                 _ => {}
             }

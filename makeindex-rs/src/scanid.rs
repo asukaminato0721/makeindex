@@ -406,8 +406,8 @@ unsafe extern "C" fn make_key() -> i32 {
     }
     (*ptr).data.encap = b"\0" as *const u8 as *const libc::c_char as *mut libc::c_char;
     (*ptr).data.lpg[0] = '\0' as i32 as libc::c_char;
-    (*ptr).data.count = 0_i16;
-    (*ptr).data.type_0 = -9999_i16;
+    (*ptr).data.count = 0;
+    (*ptr).data.type_0 = -9999;
     if scan_key(&mut (*ptr).data) == 0 {
         return 0;
     }
@@ -435,7 +435,7 @@ unsafe extern "C" fn make_key() -> i32 {
     (*tail).next = std::ptr::null_mut::<KNODE>();
     1
 }
-unsafe extern "C" fn make_string(mut ppstr: *mut *mut libc::c_char, mut n: i32) {
+unsafe extern "C" fn make_string(ppstr: *mut *mut libc::c_char, n: i32) {
     if *(*ppstr).offset(0) as i32 == '\0' as i32 {
         *ppstr = malloc(n.try_into().unwrap()) as *mut libc::c_char;
         if (*ppstr).is_null() {
@@ -455,11 +455,11 @@ unsafe extern "C" fn make_string(mut ppstr: *mut *mut libc::c_char, mut n: i32) 
         *(*ppstr).offset(0) = '\0' as i32 as libc::c_char;
     }
 }
-unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
+unsafe extern "C" fn scan_key(data: FIELD_PTR) -> i32 {
     let mut i = 0;
     let mut n = 0;
     let mut second_round = 0;
-    let mut last = 3 - 1;
+    let last = 3 - 1;
     while key[n as usize] as i32 != '\0' as i32 {
         if key[n as usize] as i32 == idx_encap as i32 {
             n += 1;
@@ -640,12 +640,12 @@ unsafe extern "C" fn scan_key(mut data: FIELD_PTR) -> i32 {
     1
 }
 unsafe extern "C" fn scan_field(
-    mut n: *mut i32,
-    mut field: *mut libc::c_char,
-    mut len_field: i32,
-    mut ck_level: i32,
-    mut ck_encap: i32,
-    mut ck_actual: i32,
+    n: *mut i32,
+    field: *mut libc::c_char,
+    len_field: i32,
+    ck_level: i32,
+    ck_encap: i32,
+    ck_actual: i32,
 ) -> i32 {
     let mut current_block: u64;
     let mut i = 0;
@@ -852,7 +852,7 @@ unsafe extern "C" fn scan_field(
     }
 }
 #[no_mangle]
-pub unsafe extern "C" fn group_type(mut str: *mut libc::c_char) -> i32 {
+pub unsafe extern "C" fn group_type(str: *mut libc::c_char) -> i32 {
     let mut i = 0;
     while *str.offset(i as isize) as i32 != '\0' as i32
         && ('0' as i32 <= *str.offset(i as isize) as i32
@@ -878,17 +878,17 @@ pub unsafe extern "C" fn group_type(mut str: *mut libc::c_char) -> i32 {
     }
 }
 unsafe extern "C" fn scan_no(
-    mut no_0: *mut libc::c_char,
-    mut npg: *mut i16,
-    mut count: *mut i16,
-    mut type_0: *mut i16,
+    no_0: *mut libc::c_char,
+    npg: *mut i16,
+    count: *mut i16,
+    type_0: *mut i16,
 ) -> i32 {
-    let mut i = 1;
+    let i = 1;
     if *(*__ctype_b_loc()).offset(*no_0.offset(0) as i32 as isize) as i32
         & _ISdigit as i32 as libc::c_ushort as i32
         != 0
     {
-        *type_0 = 2_i16;
+        *type_0 = 2;
         if scan_arabic(no_0, npg, count) == 0 {
             return 0;
         }
@@ -905,7 +905,7 @@ unsafe extern "C" fn scan_no(
             comp_len.try_into().unwrap(),
         ) != 0)
     {
-        *type_0 = 0_i16;
+        *type_0 = 0;
         if scan_roman_lower(no_0, npg, count) == 0 {
             return 0;
         }
@@ -923,17 +923,17 @@ unsafe extern "C" fn scan_no(
                 comp_len.try_into().unwrap(),
             ) != 0))
     {
-        *type_0 = 1_i16;
+        *type_0 = 1;
         if scan_roman_upper(no_0, npg, count) == 0 {
             return 0;
         }
     } else if 'a' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'z' as i32 {
-        *type_0 = 3_i16;
+        *type_0 = 3;
         if scan_alpha_lower(no_0, npg, count) == 0 {
             return 0;
         }
     } else if 'A' as i32 <= *no_0.offset(0) as i32 && *no_0.offset(0) as i32 <= 'Z' as i32 {
-        *type_0 = 4_i16;
+        *type_0 = 4;
         if scan_alpha_upper(no_0, npg, count) == 0 {
             return 0;
         }
@@ -961,9 +961,9 @@ unsafe extern "C" fn scan_no(
     1
 }
 unsafe extern "C" fn scan_arabic(
-    mut no_0: *mut libc::c_char,
-    mut npg: *mut i16,
-    mut count: *mut i16,
+    no_0: *mut libc::c_char,
+    npg: *mut i16,
+    count: *mut i16,
 ) -> i32 {
     let mut i = 0;
     let mut str = [0; 6];
@@ -1071,9 +1071,9 @@ unsafe extern "C" fn scan_arabic(
     }
 }
 unsafe extern "C" fn scan_roman_lower(
-    mut no_0: *mut libc::c_char,
-    mut npg: *mut i16,
-    mut count: *mut i16,
+    no_0: *mut libc::c_char,
+    npg: *mut i16,
+    count: *mut i16,
 ) -> i32 {
     let mut i = 0;
     let mut inp = 0;
@@ -1216,9 +1216,9 @@ unsafe extern "C" fn scan_roman_lower(
     }
 }
 unsafe extern "C" fn scan_roman_upper(
-    mut no_0: *mut libc::c_char,
-    mut npg: *mut i16,
-    mut count: *mut i16,
+    no_0: *mut libc::c_char,
+    npg: *mut i16,
+    count: *mut i16,
 ) -> i32 {
     let mut i = 0;
     let mut inp = 0;
@@ -1361,9 +1361,9 @@ unsafe extern "C" fn scan_roman_upper(
     }
 }
 unsafe extern "C" fn scan_alpha_lower(
-    mut no_0: *mut libc::c_char,
-    mut npg: *mut i16,
-    mut count: *mut i16,
+    no_0: *mut libc::c_char,
+    npg: *mut i16,
+    count: *mut i16,
 ) -> i32 {
     let mut i = 0;
     if *count as i32 >= 10 {
@@ -1398,7 +1398,7 @@ unsafe extern "C" fn scan_alpha_lower(
         }) + page_offset[3]) as i16;
     *count += 1;
     *count;
-    i = 1_i16;
+    i = 1;
     if strncmp(
         &mut *no_0.offset(i as isize),
         page_comp.as_mut_ptr(),
@@ -1416,9 +1416,9 @@ unsafe extern "C" fn scan_alpha_lower(
     }
 }
 unsafe extern "C" fn scan_alpha_upper(
-    mut no_0: *mut libc::c_char,
-    mut npg: *mut i16,
-    mut count: *mut i16,
+    no_0: *mut libc::c_char,
+    npg: *mut i16,
+    count: *mut i16,
 ) -> i32 {
     let mut i = 0;
     if *count as i32 >= 10 {
@@ -1453,7 +1453,7 @@ unsafe extern "C" fn scan_alpha_upper(
         }) + page_offset[4]) as i16;
     *count += 1;
     *count;
-    i = 1_i16;
+    i = 1;
     if strncmp(
         &mut *no_0.offset(i as isize),
         page_comp.as_mut_ptr(),
@@ -1513,7 +1513,7 @@ unsafe extern "C" fn scan_arg1() -> i32 {
                 n -= 1;
             }
         } else {
-            let mut current_block_34: u64;
+            let current_block_34: u64;
             match a {
                 10 => {
                     idx_lc += 1;
@@ -1690,8 +1690,8 @@ unsafe extern "C" fn scan_arg2() -> i32 {
     0
 }
 unsafe extern "C" fn search_quote(
-    mut sort_key: *mut libc::c_char,
-    mut actual_key: *mut libc::c_char,
+    sort_key: *mut libc::c_char,
+    actual_key: *mut libc::c_char,
 ) {
     let mut ptr = std::ptr::null_mut::<libc::c_char>();
     let mut sort = std::ptr::null_mut::<libc::c_char>();

@@ -210,7 +210,7 @@ pub unsafe extern "C" fn gen_ind() {
         );
     };
 }
-unsafe extern "C" fn make_entry(mut n: i32) -> i32 {
+unsafe extern "C" fn make_entry(n: i32) -> i32 {
     let mut let_0 = 0;
     prev = curr;
     curr = *idx_key.offset(n as isize);
@@ -346,7 +346,7 @@ unsafe extern "C" fn make_entry(mut n: i32) -> i32 {
     }
     1
 }
-unsafe extern "C" fn make_item(mut term: *mut libc::c_char) {
+unsafe extern "C" fn make_item(term: *mut libc::c_char) {
     let mut i = 0;
     if level > prev_level {
         if *(*curr).af[level as usize] as i32 == '\0' as i32 {
@@ -584,13 +584,13 @@ unsafe extern "C" fn old_entry() {
         prev_encap = encap;
     };
 }
-unsafe extern "C" fn page_diff(mut a: FIELD_PTR, mut b: FIELD_PTR) -> i32 {
+unsafe extern "C" fn page_diff(a: FIELD_PTR, b: FIELD_PTR) -> i32 {
     let mut i = 0;
     if (*a).count as i32 != (*b).count as i32 {
         return -1;
     }
     i = 0;
-    while (i as i32) < (*a).count as i32 - 1 {
+    while i < (*a).count as i32 - 1 {
         if (*a).npg[i as usize] as i32 != (*b).npg[i as usize] as i32 {
             return -1;
         }
@@ -648,7 +648,7 @@ unsafe extern "C" fn put_header(mut let_0: i32) {
         ind_lc += headsuflen;
     }
 }
-unsafe extern "C" fn flush_line(mut print: i32) {
+unsafe extern "C" fn flush_line(print: i32) {
     let mut tmp = [0; 2048];
     if page_diff(begin, end) != 0 {
         if encap_range != 0
@@ -659,7 +659,7 @@ unsafe extern "C" fn flush_line(mut print: i32) {
                     1
                 })
         {
-            let mut diff = page_diff(begin, end);
+            let diff = page_diff(begin, end);
             if diff == 1 && *suffix_2p.as_mut_ptr() as i32 != 0 {
                 sprintf(
                     buff.as_mut_ptr(),
@@ -718,7 +718,7 @@ unsafe extern "C" fn flush_line(mut print: i32) {
     }
     wrap_line(print);
 }
-unsafe extern "C" fn wrap_line(mut print: i32) {
+unsafe extern "C" fn wrap_line(print: i32) {
     let mut len = 0;
     len = (strlen(line.as_mut_ptr()))
         .wrapping_add(strlen(buff.as_mut_ptr()))
