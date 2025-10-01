@@ -231,6 +231,11 @@ acs-*.bib
 *.ilg
 *.ind
 
+# Keep the test reference files
+!test/*.idx
+!test/ok-*.ilg
+!test/ok-*.ind
+
 # minitoc
 *.maf
 *.mlf
