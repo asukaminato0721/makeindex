@@ -75,7 +75,7 @@ fn render_entry(entry: &Entry, prev: Option<&Entry>, pages: &[String], style: &S
 
     if diff_level <= depth {
         let mut current = String::new();
-        let template = if prev_depth.map_or(false, |pd| diff_level > pd) {
+        let template = if prev_depth.is_some_and(|pd| diff_level > pd) {
             &style.item_u[diff_level]
         } else {
             &style.item_r[diff_level]
@@ -146,13 +146,13 @@ fn emit_heading<W: Write>(
     if style.headings_flag == 0 {
         return Ok(());
     }
-    if let Some(label) = heading_label(entry, style) {
-        if prev_heading.as_ref().map(String::as_str) != Some(label.as_str()) {
-            util::write_latin1(writer, &style.heading_pre)?;
-            util::write_latin1(writer, &label)?;
-            util::write_latin1(writer, &style.heading_suf)?;
-            *prev_heading = Some(label);
-        }
+    if let Some(label) = heading_label(entry, style)
+        && prev_heading.as_ref().map(String::as_str) != Some(label.as_str())
+    {
+        util::write_latin1(writer, &style.heading_pre)?;
+        util::write_latin1(writer, &label)?;
+        util::write_latin1(writer, &style.heading_suf)?;
+        *prev_heading = Some(label);
     }
     Ok(())
 }
@@ -190,7 +190,7 @@ fn group_kind(group: &Group) -> GroupKind {
 fn entry_letter(entry: &Entry) -> Option<char> {
     entry
         .sort_keys
-        .get(0)
+        .first()
         .and_then(|s| s.chars().next())
         .map(|c| c.to_ascii_lowercase())
 }
@@ -233,7 +233,7 @@ fn first_diff(prev: Option<&Entry>, current: &Entry) -> Option<usize> {
     }
 }
 
-fn render_level<'a>(entry: &'a Entry, level: usize) -> &'a str {
+fn render_level(entry: &Entry, level: usize) -> &str {
     if entry.actual_keys[level].is_empty() {
         entry.sort_keys[level].as_str()
     } else {
@@ -241,7 +241,7 @@ fn render_level<'a>(entry: &'a Entry, level: usize) -> &'a str {
     }
 }
 
-fn consolidate_pages<'a>(entries: &[&'a Entry], style: &Style, merge_ranges: bool) -> Vec<String> {
+fn consolidate_pages(entries: &[&Entry], style: &Style, merge_ranges: bool) -> Vec<String> {
     let mut collector = PageCollector::new(style, merge_ranges);
     for entry in entries {
         collector.push(entry);
@@ -273,7 +273,7 @@ impl<'a> PageRun<'a> {
     }
 
     fn end(&self) -> &'a Entry {
-        *self.entries.last().unwrap()
+        self.entries.last().unwrap()
     }
 
     fn push(&mut self, entry: &'a Entry) {
@@ -525,19 +525,17 @@ impl<'a> LineWriter<'a> {
             }
             self.output.push_str(buff);
             self.current.clear();
+        } else if len > self.style.linemax {
+            self.output.push_str(&self.current);
+            self.output.push('\n');
+            self.current.clear();
+            self.current.push_str(&self.style.indent_space);
+            self.current.push_str(buff);
+            self.current.push_str(&self.style.delim_n);
+            self.ind_indent = self.style.indent_length;
         } else {
-            if len > self.style.linemax {
-                self.output.push_str(&self.current);
-                self.output.push('\n');
-                self.current.clear();
-                self.current.push_str(&self.style.indent_space);
-                self.current.push_str(buff);
-                self.current.push_str(&self.style.delim_n);
-                self.ind_indent = self.style.indent_length;
-            } else {
-                self.current.push_str(buff);
-                self.current.push_str(&self.style.delim_n);
-            }
+            self.current.push_str(buff);
+            self.current.push_str(&self.style.delim_n);
         }
     }
 

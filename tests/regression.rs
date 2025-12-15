@@ -43,11 +43,59 @@ const FIXTURES: &[Fixture] = {
             args: &[],
         },
         Fixture {
+            name: "b209e",
+            args: &[],
+        },
+        Fixture {
+            name: "b209f",
+            args: &[],
+        },
+        Fixture {
             name: "b210a",
             args: &[Lit("-s"), Repo("makeindex/test/b210a.ist")],
         },
         Fixture {
+            name: "b211a",
+            args: &[],
+        },
+        Fixture {
+            name: "b211b",
+            args: &[Lit("-s"), Repo("makeindex/test/b211b.ist"), Lit("-g")],
+        },
+        Fixture {
+            name: "b211c",
+            args: &[Lit("-s"), Repo("makeindex/test/b211c.ist")],
+        },
+        Fixture {
+            name: "b211d",
+            args: &[],
+        },
+        Fixture {
+            name: "b211e",
+            args: &[],
+        },
+        Fixture {
+            name: "b211f",
+            args: &[],
+        },
+        Fixture {
+            name: "b211g",
+            args: &[],
+        },
+        Fixture {
+            name: "b211h",
+            args: &[],
+        },
+        Fixture {
+            name: "book",
+            args: &[],
+        },
+        Fixture {
             name: "test",
+            args: &[],
+        },
+        Fixture {
+            name: "tort",
             args: &[],
         },
     ]
@@ -94,9 +142,8 @@ fn reference_indices_match_goldens() {
             String::from_utf8_lossy(&output.stderr)
         );
 
-        let actual = String::from_utf8(output.stdout)
-            .unwrap_or_else(|_| panic!("stdout for {} not utf-8", fixture.name));
-        let expected = fs::read_to_string(repo_file(&expect_path))
+        let actual = output.stdout;
+        let expected = fs::read(repo_file(&expect_path))
             .unwrap_or_else(|_| panic!("missing golden for {}", fixture.name));
 
         assert_eq!(

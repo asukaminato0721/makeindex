@@ -98,7 +98,7 @@ fn classify_field(text: &str) -> FieldCategory {
     } else if text.chars().all(|c| c.is_ascii_digit()) {
         let value = text.parse().unwrap_or(0);
         FieldCategory::Numeric(value)
-    } else if text.chars().next().map_or(false, is_symbol) {
+    } else if text.chars().next().is_some_and(is_symbol) {
         FieldCategory::Symbol
     } else {
         FieldCategory::Alpha
@@ -110,8 +110,8 @@ fn is_symbol(ch: char) -> bool {
 }
 
 fn compare_symbol_strings(left: &str, right: &str) -> Ordering {
-    let left_is_digit = left.chars().next().map_or(false, |c| c.is_ascii_digit());
-    let right_is_digit = right.chars().next().map_or(false, |c| c.is_ascii_digit());
+    let left_is_digit = left.chars().next().is_some_and(|c| c.is_ascii_digit());
+    let right_is_digit = right.chars().next().is_some_and(|c| c.is_ascii_digit());
     match (left_is_digit, right_is_digit) {
         (true, false) => Ordering::Greater,
         (false, true) => Ordering::Less,
@@ -177,7 +177,7 @@ fn compare_case_sensitive_german(left: &str, right: &str) -> Ordering {
 }
 
 fn next_alpha_char(iter: &mut std::str::Chars<'_>, letter_ordering: bool) -> Option<char> {
-    while let Some(ch) = iter.next() {
+    for ch in iter.by_ref() {
         if letter_ordering && ch == ' ' {
             continue;
         }

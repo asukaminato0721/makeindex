@@ -268,11 +268,9 @@ fn parse_key_levels(
                 return Err(anyhow!("Illegal null field in index key."));
             }
             let mut actual = String::new();
-            if german_sort {
-                if let Some(transformed) = german_sort_transform(&sort) {
-                    actual = sort.clone();
-                    sort = transformed;
-                }
+            if german_sort && let Some(transformed) = german_sort_transform(&sort) {
+                actual = sort.clone();
+                sort = transformed;
             }
             levels.push(Level { sort, actual });
             current_level = Some(levels.len() - 1);
@@ -424,14 +422,14 @@ fn normalize_encap(encap: String, style: &Style) -> (String, RangeOp) {
     (encap, RangeOp::None)
 }
 
-fn extract_argument<'a>(
-    text: &'a str,
+fn extract_argument(
+    text: &str,
     open: char,
     close: char,
     escape: char,
     quote: Option<char>,
     compress_blanks: bool,
-) -> Result<(String, &'a str)> {
+) -> Result<(String, &str)> {
     let trimmed = text.trim_start();
     let mut iter = trimmed.char_indices();
     match iter.next() {
@@ -444,7 +442,7 @@ fn extract_argument<'a>(
     let mut last_char_space = false;
     let quote_char = quote.unwrap_or('\0');
 
-    while let Some((idx, ch)) = iter.next() {
+    for (idx, ch) in iter {
         if take_literal {
             buf.push(ch);
             take_literal = false;
@@ -533,7 +531,7 @@ fn determine_group(first: &str) -> Group {
     if !first.is_empty() && first.chars().all(|c| c.is_ascii_digit()) {
         let value = first.parse().unwrap_or(0);
         Group::Numeric(value)
-    } else if first.chars().next().map_or(false, is_symbol_char) {
+    } else if first.chars().next().is_some_and(is_symbol_char) {
         Group::Symbol
     } else {
         Group::Alpha

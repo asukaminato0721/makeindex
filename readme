@@ -1,0 +1,8 @@
+# fully rewrite of makeindex
+
+download https://mirrors.ctan.org/indexing/makeindex.zip
+
+put it in ./makeindex
+
+then `cargo test`
+
