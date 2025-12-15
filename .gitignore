@@ -232,9 +232,9 @@ acs-*.bib
 *.ind
 
 # Keep the test reference files
-!test/*.idx
-!test/ok-*.ilg
-!test/ok-*.ind
+!makeindex/test/*.idx
+!makeindex/test/ok-*.ilg
+!makeindex/test/ok-*.ind
 
 # minitoc
 *.maf

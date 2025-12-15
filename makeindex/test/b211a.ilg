@@ -1,0 +1,8 @@
+makeindex (Rust rewrite) starting...
+Using built-in default style.
+Reading index file makeindex/test/b211a.idx
+!! Input index error (file = makeindex/test/b211a.idx, line = 6):
+   -- Actual text specified before primary index key
+  + 11 entries from makeindex/test/b211a.idx (1 rejected).
+11 entries ready after sorting.
+Index written to makeindex/test/b211a.ind.

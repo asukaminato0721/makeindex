@@ -1,0 +1,6 @@
+makeindex (Rust rewrite) starting...
+Using built-in default style.
+Reading index file makeindex/test/b209e.idx
+  + 85 entries from makeindex/test/b209e.idx.
+85 entries ready after sorting.
+Index written to makeindex/test/b209e.ind.

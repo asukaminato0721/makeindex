@@ -1,0 +1,8 @@
+makeindex (Rust rewrite) starting...
+Using built-in default style.
+Reading index file makeindex/test/b211h.idx
+!! Input index error (file = makeindex/test/b211h.idx, line = 10):
+   -- invalid first argument: Unterminated argument
+  + 253 entries from makeindex/test/b211h.idx (1 rejected).
+253 entries ready after sorting.
+Index written to makeindex/test/b211h.ind.

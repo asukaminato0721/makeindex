@@ -1,0 +1,16 @@
+makeindex (Rust rewrite) starting...
+Using built-in default style.
+Reading index file makeindex/test/tort.idx
+!! Input index error (file = makeindex/test/tort.idx, line = 1):
+   -- Actual text specified before primary index key
+!! Input index error (file = makeindex/test/tort.idx, line = 2):
+   -- Illegal null field in index key.
+!! Input index error (file = makeindex/test/tort.idx, line = 3):
+   -- Extra '@' at position 14 of first argument.
+!! Input index error (file = makeindex/test/tort.idx, line = 4):
+   -- Extra '!' at position 18 of first argument.
+!! Input index error (file = makeindex/test/tort.idx, line = 5):
+   -- Extra '|' at position 15 of first argument.
+  + 29 entries from makeindex/test/tort.idx (5 rejected).
+29 entries ready after sorting.
+Index written to makeindex/test/tort.ind.
