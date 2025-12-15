@@ -1,0 +1,6 @@
+makeindex (Rust rewrite) starting...
+Using built-in default style.
+Reading index file /home/w/gitproject/makeindex/makeindex/test/test.idx
+  + 125 entries.
+125 entries ready after sorting.
+Index written to /home/w/gitproject/makeindex/makeindex/test/test.ind.

@@ -1,0 +1,6 @@
+makeindex (Rust rewrite) starting...
+Loading style file makeindex/test/b211b.ist
+Reading index file makeindex/test/b211b.idx
+  + 23 entries from makeindex/test/b211b.idx.
+23 entries ready after sorting.
+Index written to makeindex/test/b211b.ind.

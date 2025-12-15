@@ -232,9 +232,9 @@ acs-*.bib
 *.ind
 
 # Keep the test reference files
-!test/*.idx
-!test/ok-*.ilg
-!test/ok-*.ind
+!makeindex/test/*.idx
+!makeindex/test/ok-*.ilg
+!makeindex/test/ok-*.ind
 
 # minitoc
 *.maf
@@ -385,8 +385,6 @@ TSWLatexianTemp*
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
-
-makeindex
 
 
 # Added by cargo

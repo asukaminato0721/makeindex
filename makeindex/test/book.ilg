@@ -1,0 +1,6 @@
+makeindex (Rust rewrite) starting...
+Using built-in default style.
+Reading index file makeindex/test/book.idx
+  + 4241 entries from makeindex/test/book.idx.
+4241 entries ready after sorting.
+Index written to makeindex/test/book.ind.
