@@ -371,8 +371,10 @@ mod tests {
 
     #[test]
     fn test_initial_page_literal() {
-        let mut opts = CliOptions::default();
-        opts.initial_page = Some(InitialPage::Literal("42".into()));
+        let opts = CliOptions {
+            initial_page: Some(InitialPage::Literal("42".into())),
+            ..CliOptions::default()
+        };
         let mut transcript = test_transcript();
         let result = compute_initial_page(&opts, None, &mut transcript).unwrap();
         assert_eq!(result, Some("42".into()));
@@ -380,10 +382,12 @@ mod tests {
 
     #[test]
     fn test_initial_page_even_from_log() {
-        let mut opts = CliOptions::default();
         let path = temp_path("even");
         fs::write(&path, "[17]\n").unwrap();
-        opts.initial_page = Some(InitialPage::NextEven);
+        let opts = CliOptions {
+            initial_page: Some(InitialPage::NextEven),
+            ..CliOptions::default()
+        };
         let mut transcript = test_transcript();
         let result = compute_initial_page(&opts, Some(path.as_path()), &mut transcript).unwrap();
         assert_eq!(result, Some("18".into()));
@@ -391,10 +395,12 @@ mod tests {
 
     #[test]
     fn test_initial_page_odd_from_log() {
-        let mut opts = CliOptions::default();
         let path = temp_path("odd");
         fs::write(&path, "ignored\n[18]\n").unwrap();
-        opts.initial_page = Some(InitialPage::NextOdd);
+        let opts = CliOptions {
+            initial_page: Some(InitialPage::NextOdd),
+            ..CliOptions::default()
+        };
         let mut transcript = test_transcript();
         let result = compute_initial_page(&opts, Some(path.as_path()), &mut transcript).unwrap();
         assert_eq!(result, Some("19".into()));
@@ -402,10 +408,12 @@ mod tests {
 
     #[test]
     fn test_initial_page_any_from_log() {
-        let mut opts = CliOptions::default();
         let path = temp_path("any");
         fs::write(&path, "[5]\n").unwrap();
-        opts.initial_page = Some(InitialPage::NextAny);
+        let opts = CliOptions {
+            initial_page: Some(InitialPage::NextAny),
+            ..CliOptions::default()
+        };
         let mut transcript = test_transcript();
         let result = compute_initial_page(&opts, Some(path.as_path()), &mut transcript).unwrap();
         assert_eq!(result, Some("6".into()));
