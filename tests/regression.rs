@@ -101,14 +101,10 @@ const FIXTURES: &[Fixture] = {
     ]
 };
 
-fn fixtures() -> &'static [Fixture] {
-    FIXTURES
-}
-
 #[test]
 fn reference_indices_match_goldens() {
     let binary = env!("CARGO_BIN_EXE_makeindex");
-    for fixture in fixtures() {
+    for fixture in FIXTURES {
         let idx_path = format!("makeindex/test/{}.idx", fixture.name);
         let expect_path = format!("makeindex/test/ok-{}.ind", fixture.name);
         let output = {
