@@ -387,3 +387,8 @@ TSWLatexianTemp*
 #*Notes.bib
 
 makeindex
+
+
+# Added by cargo
+
+/target
